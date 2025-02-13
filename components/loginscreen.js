@@ -88,7 +88,7 @@ const LoginScreen = ({ navigation }) => {
             <Text style={styles.title}>Chủ trọ</Text>
             <Text style={styles.subtitle}>Quản lý nhà trọ thật dễ dàng</Text>
 
-            <Text style={styles.label}>Email đăng nhập</Text>
+            <Text style={styles.label}>Tài khoản</Text>
             <TextInput 
               style={styles.input} 
               placeholder="Ví dụ: abc1234@gmail.com" 
@@ -121,12 +121,7 @@ const LoginScreen = ({ navigation }) => {
             </View>
 
             <View style={styles.buttonContainer}>
-              <TouchableOpacity 
-                style={styles.registerButton}
-                onPress={() => navigation.navigate('Register')}
-              >
-                <Text style={styles.registerButtonText}>Đăng ký</Text>
-              </TouchableOpacity>
+              
               <TouchableOpacity 
                 style={[
                   styles.loginButton,
@@ -242,30 +237,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 30,
     width: "90%",
-    justifyContent: "space-between",
+    justifyContent: "center",
   },
-  registerButton: {
-    borderWidth: 2,
-    borderColor: "#006D5B",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-    width: "48%",
-    backgroundColor: "#FFFFFF",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
-  },
+ 
   loginButton: {
     backgroundColor: "#006D5B",
     padding: 15,
     borderRadius: 10,
     alignItems: "center",
+    justifyContent: "center",
     width: "48%",
     shadowColor: "#000",
     shadowOffset: {
@@ -285,12 +265,15 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "700",
+    
+    
   },
   passwordContainer: {
     width: "90%",
     flexDirection: "row",
     alignItems: "center",
     position: "relative",
+    
   },
   passwordInput: {
     flex: 1,
@@ -316,6 +299,7 @@ const styles = StyleSheet.create({
     right: 15,
     height: 50,
     justifyContent: "center",
+   bottom: 14
   },
   disabledButton: {
     opacity: 0.7,

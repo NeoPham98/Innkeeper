@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
 const DetailHomeScreen = ({ route, navigation }) => {
   const { home } = route.params; // Nhận thông tin nhà từ params
@@ -13,34 +14,32 @@ const DetailHomeScreen = ({ route, navigation }) => {
           onPress={() => navigation.goBack()}
         >
           <AntDesign name="arrowleft" size={26} color="#2C3E50" />
+          <Text style={styles.headerText}>{home.home_name}</Text>
         </TouchableOpacity>
-        <Text style={styles.headerText}>{home.home_name}</Text>
+        
       </View>
 
       <View style={styles.infoContainer}>
-        <TouchableOpacity style={styles.infoItem}>
-          <AntDesign name="plus" size={24} color="#2C3E50" />
+        <TouchableOpacity
+          style={styles.infoItem}
+          onPress={() => navigation.navigate("CreateRoom")}
+        >
+          <FontAwesome name="plus-circle" size={30} color="#FF6347" />
           <Text style={styles.infoText}>Thêm phòng</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoItem}>
-          <MaterialIcons name="lightbulb-outline" size={24} color="#2C3E50" />
+          <FontAwesome name="lightbulb-o" size={30} color="#FFD700" />
           <Text style={styles.infoText}>Ghi điện nước</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoItem}>
-          <MaterialIcons name="attach-money" size={24} color="#2C3E50" />
+          <FontAwesome name="money" size={30} color="#32CD32" />
           <Text style={styles.infoText}>Thu tiền</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoItem}>
-          <AntDesign name="setting" size={24} color="#2C3E50" />
+          <FontAwesome name="cog" size={30} color="#1E90FF" />
           <Text style={styles.infoText}>Cài đặt</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.infoItem}>
-          <MaterialIcons name="info-outline" size={24} color="#2C3E50" />
-          <Text style={styles.infoText}>Hướng dẫn</Text>
-        </TouchableOpacity>
       </View>
-
-    
     </View>
   );
 };
@@ -55,30 +54,34 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
-    marginTop: 40,
+    marginTop: 30,
   },
   backButton: {
-    marginTop: -20,
-    marginRight: 20,
+    flexDirection: "row",
+    alignItems: "center",
   },
   headerText: {
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: "bold",
     color: "#2C3E50",
-    marginTop: -25,
+    marginLeft: 20,
+    marginTop: -2
   },
   infoContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     marginBottom: 20,
   },
   infoItem: {
     alignItems: "center",
+    marginHorizontal: 15,
+    marginTop: 10,
   },
   infoText: {
-    fontSize: 14,
+    fontSize: 16,
     marginVertical: 5,
-    color: "#333",
+    color: "#000",
+    fontWeight: "bold",
   },
 });
 

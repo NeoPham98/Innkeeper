@@ -192,8 +192,6 @@ const HomeScreen = ({ navigation }) => {
           </View>
 
           <View style={styles.content}>
-            <Text style={styles.title}>Chủ trọ</Text>
-            <Text style={styles.subtitle}>Quản lý nhà trọ thật dễ dàng</Text>
 
             <View style={styles.card}>
               <TouchableOpacity
@@ -320,17 +318,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingHorizontal: 10,
   },
-  title: {
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "#E74C3C",
-    marginBottom: 5,
-  },
-  subtitle: {
-    fontSize: 20,
-    color: "#7F8C8D",
-    marginBottom: 30,
-  },
+
   card: {
     alignItems: "center",
     backgroundColor: "white",
@@ -343,6 +331,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     marginBottom: 15,
+    marginTop: 15
   },
   addButton: {
     marginBottom: 10,
@@ -357,7 +346,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 20,
     marginVertical: 10,
-    width: "85%",
+    width: "90%",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

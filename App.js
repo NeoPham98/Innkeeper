@@ -6,6 +6,7 @@ import HomeScreen from "./components/homescreen";
 import CreateHomeScreen from "./components/createhomescreen";
 import EditHomeScreen from "./components/EditHomeScreen";
 import DetailHomeScreen from "./components/DetailHomeScreen";
+import CreateRoomScreen from "./components/CreateRoomScreen";
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
         <Stack.Screen name="CreateHome" component={CreateHomeScreen} />
         <Stack.Screen name="EditHome" component={EditHomeScreen} />
         <Stack.Screen name="DetailHome" component={DetailHomeScreen} />
+        <Stack.Screen name="CreateRoom" component={CreateRoomScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
