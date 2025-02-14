@@ -16,9 +16,11 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const CreateRoomScreen = ({ navigation }) => {
   const [roomName, setRoomName] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [idCardFront, setIdCardFront] = useState(null);
   const [idCardBack, setIdCardBack] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -26,6 +28,9 @@ const CreateRoomScreen = ({ navigation }) => {
   const [notificationMessage, setNotificationMessage] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [contractImage, setContractImage] = useState([null, null]);
+  const [startDate, setStartDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const handleSave = async () => {
     if (!roomName) {
@@ -42,7 +47,7 @@ const CreateRoomScreen = ({ navigation }) => {
     setTimeout(() => navigation.navigate("Home"), 2000);
   };
 
-  const handleImageUpload = async (side) => {
+  const handleImageUpload = async (side, index) => {
     // Yêu cầu quyền truy cập vào thư viện ảnh
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -55,16 +60,20 @@ const CreateRoomScreen = ({ navigation }) => {
     // Mở bộ sưu tập ảnh
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
+      allowsEditing: false,
       aspect: [4, 3],
       quality: 1,
     });
 
     if (!result.canceled) {
       if (side === "front") {
-        setIdCardFront(result.assets[0].uri); // Lưu URI của ảnh đã chọn
-      } else {
-        setIdCardBack(result.assets[0].uri); // Lưu URI của ảnh đã chọn
+        setIdCardFront(result.assets[0].uri);
+      } else if (side === "back") {
+        setIdCardBack(result.assets[0].uri);
+      } else if (side === "contract") {
+        const newContractImages = [...contractImage];
+        newContractImages[index] = result.assets[0].uri;
+        setContractImage(newContractImages);
       }
     }
   };
@@ -74,15 +83,23 @@ const CreateRoomScreen = ({ navigation }) => {
     setModalVisible(true);
   };
 
+  const handleDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || startDate;
+    setShowDatePicker(false);
+    setStartDate(currentDate);
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "android" ? 150 : 0}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView
           contentContainerStyle={{ flexGrow: 1 }}
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
         >
           <View style={styles.headerContainer}>
             <TouchableOpacity
@@ -97,13 +114,28 @@ const CreateRoomScreen = ({ navigation }) => {
           <View style={styles.content}>
             <Text style={styles.title}>Thông tin phòng</Text>
 
-            <Text style={styles.label}>Tên phòng</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Ví dụ: Phòng 1"
-              value={roomName}
-              onChangeText={setRoomName}
-            />
+            <View style={styles.rowContainer}>
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>Tên phòng</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Ví dụ: Phòng 1"
+                  value={roomName}
+                  onChangeText={setRoomName}
+                />
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>Số lượng</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Ví dụ: 1"
+                  value={quantity}
+                  onChangeText={setQuantity}
+                  keyboardType="numeric"
+                />
+              </View>
+            </View>
+
             <Text style={styles.label}>Khách thuê</Text>
             <TextInput
               style={styles.input}
@@ -120,12 +152,12 @@ const CreateRoomScreen = ({ navigation }) => {
             />
             <Text style={styles.label}>Quê quán / Địa chỉ</Text>
             <TextInput
-              style={[styles.input, { height: 120 }]}
+              style={[styles.input, { height: 100 }]}
               placeholder="Ví dụ: Hà Nội"
               value={roomName}
               onChangeText={setRoomName}
               multiline={true}
-              numberOfLines={2}
+              numberOfLines={6}
               textAlignVertical="top"
             />
             <Text style={styles.label}>CCCD / CMND</Text>
@@ -140,7 +172,17 @@ const CreateRoomScreen = ({ navigation }) => {
             <View style={styles.imageUploadContainer}>
               <View style={styles.imageRow}>
                 <View style={styles.imageColumn}>
-                  <Text style={styles.label}>Ảnh CCCD trước</Text>
+                  <View style={styles.labelContainer}>
+                    <Text style={styles.label}>Ảnh CCCD trước</Text>
+                    {idCardFront && (
+                      <TouchableOpacity
+                        onPress={() => setIdCardFront(null)}
+                        style={styles.deleteIcon}
+                      >
+                        <AntDesign name="delete" size={20} color="#E74C3C" />
+                      </TouchableOpacity>
+                    )}
+                  </View>
                   <TouchableOpacity
                     style={styles.imageUploadButton}
                     onPress={() =>
@@ -166,7 +208,17 @@ const CreateRoomScreen = ({ navigation }) => {
                 </View>
 
                 <View style={styles.imageColumn}>
-                  <Text style={styles.label}>Ảnh CCCD sau</Text>
+                  <View style={styles.labelContainer}>
+                    <Text style={styles.label}>Ảnh CCCD sau</Text>
+                    {idCardBack && (
+                      <TouchableOpacity
+                        onPress={() => setIdCardBack(null)}
+                        style={styles.deleteIcon}
+                      >
+                        <AntDesign name="delete" size={20} color="#E74C3C" />
+                      </TouchableOpacity>
+                    )}
+                  </View>
                   <TouchableOpacity
                     style={styles.imageUploadButton}
                     onPress={() =>
@@ -191,7 +243,94 @@ const CreateRoomScreen = ({ navigation }) => {
                   </TouchableOpacity>
                 </View>
               </View>
+              {/* Thêm phần upload ảnh hợp đồng */}
+              <View style={styles.imageColumn}>
+                <View style={styles.labelContainer}>
+                  <Text style={styles.label}>Ảnh hợp đồng</Text>
+                  {contractImage.every((image) => image === null) ? null : (
+                    <TouchableOpacity
+                      onPress={() => setContractImage([null, null])} // Xóa tất cả ảnh
+                      style={styles.deleteIcon}
+                    >
+                      <AntDesign name="delete" size={20} color="#E74C3C" />
+                    </TouchableOpacity>
+                  )}
+                </View>
+                <View style={styles.imageRow}>
+                  {[0, 1].map((index) => (
+                    <View key={index} style={styles.imageColumn}>
+                      <TouchableOpacity
+                        style={styles.imageUploadButton}
+                        onPress={() => handleImageUpload("contract", index)}
+                      >
+                        {contractImage[index] ? (
+                          <Image
+                            source={{ uri: contractImage[index] }}
+                            style={styles.imagePreview}
+                            resizeMode="contain"
+                          />
+                        ) : (
+                          <Image
+                            source={require("../assets/img_icon.png")}
+                            style={styles.thumbnail}
+                            resizeMode="contain"
+                          />
+                        )}
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
+              </View>
             </View>
+
+            <Text style={styles.label}>Tiền cọc</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Ví dụ: 1,000,000 ₫"
+              value={roomName}
+              onChangeText={setRoomName}
+            />
+
+            <Text style={styles.label}>Giá phòng (₫/tháng)</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Ví dụ: 1,000,000 "
+              value={roomName}
+              onChangeText={setRoomName}
+            />
+
+            <Text style={styles.label}>Ngày bắt đầu thuê</Text>
+            <TouchableOpacity
+              onPress={() => setShowDatePicker(true)}
+              style={{ width: "100%" }}
+            >
+              <TextInput
+                style={styles.input}
+                placeholder="Chọn ngày bắt đầu"
+                value={startDate.toLocaleDateString()}
+                editable={false}
+              />
+            </TouchableOpacity>
+
+            {showDatePicker && (
+              <DateTimePicker
+                value={startDate}
+                mode="date"
+                display="default"
+                onChange={handleDateChange}
+              />
+            )}
+
+            <Text style={styles.label}>Ghi chú</Text>
+            <TextInput
+              style={[styles.input, { height: 100 }]}
+              placeholder="Ví dụ: Ở 2 người"
+              value={roomName}
+              onChangeText={setRoomName}
+              multiline={true}
+              numberOfLines={6}
+              textAlignVertical="top"
+            />
 
             <TouchableOpacity
               style={[styles.saveButton, isLoading && { opacity: 0.7 }]}
@@ -242,7 +381,7 @@ const CreateRoomScreen = ({ navigation }) => {
                 <Image
                   source={{ uri: selectedImage }}
                   style={styles.fullImage} // Đặt kích thước ảnh đầy đủ
-                  resizeMode="contain" // Hoặc "cover" nếu bạn muốn lấp đầy
+                  resizeMode="cover" // Hoặc "cover" nếu bạn muốn lấp đầy
                 />
               </View>
             </TouchableOpacity>
@@ -340,8 +479,10 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: "white",
     borderRadius: 15,
-    padding: 30,
-    width: "80%",
+    // padding: 30,
+    width: "90%",
+    height: "auto",
+    maxHeight: "67%",
     alignItems: "center",
   },
   modalTitle: {
@@ -402,7 +543,7 @@ const styles = StyleSheet.create({
   imagePreview: {
     width: "100%",
     height: "100%",
-    borderRadius: 10,
+    borderRadius: 15,
   },
   thumbnail: {
     width: 100,
@@ -413,8 +554,26 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   fullImage: {
-    width: "130%", // Chiếm toàn bộ chiều rộng màn hình
-    height: "130%", // Chiếm toàn bộ chiều cao màn hình
+    borderRadius: 15,
+    width: "100%", // Keep full width
+    height: "100%", // Maintain aspect ratio
+  },
+  labelContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "90%",
+  },
+  deleteIcon: {
+    marginTop: 10,
+  },
+  rowContainer: {
+    flexDirection: "row", // Căn chỉnh theo hàng
+    justifyContent: "space-between", // Căn giữa các ô
+    width: "100%", // Đảm bảo chiều rộng đầy đủ
+  },
+  inputContainer: {
+    width: "48%", // Đặt chiều rộng cho mỗi ô input
   },
 });
 
