@@ -17,10 +17,24 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { supabaseDB } from "../DBconfig";
+
+const formatCurrency = (value) => {
+  // Chuyển đổi giá trị thành số và định dạng với dấu phẩy
+  const numberValue = parseFloat(value.replace(/,/g, "")); // Xóa dấu phẩy trước khi chuyển đổi
+  return isNaN(numberValue) ? "" : numberValue.toLocaleString("en-US"); // Định dạng số
+};
 
 const CreateRoomScreen = ({ navigation }) => {
   const [roomName, setRoomName] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [roomer, setRoomer] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [hometown, setHometown] = useState("");
+  const [cccdNumber, setCccdNumber] = useState("");
+  const [note, setNote] = useState("");
+  const [deposit, setDeposit] = useState("");
+  const [roomPrice, setRoomPrice] = useState("");
   const [idCardFront, setIdCardFront] = useState(null);
   const [idCardBack, setIdCardBack] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,20 +45,70 @@ const CreateRoomScreen = ({ navigation }) => {
   const [contractImage, setContractImage] = useState([null, null]);
   const [startDate, setStartDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [id_home, setIdHome] = useState(null);
+  const [formattedDeposit, setFormattedDeposit] = useState("");
+  const [formattedRoomPrice, setFormattedRoomPrice] = useState("");
 
   const handleSave = async () => {
-    if (!roomName) {
-      setNotificationMessage("Vui lòng nhập tên phòng");
+    if (
+      !roomName ||
+      !quantity ||
+      !roomer ||
+      !phoneNumber ||
+      !hometown ||
+      !cccdNumber ||
+      !deposit ||
+      !roomPrice ||
+      !startDate
+    ) {
+      setNotificationMessage("Vui lòng nhập đầy đủ thông tin");
       setNotificationVisible(true);
       return;
     }
 
-    // Logic để lưu thông tin phòng vào database (nếu cần)
+    try {
+      setIsLoading(true);
 
-    setIsLoading(false);
-    setNotificationMessage("Đã tạo phòng thành công!");
-    setNotificationVisible(true);
-    setTimeout(() => navigation.navigate("Home"), 2000);
+      // Lấy thời gian hiện tại theo UTC +7
+      const currentDate = new Date();
+      const utcPlus7 = new Date(currentDate.getTime() + 7 * 60 * 60 * 1000);
+
+      // Cập nhật rental_date cũng theo UTC +7
+      const rentalDateUtcPlus7 = new Date(
+        startDate.getTime() + 7 * 60 * 60 * 1000
+      );
+
+      const { error } = await supabaseDB.from("Rooms").insert({
+        id_home: id_home,
+        room_name: roomName,
+        roomer: roomer,
+        is_active: true,
+        phone_number: phoneNumber,
+        front_card_img: idCardFront,
+        back_card_img: idCardBack,
+        hometown: hometown,
+        cccd_number: cccdNumber,
+        rental_date: rentalDateUtcPlus7,
+        note: note,
+        deposit: deposit,
+        room_price: roomPrice,
+        contract_img: contractImage,
+        quantity: quantity,
+        created_at: utcPlus7,
+      });
+
+      if (error) throw error;
+
+      setIsLoading(false);
+      setNotificationMessage("Đã tạo phòng thành công!");
+      setNotificationVisible(true);
+      setTimeout(() => navigation.navigate("DetailHomeScreen"), 2000);
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Error creating room:", error.message);
+      setNotificationMessage("Tạo phòng thất bại!");
+      setNotificationVisible(true);
+    }
   };
 
   const handleImageUpload = async (side, index) => {
@@ -89,11 +153,20 @@ const CreateRoomScreen = ({ navigation }) => {
     setStartDate(currentDate);
   };
 
+  const handleDepositChange = (value) => {
+    setDeposit(value);
+    setFormattedDeposit(formatCurrency(value)); // Cập nhật giá trị đã định dạng
+  };
+
+  const handleRoomPriceChange = (value) => {
+    setRoomPrice(value);
+    setFormattedRoomPrice(formatCurrency(value)); // Cập nhật giá trị đã định dạng
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "android" ? 150 : 0}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView
@@ -116,7 +189,9 @@ const CreateRoomScreen = ({ navigation }) => {
 
             <View style={styles.rowContainer}>
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>Tên phòng</Text>
+                <Text style={styles.label}>
+                  <Text style={styles.required}>*</Text> Tên phòng
+                </Text>
                 <TextInput
                   style={styles.input}
                   placeholder="Ví dụ: Phòng 1"
@@ -125,7 +200,9 @@ const CreateRoomScreen = ({ navigation }) => {
                 />
               </View>
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>Số lượng</Text>
+                <Text style={styles.label}>
+                  <Text style={styles.required}>*</Text> Số lượng
+                </Text>
                 <TextInput
                   style={styles.input}
                   placeholder="Ví dụ: 1"
@@ -136,36 +213,46 @@ const CreateRoomScreen = ({ navigation }) => {
               </View>
             </View>
 
-            <Text style={styles.label}>Khách thuê</Text>
+            <Text style={styles.label}>
+              <Text style={styles.required}>*</Text> Khách thuê
+            </Text>
             <TextInput
               style={styles.input}
               placeholder="Ví dụ: Nguyễn Văn A"
-              value={roomName}
-              onChangeText={setRoomName}
+              value={roomer}
+              onChangeText={setRoomer}
             />
-            <Text style={styles.label}>Số điện thoại</Text>
+            <Text style={styles.label}>
+              <Text style={styles.required}>*</Text> Số điện thoại
+            </Text>
             <TextInput
               style={styles.input}
               placeholder="Ví dụ: 0387022221"
-              value={roomName}
-              onChangeText={setRoomName}
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
+              keyboardType="numeric"
             />
-            <Text style={styles.label}>Quê quán / Địa chỉ</Text>
+            <Text style={styles.label}>
+              <Text style={styles.required}>*</Text> Quê quán / Địa chỉ
+            </Text>
             <TextInput
               style={[styles.input, { height: 100 }]}
               placeholder="Ví dụ: Hà Nội"
-              value={roomName}
-              onChangeText={setRoomName}
+              value={hometown}
+              onChangeText={setHometown}
               multiline={true}
               numberOfLines={6}
               textAlignVertical="top"
             />
-            <Text style={styles.label}>CCCD / CMND</Text>
+            <Text style={styles.label}>
+              <Text style={styles.required}>*</Text> CCCD / CMND
+            </Text>
             <TextInput
               style={styles.input}
               placeholder="Ví dụ: 046440849881"
-              value={roomName}
-              onChangeText={setRoomName}
+              value={cccdNumber}
+              onChangeText={setCccdNumber}
+              keyboardType="numeric"
             />
 
             {/* Phần upload ảnh CMND */}
@@ -283,23 +370,31 @@ const CreateRoomScreen = ({ navigation }) => {
               </View>
             </View>
 
-            <Text style={styles.label}>Tiền cọc</Text>
+            <Text style={styles.label}>
+              <Text style={styles.required}>*</Text> Tiền cọc (₫)
+            </Text>
             <TextInput
               style={styles.input}
               placeholder="Ví dụ: 1,000,000 ₫"
-              value={roomName}
-              onChangeText={setRoomName}
+              value={formattedDeposit}
+              onChangeText={handleDepositChange}
+              keyboardType="numeric"
             />
 
-            <Text style={styles.label}>Giá phòng (₫/tháng)</Text>
+            <Text style={styles.label}>
+              <Text style={styles.required}>*</Text> Giá phòng (₫/tháng)
+            </Text>
             <TextInput
               style={styles.input}
               placeholder="Ví dụ: 1,000,000 "
-              value={roomName}
-              onChangeText={setRoomName}
+              value={formattedRoomPrice}
+              onChangeText={handleRoomPriceChange}
+              keyboardType="numeric"
             />
 
-            <Text style={styles.label}>Ngày bắt đầu thuê</Text>
+            <Text style={styles.label}>
+              <Text style={styles.required}>*</Text> Ngày bắt đầu thuê
+            </Text>
             <TouchableOpacity
               onPress={() => setShowDatePicker(true)}
               style={{ width: "100%" }}
@@ -309,6 +404,12 @@ const CreateRoomScreen = ({ navigation }) => {
                 placeholder="Chọn ngày bắt đầu"
                 value={startDate.toLocaleDateString()}
                 editable={false}
+              />
+              <AntDesign
+                name="calendar"
+                size={20}
+                color="#E74C3E"
+                style={styles.dateIcon}
               />
             </TouchableOpacity>
 
@@ -325,8 +426,8 @@ const CreateRoomScreen = ({ navigation }) => {
             <TextInput
               style={[styles.input, { height: 100 }]}
               placeholder="Ví dụ: Ở 2 người"
-              value={roomName}
-              onChangeText={setRoomName}
+              value={note}
+              onChangeText={setNote}
               multiline={true}
               numberOfLines={6}
               textAlignVertical="top"
@@ -574,6 +675,14 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: "48%", // Đặt chiều rộng cho mỗi ô input
+  },
+  dateIcon: {
+    position: "absolute",
+    right: 10,
+    top: 10, // Điều chỉnh vị trí icon cho phù hợp
+  },
+  required: {
+    color: "red",
   },
 });
 
