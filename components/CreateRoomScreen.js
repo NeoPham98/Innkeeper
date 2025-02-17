@@ -18,14 +18,14 @@ import { AntDesign } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { supabaseDB } from "../DBconfig";
-
 const formatCurrency = (value) => {
   // Chuyển đổi giá trị thành số và định dạng với dấu phẩy
   const numberValue = parseFloat(value.replace(/,/g, "")); // Xóa dấu phẩy trước khi chuyển đổi
   return isNaN(numberValue) ? "" : numberValue.toLocaleString("en-US"); // Định dạng số
 };
 
-const CreateRoomScreen = ({ navigation }) => {
+const CreateRoomScreen = ({ route, navigation }) => {
+  const { home } = route.params;
   const [roomName, setRoomName] = useState("");
   const [quantity, setQuantity] = useState("");
   const [roomer, setRoomer] = useState("");
@@ -79,7 +79,7 @@ const CreateRoomScreen = ({ navigation }) => {
       );
 
       const { error } = await supabaseDB.from("Rooms").insert({
-        id_home: id_home,
+        id_home: home.id_home,
         room_name: roomName,
         roomer: roomer,
         is_active: true,
@@ -102,7 +102,7 @@ const CreateRoomScreen = ({ navigation }) => {
       setIsLoading(false);
       setNotificationMessage("Đã tạo phòng thành công!");
       setNotificationVisible(true);
-      setTimeout(() => navigation.navigate("DetailHomeScreen"), 2000);
+      setTimeout(() => navigation.navigate("DetailHome", { home }), 2000);
     } catch (error) {
       setIsLoading(false);
       console.error("Error creating room:", error.message);
@@ -386,7 +386,7 @@ const CreateRoomScreen = ({ navigation }) => {
             </Text>
             <TextInput
               style={styles.input}
-              placeholder="Ví dụ: 1,000,000 "
+              placeholder="Ví dụ: 1,000,000 ₫"
               value={formattedRoomPrice}
               onChangeText={handleRoomPriceChange}
               keyboardType="numeric"
