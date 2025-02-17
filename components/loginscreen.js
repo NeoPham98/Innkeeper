@@ -1,29 +1,29 @@
 import React, { useState } from "react";
-import { 
-  View, 
-  Text, 
-  Image, 
-  TextInput, 
-  TouchableOpacity, 
-  StyleSheet, 
-  KeyboardAvoidingView, 
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  KeyboardAvoidingView,
   Platform,
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
-  Modal
+  Modal,
 } from "react-native";
-import { Ionicons } from '@expo/vector-icons';
-import { supabaseDB } from '../DBconfig';
+import { Ionicons } from "@expo/vector-icons";
+import { supabaseDB } from "../DBconfig";
 
 const LoginScreen = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   const showErrorMessage = (message) => {
     setErrorMessage(message);
@@ -32,66 +32,66 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      showErrorMessage('Vui lòng nhập đầy đủ Tài khoản và Mật khẩu');
+      showErrorMessage("Vui lòng nhập đầy đủ Tài khoản và Mật khẩu");
       return;
     }
 
     try {
       setLoading(true);
-      
+
       // Query đến bảng Account để kiểm tra thông tin đăng nhập
       const { data, error } = await supabaseDB
-        .from('Account')
-        .select('*')
-        .eq('email', email)
-        .eq('password', password);
-
-
+        .from("Account")
+        .select("*")
+        .eq("email", email)
+        .eq("password", password);
 
       if (error) {
-        showErrorMessage('Có lỗi xảy ra khi đăng nhập');
+        showErrorMessage("Có lỗi xảy ra khi đăng nhập");
         return;
       }
 
       if (data && data.length > 0) {
         // Đăng nhập thành công
-        navigation.navigate('Home');
-        setEmail('');
-        setPassword('');
+        navigation.navigate("Home");
+        setEmail("");
+        setPassword("");
       } else {
         // Không tìm thấy tài khoản phù hợp
-        showErrorMessage('Tài khoản hoặc Mật khẩu không chính xác');
+        showErrorMessage("Tài khoản hoặc Mật khẩu không chính xác");
       }
-
     } catch (error) {
-      showErrorMessage('Có lỗi xảy ra khi đăng nhập');
+      showErrorMessage("Có lỗi xảy ra khi đăng nhập");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <KeyboardAvoidingView 
+    <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView 
+        <ScrollView
           contentContainerStyle={{ flexGrow: 1 }}
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.header}>
-            <Image source={require("../assets/house.png")} style={styles.houseImage} />
+            <Image
+              source={require("../assets/house.png")}
+              style={styles.houseImage}
+            />
           </View>
-          
+
           <View style={styles.content}>
             <Text style={styles.title}>Chủ trọ</Text>
             <Text style={styles.subtitle}>Quản lý nhà trọ thật dễ dàng</Text>
 
             <Text style={styles.label}>Tài khoản</Text>
-            <TextInput 
-              style={styles.input} 
-              placeholder="Ví dụ: abc1234@gmail.com" 
+            <TextInput
+              style={styles.input}
+              placeholder="Ví dụ: abc1234@gmail.com"
               keyboardType="email-address"
               autoCapitalize="none"
               value={email}
@@ -100,38 +100,34 @@ const LoginScreen = ({ navigation }) => {
 
             <Text style={styles.label}>Mật khẩu</Text>
             <View style={styles.passwordContainer}>
-              <TextInput 
-                style={styles.passwordInput} 
-                placeholder="Nhập mật khẩu" 
+              <TextInput
+                style={styles.passwordInput}
+                placeholder="Nhập mật khẩu"
                 secureTextEntry={!showPassword}
                 autoCapitalize="none"
                 value={password}
                 onChangeText={setPassword}
               />
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.eyeIcon}
                 onPress={() => setShowPassword(!showPassword)}
               >
-                <Ionicons 
-                  name={showPassword ? "eye-outline" : "eye-off-outline"} 
-                  size={24} 
+                <Ionicons
+                  name={showPassword ? "eye-outline" : "eye-off-outline"}
+                  size={24}
                   color="#006D5B"
                 />
               </TouchableOpacity>
             </View>
 
             <View style={styles.buttonContainer}>
-              
-              <TouchableOpacity 
-                style={[
-                  styles.loginButton,
-                  loading && styles.disabledButton
-                ]}
+              <TouchableOpacity
+                style={[styles.loginButton, loading && styles.disabledButton]}
                 onPress={handleLogin}
                 disabled={loading}
               >
                 <Text style={styles.loginButtonText}>
-                  {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+                  {loading ? "Đang đăng nhập..." : "Đăng nhập"}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -146,7 +142,7 @@ const LoginScreen = ({ navigation }) => {
         visible={showError}
         onRequestClose={() => setShowError(false)}
       >
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.modalOverlay}
           activeOpacity={1}
           onPress={() => setShowError(false)}
@@ -157,7 +153,7 @@ const LoginScreen = ({ navigation }) => {
               <Text style={styles.modalTitle}>Lỗi đăng nhập</Text>
             </View>
             <Text style={styles.modalMessage}>{errorMessage}</Text>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.modalButton}
               onPress={() => setShowError(false)}
             >
@@ -239,7 +235,7 @@ const styles = StyleSheet.create({
     width: "90%",
     justifyContent: "center",
   },
- 
+
   loginButton: {
     backgroundColor: "#006D5B",
     padding: 15,
@@ -265,15 +261,12 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "700",
-    
-    
   },
   passwordContainer: {
     width: "90%",
     flexDirection: "row",
     alignItems: "center",
     position: "relative",
-    
   },
   passwordInput: {
     flex: 1,
@@ -299,24 +292,24 @@ const styles = StyleSheet.create({
     right: 15,
     height: 50,
     justifyContent: "center",
-   bottom: 14
+    bottom: 14,
   },
   disabledButton: {
     opacity: 0.7,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalContent: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 20,
     padding: 20,
-    width: '80%',
-    alignItems: 'center',
-    shadowColor: '#000',
+    width: "80%",
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -326,34 +319,34 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 15,
     gap: 10, // Khoảng cách giữa icon và text
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#E74C3C',
+    fontWeight: "bold",
+    color: "#E74C3C",
   },
   modalMessage: {
     fontSize: 16,
-    color: '#2C3E50',
-    textAlign: 'center',
+    color: "#2C3E50",
+    textAlign: "center",
     marginBottom: 20,
     lineHeight: 22,
   },
   modalButton: {
-    backgroundColor: '#E74C3C',
+    backgroundColor: "#E74C3C",
     paddingVertical: 12,
     paddingHorizontal: 30,
     borderRadius: 10,
     marginTop: 10,
   },
   modalButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });
 

@@ -201,7 +201,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>
-                  <Text style={styles.required}>*</Text> Số lượng
+                  <Text style={styles.required}>*</Text> Số người
                 </Text>
                 <TextInput
                   style={styles.input}

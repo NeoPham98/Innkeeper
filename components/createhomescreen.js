@@ -47,8 +47,8 @@ const CreateHomeScreen = ({ navigation }) => {
     } catch (error) {
       setIsLoading(false);
       console.error("Error creating home:", error.message);
-      setNotification("Tạo nhà thất bại!");
-      setTimeout(() => setNotification(""), 3000);
+      setNotificationMessage("Tạo nhà thất bại!");
+      setNotificationVisible(true);
     }
   };
 

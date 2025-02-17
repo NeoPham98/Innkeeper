@@ -99,6 +99,28 @@ const HomeScreen = ({ navigation }) => {
     await fetchHomes(); // Gọi lại hàm fetchHomes để lấy dữ liệu mới
   };
 
+  const fetchRooms = async () => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabaseDB
+        .from("Rooms")
+        .select("*")
+        .eq("id_home", selectedHome.id);
+
+      if (error) {
+        console.error("Error fetching rooms:", error.message);
+        return;
+      }
+
+      console.log("Fetched rooms:", data);
+      setRooms(data || []);
+    } catch (error) {
+      console.error("Error fetching rooms:", error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const renderHomeCard = (home) => (
     <View style={styles.homeCard}>
       <View style={styles.homeHeader}>
@@ -192,7 +214,6 @@ const HomeScreen = ({ navigation }) => {
           </View>
 
           <View style={styles.content}>
-
             <View style={styles.card}>
               <TouchableOpacity
                 style={styles.addButton}
@@ -331,7 +352,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     marginBottom: 15,
-    marginTop: 15
+    marginTop: 15,
   },
   addButton: {
     marginBottom: 10,
