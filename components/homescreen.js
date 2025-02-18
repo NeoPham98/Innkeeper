@@ -16,21 +16,23 @@ import { AntDesign, Entypo, MaterialIcons } from "@expo/vector-icons";
 import { supabaseDB } from "../DBconfig";
 import { useRoute } from "@react-navigation/native";
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation, route }) => {
+  const { id_account } = route.params;
   const [refreshing, setRefreshing] = useState(false);
   const [homes, setHomes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedHome, setSelectedHome] = useState(null);
   const [notification, setNotification] = useState("");
-  const route = useRoute();
 
   const fetchHomes = async () => {
     setIsLoading(true);
     try {
+      console.log("Fetching homes for id_account:", id_account);
       const { data, error } = await supabaseDB
         .from("Home")
         .select("*")
+        .eq("id_account", id_account)
         .order("created_at", { ascending: false });
 
       if (error) {
@@ -217,7 +219,7 @@ const HomeScreen = ({ navigation }) => {
             <View style={styles.card}>
               <TouchableOpacity
                 style={styles.addButton}
-                onPress={() => navigation.navigate("CreateHome")}
+                onPress={() => navigation.navigate("CreateHome", { id_account: id_account })}
               >
                 <AntDesign name="pluscircleo" size={50} color="#006D5B" />
               </TouchableOpacity>

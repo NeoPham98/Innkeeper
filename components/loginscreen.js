@@ -52,8 +52,8 @@ const LoginScreen = ({ navigation }) => {
       }
 
       if (data && data.length > 0) {
-        // Đăng nhập thành công
-        navigation.navigate("Home");
+        const userAccount = data[0];
+        navigation.navigate("Home", { id_account: userAccount.id_account });
         setEmail("");
         setPassword("");
       } else {

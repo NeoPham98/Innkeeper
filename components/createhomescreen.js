@@ -17,7 +17,12 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { supabaseDB } from "../DBconfig";
 
-const CreateHomeScreen = ({ navigation }) => {
+const CreateHomeScreen = ({ navigation, route }) => {
+  const { id_account } = route.params || {};
+  if (!id_account) {
+    console.error("id_account is undefined");
+    return null;
+  }
   const [houseName, setHouseName] = useState("");
   const [address, setAddress] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -32,18 +37,24 @@ const CreateHomeScreen = ({ navigation }) => {
       return;
     }
 
+    if (typeof id_account === "undefined") {
+      console.error("id_account is undefined");
+      setNotification("Có lỗi xảy ra, vui lòng thử lại.");
+      return;
+    }
+
     try {
       setIsLoading(true);
 
       const { error } = await supabaseDB
         .from("Home")
-        .insert({ home_name: houseName, home_address: address });
+        .insert({ home_name: houseName, home_address: address, id_account: id_account });
 
       if (error) throw error;
 
       setIsLoading(false);
       setNotification("Đã tạo nhà trọ thành công!");
-      navigation.navigate("Home", { notification: "Đã tạo nhà thành công!" });
+      navigation.navigate("Home", { id_account });
     } catch (error) {
       setIsLoading(false);
       console.error("Error creating home:", error.message);
