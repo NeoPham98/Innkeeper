@@ -17,7 +17,7 @@ import { supabaseDB } from "../DBconfig";
 import { useRoute } from "@react-navigation/native";
 
 const HomeScreen = ({ navigation, route }) => {
-  const { id_account } = route.params;
+  const { id_account } = route.params || {};
   const [refreshing, setRefreshing] = useState(false);
   const [homes, setHomes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -25,10 +25,21 @@ const HomeScreen = ({ navigation, route }) => {
   const [selectedHome, setSelectedHome] = useState(null);
   const [notification, setNotification] = useState("");
 
+
+  if (!id_account) {
+    console.error(
+      "id_account is undefined. Please ensure it is passed correctly."
+    );
+    return (
+      <View>
+        <Text>Error: id_account is required.</Text>
+      </View>
+    );
+  }
+
   const fetchHomes = async () => {
     setIsLoading(true);
     try {
-      console.log("Fetching homes for id_account:", id_account);
       const { data, error } = await supabaseDB
         .from("Home")
         .select("*")
@@ -40,7 +51,6 @@ const HomeScreen = ({ navigation, route }) => {
         return;
       }
 
-      console.log("Fetched homes:", data);
       setHomes(data || []);
     } catch (error) {
       console.error("Error fetching homes:", error.message);
@@ -52,7 +62,19 @@ const HomeScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     fetchHomes();
-  }, []);
+
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchHomes(); // Gọi lại hàm fetchHomes khi quay lại màn hình
+    });
+
+    // Lắng nghe nếu có updateHomes từ params
+    const { updateHomes } = route.params || {};
+    if (updateHomes) {
+      fetchHomes(); // Gọi lại hàm fetchHomes nếu có yêu cầu cập nhật
+    }
+
+    return unsubscribe; // Dọn dẹp listener khi component unmount
+  }, [navigation, route.params]); // Thêm route.params vào dependency
 
   useEffect(() => {
     const { notification } = route.params || {};
@@ -114,7 +136,6 @@ const HomeScreen = ({ navigation, route }) => {
         return;
       }
 
-      console.log("Fetched rooms:", data);
       setRooms(data || []);
     } catch (error) {
       console.error("Error fetching rooms:", error.message);
@@ -219,7 +240,9 @@ const HomeScreen = ({ navigation, route }) => {
             <View style={styles.card}>
               <TouchableOpacity
                 style={styles.addButton}
-                onPress={() => navigation.navigate("CreateHome", { id_account: id_account })}
+                onPress={() =>
+                  navigation.navigate("CreateHome", { id_account: id_account })
+                }
               >
                 <AntDesign name="pluscircleo" size={50} color="#006D5B" />
               </TouchableOpacity>
@@ -255,7 +278,7 @@ const HomeScreen = ({ navigation, route }) => {
         visible={isModalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
               <TouchableOpacity
@@ -276,6 +299,7 @@ const HomeScreen = ({ navigation, route }) => {
                       id: selectedHome.id,
                       name: selectedHome.name,
                       address: selectedHome.address,
+                      id_account: id_account,
                       reloadHomes,
                     });
                     setModalVisible(false);

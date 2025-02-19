@@ -18,37 +18,35 @@ import { AntDesign } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { supabaseDB } from "../DBconfig";
+
 const formatCurrency = (value) => {
-  // Chuyển đổi giá trị thành số và định dạng với dấu phẩy
   const numberValue = parseFloat(value.replace(/,/g, "")); // Xóa dấu phẩy trước khi chuyển đổi
   return isNaN(numberValue) ? "" : numberValue.toLocaleString("en-US"); // Định dạng số
 };
 
-const CreateRoomScreen = ({ route, navigation }) => {
-  const { home } = route.params;
-  const [roomName, setRoomName] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [roomer, setRoomer] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [hometown, setHometown] = useState("");
-  const [cccdNumber, setCccdNumber] = useState("");
-  const [note, setNote] = useState("");
-  const [deposit, setDeposit] = useState("");
-  const [roomPrice, setRoomPrice] = useState("");
-  const [idCardFront, setIdCardFront] = useState(null);
-  const [idCardBack, setIdCardBack] = useState(null);
+const EditRoomScreen = ({ route, navigation }) => {
+  const { home, room } = route.params;
+  const [roomName, setRoomName] = useState(room.room_name);
+  const [quantity, setQuantity] = useState(room.quantity.toString());
+  const [roomer, setRoomer] = useState(room.roomer);
+  const [phoneNumber, setPhoneNumber] = useState(room.phone_number);
+  const [hometown, setHometown] = useState(room.hometown);
+  const [cccdNumber, setCccdNumber] = useState(room.cccd_number);
+  const [note, setNote] = useState(room.note);
+  const [deposit, setDeposit] = useState(formatCurrency(room.deposit));
+  const [roomPrice, setRoomPrice] = useState(formatCurrency(room.room_price));
+  const [idCardFront, setIdCardFront] = useState(room.front_card_img);
+  const [idCardBack, setIdCardBack] = useState(room.back_card_img);
   const [isLoading, setIsLoading] = useState(false);
   const [isNotificationVisible, setNotificationVisible] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [contractImage, setContractImage] = useState([null, null]);
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date(room.rental_date));
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [id_home, setIdHome] = useState(null);
-  const [formattedDeposit, setFormattedDeposit] = useState("");
-  const [formattedRoomPrice, setFormattedRoomPrice] = useState("");
-
+  console.log("room:", room);
   const handleSave = async () => {
     if (
       !roomName ||
@@ -78,6 +76,10 @@ const CreateRoomScreen = ({ route, navigation }) => {
         startDate.getTime() + 7 * 60 * 60 * 1000
       );
 
+      // Thêm dòng này để đảm bảo tiền cọc và tiền phòng được điền đúng
+      const depositValue = deposit.replace(/,/g, "").trim();
+      const roomPriceValue = roomPrice.replace(/,/g, "").trim();
+
       const { error } = await supabaseDB.from("Rooms").insert({
         id_home: home.id_home,
         room_name: roomName,
@@ -90,8 +92,8 @@ const CreateRoomScreen = ({ route, navigation }) => {
         cccd_number: cccdNumber,
         rental_date: rentalDateUtcPlus7,
         note: note,
-        deposit: deposit,
-        room_price: roomPrice,
+        deposit: depositValue,
+        room_price: roomPriceValue,
         contract_img: contractImage,
         quantity: quantity,
         created_at: utcPlus7,
@@ -154,19 +156,21 @@ const CreateRoomScreen = ({ route, navigation }) => {
   };
 
   const handleDepositChange = (value) => {
+    // Cập nhật giá trị nhập vào
     setDeposit(value);
-    setFormattedDeposit(formatCurrency(value)); // Cập nhật giá trị đã định dạng
-    // Chuyển đổi giá trị thành số trước khi lưu vào DB
-    const numericValue = parseFloat(value.replace(/,/g, ""));
-    setDeposit(numericValue); // Lưu giá trị số
+    // Định dạng lại giá trị với dấu phẩy
+    const numericValue = value.replace(/,/g, ""); // Xóa dấu phẩy để chuyển đổi thành số
+    const formattedValue = formatCurrency(numericValue); // Định dạng lại với dấu phẩy
+    setDeposit(formattedValue); // Cập nhật giá trị đã định dạng
   };
 
   const handleRoomPriceChange = (value) => {
+    // Cập nhật giá trị nhập vào
     setRoomPrice(value);
-    setFormattedRoomPrice(formatCurrency(value)); // Cập nhật giá trị đã định dạng
-    // Chuyển đổi giá trị thành số trước khi lưu vào DB
-    const numericValue = parseFloat(value.replace(/,/g, ""));
-    setRoomPrice(numericValue); // Lưu giá trị số
+    // Định dạng lại giá trị với dấu phẩy
+    const numericValue = value.replace(/,/g, ""); // Xóa dấu phẩy để chuyển đổi thành số
+    const formattedValue = formatCurrency(numericValue); // Định dạng lại với dấu phẩy
+    setRoomPrice(formattedValue); // Cập nhật giá trị đã định dạng
   };
 
   return (
@@ -186,7 +190,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
               onPress={() => navigation.goBack()}
             >
               <AntDesign name="arrowleft" size={24} color="#2C3E50" />
-              <Text style={styles.headerText}>Tạo phòng</Text>
+              <Text style={styles.headerText}>Chỉnh sửa phòng</Text>
             </TouchableOpacity>
           </View>
 
@@ -382,7 +386,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
             <TextInput
               style={styles.input}
               placeholder="Ví dụ: 1,000,000 ₫"
-              value={formattedDeposit}
+              value={deposit}
               onChangeText={handleDepositChange}
               keyboardType="numeric"
             />
@@ -393,7 +397,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
             <TextInput
               style={styles.input}
               placeholder="Ví dụ: 1,000,000 ₫"
-              value={formattedRoomPrice}
+              value={roomPrice}
               onChangeText={handleRoomPriceChange}
               keyboardType="numeric"
             />
@@ -692,4 +696,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateRoomScreen;
+export default EditRoomScreen;

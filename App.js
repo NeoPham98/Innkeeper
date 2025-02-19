@@ -7,6 +7,7 @@ import CreateHomeScreen from "./components/createhomescreen";
 import EditHomeScreen from "./components/EditHomeScreen";
 import DetailHomeScreen from "./components/DetailHomeScreen";
 import CreateRoomScreen from "./components/CreateRoomScreen";
+import EditRoomScreen from "./components/EditRoomScreen";
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -22,7 +23,7 @@ export default function App() {
         <Stack.Screen name="EditHome" component={EditHomeScreen} />
         <Stack.Screen name="DetailHome" component={DetailHomeScreen} />
         <Stack.Screen name="CreateRoom" component={CreateRoomScreen} />
-        
+        <Stack.Screen name="EditRoom" component={EditRoomScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

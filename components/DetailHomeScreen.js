@@ -19,6 +19,7 @@ import {
 } from "@expo/vector-icons";
 import { supabaseDB } from "../DBconfig";
 import Toast from "react-native-toast-message";
+import EditRoomScreen from "./EditRoomScreen";
 
 const DetailHomeScreen = ({ route, navigation }) => {
   const { home } = route.params; // Nhận thông tin nhà từ params
@@ -27,6 +28,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isActionModalVisible, setActionModalVisible] = useState(false); // Trạng thái cho modal hành động
+  const [notification, setNotification] = useState(""); // Thêm state cho thông báo
 
   const fetchRooms = async () => {
     try {
@@ -41,6 +43,36 @@ const DetailHomeScreen = ({ route, navigation }) => {
         return;
       }
 
+      // Đếm số lượng id_room
+      const roomCount = data ? data.length : 0;
+
+      // Đếm số lượng phòng có is_active = true
+      const inActiveRoomCount = data
+        ? data.filter((room) => room.is_active === false).length
+        : 0;
+
+      // Cập nhật room_total và room_total_empty trong bảng Home
+      const { updateError } = await supabaseDB
+        .from("Home")
+        .update({
+          room_total: roomCount,
+          room_total_empty: inActiveRoomCount, // Cập nhật số lượng phòng đang hoạt động
+        })
+        .eq("id_home", home.id_home);
+
+      if (updateError) {
+        console.error(
+          "Error updating room_total and room_total_empty:",
+          updateError.message
+        );
+      } else {
+        console.log(
+          "Cập nhật room_total và room_total_empty thành công:",
+          roomCount,
+          inActiveRoomCount
+        );
+      }
+
       setRooms(data || []);
     } catch (error) {
       console.error("Error fetching rooms:", error.message);
@@ -50,8 +82,18 @@ const DetailHomeScreen = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    fetchRooms();
-  }, [home]);
+    if (home && home.id_home) {
+      fetchRooms();
+
+      const unsubscribe = navigation.addListener("focus", () => {
+        if (home && home.id_home) {
+          fetchRooms();
+        }
+      });
+
+      return unsubscribe; // Dọn dẹp listener khi component unmount
+    }
+  }, [navigation, home]);
 
   const handleMenuPress = (room) => {
     setSelectedRoom(room);
@@ -59,8 +101,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
   };
 
   const handleEdit = () => {
-    // Logic for editing the room
-    setActionModalVisible(false);
+    navigation.navigate("EditRoom", { room: selectedRoom, home }); // Điều hướng đến màn chỉnh sửa
   };
 
   const handleDelete = async () => {
@@ -73,31 +114,58 @@ const DetailHomeScreen = ({ route, navigation }) => {
 
       if (error) {
         console.error("Error deleting room:", error.message);
-        Toast.show({
-          text1: "Xóa thất bại",
-          text2: "Không thể xóa phòng.",
-          type: "error",
-          style: { fontSize: 18 },
-        });
+        setNotification("Không thể xóa phòng."); // Thiết lập thông báo thất bại
       } else {
         // Cập nhật danh sách phòng sau khi xóa
         setRooms((prevRooms) =>
           prevRooms.filter((room) => room.id_room !== selectedRoom.id_room)
         );
-        Toast.show({
-          text1: "Xóa thành công",
-          text2: "Phòng đã được xóa.",
-          type: "success",
-          style: { fontSize: 18 },
-        });
+        setNotification("Xóa phòng thành công!"); // Thiết lập thông báo thành công
+
+        // Cập nhật room_total và room_total_empty trong bảng Home
+        const roomCount = rooms.length - 1; // Đếm số lượng phòng còn lại
+        const inActiveRoomCount = rooms.filter(
+          (room) => room.is_active === false
+        ).length; // Đếm số lượng phòng đang hoạt động
+        const { updateError } = await supabaseDB
+          .from("Home")
+          .update({
+            room_total: roomCount,
+            room_total_empty: inActiveRoomCount,
+          })
+          .eq("id_home", home.id_home);
+
+        if (updateError) {
+          console.error(
+            "Error updating room_total and room_total_empty:",
+            updateError.message
+          );
+        } else {
+          console.log(
+            "Cập nhật room_total và room_total_empty thành công:",
+            roomCount,
+            inActiveRoomCount
+          );
+        }
       }
     } catch (error) {
       console.error("Error deleting room:", error.message);
+      setNotification("Không thể xóa phòng."); // Thiết lập thông báo thất bại
     } finally {
       setModalVisible(false); // Đóng modal sau khi xóa
       setActionModalVisible(false); // Đóng modal hành động
     }
   };
+
+  // Xóa thông báo sau 3 giây
+  useEffect(() => {
+    if (notification) {
+      const timer = setTimeout(() => {
+        setNotification("");
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [notification]);
 
   const renderActionModal = () => (
     <Modal
@@ -106,33 +174,39 @@ const DetailHomeScreen = ({ route, navigation }) => {
       visible={isActionModalVisible}
       onRequestClose={() => setActionModalVisible(false)}
     >
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={() => setActionModalVisible(false)}
-          >
-            <AntDesign name="close" size={20} color="white" />
-          </TouchableOpacity>
-          <Text style={styles.modalTitle}>Chọn hành động</Text>
-          <TouchableOpacity onPress={handleEdit}>
-            <Text style={styles.modalButtonText}>Chỉnh sửa</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleDelete}>
-            <Text style={styles.modalButtonText}>Xóa</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActionModalVisible(false)}>
-            <Text style={styles.modalButtonText}>Hủy</Text>
-          </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={() => setActionModalVisible(false)}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setActionModalVisible(false)}
+            >
+              <AntDesign name="close" size={20} color="white" />
+            </TouchableOpacity>
+            <Text style={styles.modalTitle}>Chọn hành động</Text>
+            <Text style={styles.modalMessage}>
+              Bạn muốn làm gì với nhà này?
+            </Text>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.modalButton} onPress={handleEdit}>
+                <Text style={styles.modalButtonText}>Chỉnh sửa</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={handleDelete}
+              >
+                <Text style={styles.modalButtonText}>Xóa</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 
   const renderRoomDetails = (room) => {
     const handleToggleSwitch = async () => {
       const newStatus = !room.is_active;
-      console.log("Trạng thái đã thay đổi:", newStatus);
 
       const { error } = await supabaseDB
         .from("Rooms")
@@ -148,11 +222,16 @@ const DetailHomeScreen = ({ route, navigation }) => {
           style: { fontSize: 18 },
         });
       } else {
+        // Cập nhật trạng thái trong local state
         setRooms((prevRooms) =>
           prevRooms.map((r) =>
             r.id_room === room.id_room ? { ...r, is_active: newStatus } : r
           )
         );
+
+        // Gọi lại hàm fetchRooms để cập nhật dữ liệu từ cơ sở dữ liệu
+        await fetchRooms();
+
         Toast.show({
           text1: "Cập nhật thành công",
           text2: `Trạng thái phòng đã được cập nhật thành ${
@@ -162,6 +241,14 @@ const DetailHomeScreen = ({ route, navigation }) => {
           style: { fontSize: 18 },
         });
       }
+    };
+
+    // Hàm định dạng giá tiền với dấu phẩy
+    const formatCurrency = (value) => {
+      if (value) {
+        return parseFloat(value).toLocaleString("vi-VN"); // Định dạng số với dấu phẩy
+      }
+      return "0"; // Trả về "0" nếu không có giá trị
     };
 
     return (
@@ -207,7 +294,9 @@ const DetailHomeScreen = ({ route, navigation }) => {
           </View>
           <View style={styles.statsRow}>
             <Text style={styles.statsLabel}>Giá phòng:</Text>
-            <Text style={styles.statsValue}>{room.room_price || 0} đ</Text>
+            <Text style={styles.statsValue}>
+              {formatCurrency(room.room_price)} đ
+            </Text>
           </View>
         </View>
         <View style={styles.separator} />
@@ -245,6 +334,13 @@ const DetailHomeScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
+      {/* Hiển thị thông báo nếu có */}
+      {notification ? (
+        <View style={styles.notification}>
+          <Text style={styles.notificationText}>{notification}</Text>
+        </View>
+      ) : null}
+
       <View style={styles.headerContainer}>
         <TouchableOpacity
           style={styles.backButton}
@@ -464,10 +560,26 @@ const styles = StyleSheet.create({
     color: "#E74C3C",
     marginBottom: 15,
   },
+  modalButton: {
+    backgroundColor: "#006D5B",
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginHorizontal: 5,
+    flex: 1,
+    alignItems: "center",
+  },
   modalButtonText: {
+    color: "white",
     fontSize: 18,
-    color: "#007BFF",
-    marginVertical: 10,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    marginTop: 15,
   },
   closeButton: {
     position: "absolute",
@@ -488,6 +600,28 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: "center",
     alignItems: "center",
+  },
+  modalMessage: {
+    fontSize: 18,
+    color: "#2C3E50",
+    textAlign: "center",
+    marginBottom: 25,
+  },
+  notification: {
+    backgroundColor: "#FFD700",
+    padding: 10,
+    borderRadius: 5,
+    position: "absolute",
+    top: 40,
+    left: 10,
+    right: 10,
+    alignItems: "center",
+    zIndex: 1,
+  },
+  notificationText: {
+    color: "#2C3E50",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

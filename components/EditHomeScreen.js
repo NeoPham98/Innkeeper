@@ -12,13 +12,13 @@ import { AntDesign } from "@expo/vector-icons";
 import { supabaseDB } from "../DBconfig";
 
 const EditHomeScreen = ({ route, navigation }) => {
-  const { id, name, address, reloadHomes } = route.params;
+  const { id, name, address, id_account } = route.params;
   const [homeName, setHomeName] = useState(name);
   const [homeAddress, setHomeAddress] = useState(address);
   const [isLoading, setIsLoading] = useState(false);
   const [notification, setNotification] = useState("");
-
   const updateHome = async () => {
+    
     try {
       setIsLoading(true);
 
@@ -30,10 +30,13 @@ const EditHomeScreen = ({ route, navigation }) => {
       if (error) throw error;
 
       setIsLoading(false);
-      navigation.navigate("Home", { notification: "Cập nhật nhà trọ thành công!" });
+      navigation.navigate("Home", {
+        notification: "Cập nhật nhà trọ thành công!",
+        id_account: id_account,
+
+      });
     } catch (error) {
       setIsLoading(false);
-      console.error("Error updating home:", error.message);
       setNotification("Cập nhật thất bại!");
     }
   };
@@ -43,7 +46,7 @@ const EditHomeScreen = ({ route, navigation }) => {
       <View style={styles.headerContainer}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => navigation.navigate("Home", { id_account })}
         >
           <AntDesign name="arrowleft" size={24} color="#2C3E50" />
           <Text style={styles.headerText}>Chỉnh sửa</Text>

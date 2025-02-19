@@ -46,15 +46,20 @@ const CreateHomeScreen = ({ navigation, route }) => {
     try {
       setIsLoading(true);
 
-      const { error } = await supabaseDB
-        .from("Home")
-        .insert({ home_name: houseName, home_address: address, id_account: id_account });
+      const { error } = await supabaseDB.from("Home").insert({
+        home_name: houseName,
+        home_address: address,
+        id_account: id_account,
+      });
 
       if (error) throw error;
 
       setIsLoading(false);
-      setNotification("Đã tạo nhà trọ thành công!");
-      navigation.navigate("Home", { id_account });
+
+      navigation.navigate("Home", {
+        id_account,
+        notification: "Đã tạo nhà trọ thành công!",
+      });
     } catch (error) {
       setIsLoading(false);
       console.error("Error creating home:", error.message);
@@ -82,7 +87,7 @@ const CreateHomeScreen = ({ navigation, route }) => {
             <View style={styles.headerContainer}>
               <TouchableOpacity
                 style={styles.backButton}
-                onPress={() => navigation.navigate("Home")}
+                onPress={() => navigation.navigate("Home", { id_account })}
               >
                 <AntDesign name="arrowleft" size={24} color="#2C3E50" />
                 <Text style={styles.headerText}>Tạo nhà</Text>
