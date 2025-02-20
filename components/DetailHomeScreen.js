@@ -185,7 +185,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
             </TouchableOpacity>
             <Text style={styles.modalTitle}>Chọn hành động</Text>
             <Text style={styles.modalMessage}>
-              Bạn muốn làm gì với nhà này?
+              Bạn muốn làm gì với phòng này?
             </Text>
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.modalButton} onPress={handleEdit}>
@@ -367,7 +367,10 @@ const DetailHomeScreen = ({ route, navigation }) => {
           <FontAwesome name="money" size={30} color="#32CD32" />
           <Text style={styles.infoText}>Thu tiền</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.infoItem}>
+        <TouchableOpacity
+          style={styles.infoItem}
+          onPress={() => navigation.navigate("Settings")}
+        >
           <FontAwesome name="cog" size={30} color="#1E90FF" />
           <Text style={styles.infoText}>Cài đặt</Text>
         </TouchableOpacity>

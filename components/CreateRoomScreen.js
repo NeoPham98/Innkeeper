@@ -354,7 +354,11 @@ const CreateRoomScreen = ({ route, navigation }) => {
                     <View key={index} style={styles.imageColumn}>
                       <TouchableOpacity
                         style={styles.imageUploadButton}
-                        onPress={() => handleImageUpload("contract", index)}
+                        onPress={() =>
+                          contractImage[index]
+                            ? openImagePreview(contractImage[index])
+                            : handleImageUpload("contract", index)
+                        }
                       >
                         {contractImage[index] ? (
                           <Image

@@ -42,7 +42,9 @@ const EditRoomScreen = ({ route, navigation }) => {
   const [notificationMessage, setNotificationMessage] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [contractImage, setContractImage] = useState([null, null]);
+  const [contractImage, setContractImage] = useState(
+    JSON.parse(room.contract_img) || [null, null]
+  );
   const [startDate, setStartDate] = useState(new Date(room.rental_date));
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [id_home, setIdHome] = useState(null);
@@ -80,35 +82,37 @@ const EditRoomScreen = ({ route, navigation }) => {
       const depositValue = deposit.replace(/,/g, "").trim();
       const roomPriceValue = roomPrice.replace(/,/g, "").trim();
 
-      const { error } = await supabaseDB.from("Rooms").insert({
-        id_home: home.id_home,
-        room_name: roomName,
-        roomer: roomer,
-        is_active: true,
-        phone_number: phoneNumber,
-        front_card_img: idCardFront,
-        back_card_img: idCardBack,
-        hometown: hometown,
-        cccd_number: cccdNumber,
-        rental_date: rentalDateUtcPlus7,
-        note: note,
-        deposit: depositValue,
-        room_price: roomPriceValue,
-        contract_img: contractImage,
-        quantity: quantity,
-        created_at: utcPlus7,
-      });
+      const { error } = await supabaseDB
+        .from("Rooms")
+        .update({
+          room_name: roomName,
+          roomer: roomer,
+          is_active: true,
+          phone_number: phoneNumber,
+          front_card_img: idCardFront,
+          back_card_img: idCardBack,
+          hometown: hometown,
+          cccd_number: cccdNumber,
+          rental_date: rentalDateUtcPlus7,
+          note: note,
+          deposit: depositValue,
+          room_price: roomPriceValue,
+          contract_img: JSON.stringify(contractImage),
+          quantity: quantity,
+          created_at: utcPlus7,
+        })
+        .eq("id_room", room.id_room);
 
       if (error) throw error;
 
       setIsLoading(false);
-      setNotificationMessage("Đã tạo phòng thành công!");
+      setNotificationMessage("Chỉnh sửa phòng thành công!");
       setNotificationVisible(true);
       setTimeout(() => navigation.navigate("DetailHome", { home }), 2000);
     } catch (error) {
       setIsLoading(false);
       console.error("Error creating room:", error.message);
-      setNotificationMessage("Tạo phòng thất bại!");
+      setNotificationMessage("Chỉnh sửa thất bại!");
       setNotificationVisible(true);
     }
   };
@@ -354,15 +358,15 @@ const EditRoomScreen = ({ route, navigation }) => {
                   )}
                 </View>
                 <View style={styles.imageRow}>
-                  {[0, 1].map((index) => (
+                  {contractImage.map((image, index) => (
                     <View key={index} style={styles.imageColumn}>
                       <TouchableOpacity
                         style={styles.imageUploadButton}
                         onPress={() => handleImageUpload("contract", index)}
                       >
-                        {contractImage[index] ? (
+                        {image ? (
                           <Image
-                            source={{ uri: contractImage[index] }}
+                            source={{ uri: image }}
                             style={styles.imagePreview}
                             resizeMode="contain"
                           />
