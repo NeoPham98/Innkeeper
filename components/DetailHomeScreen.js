@@ -22,7 +22,8 @@ import Toast from "react-native-toast-message";
 import EditRoomScreen from "./EditRoomScreen";
 
 const DetailHomeScreen = ({ route, navigation }) => {
-  const { home } = route.params; // Nhận thông tin nhà từ params
+  const { home } = route.params || {}; // Nhận thông tin nhà từ params
+  const effectiveHome = home || {}; // Gán giá trị mặc định cho home
   const [rooms, setRooms] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedRoom, setSelectedRoom] = useState(null);
@@ -36,7 +37,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
       const { data, error } = await supabaseDB
         .from("Rooms")
         .select("*")
-        .eq("id_home", home.id_home);
+        .eq("id_home", effectiveHome.id_home);
 
       if (error) {
         console.error("Error fetching rooms:", error.message);
@@ -58,7 +59,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
           room_total: roomCount,
           room_total_empty: inActiveRoomCount, // Cập nhật số lượng phòng đang hoạt động
         })
-        .eq("id_home", home.id_home);
+        .eq("id_home", effectiveHome.id_home);
 
       if (updateError) {
         console.error(
@@ -82,18 +83,18 @@ const DetailHomeScreen = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    if (home && home.id_home) {
+    if (effectiveHome && effectiveHome.id_home) {
       fetchRooms();
 
       const unsubscribe = navigation.addListener("focus", () => {
-        if (home && home.id_home) {
+        if (effectiveHome && effectiveHome.id_home) {
           fetchRooms();
         }
       });
 
       return unsubscribe; // Dọn dẹp listener khi component unmount
     }
-  }, [navigation, home]);
+  }, [navigation, effectiveHome]);
 
   const handleMenuPress = (room) => {
     setSelectedRoom(room);
@@ -101,7 +102,11 @@ const DetailHomeScreen = ({ route, navigation }) => {
   };
 
   const handleEdit = () => {
-    navigation.navigate("EditRoom", { room: selectedRoom, home }); // Điều hướng đến màn chỉnh sửa
+    setActionModalVisible(false); // Đóng modal hành động trước khi điều hướng
+    navigation.navigate("EditRoom", {
+      room: selectedRoom,
+      home: effectiveHome,
+    }); // Điều hướng đến màn chỉnh sửa
   };
 
   const handleDelete = async () => {
@@ -133,7 +138,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
             room_total: roomCount,
             room_total_empty: inActiveRoomCount,
           })
-          .eq("id_home", home.id_home);
+          .eq("id_home", effectiveHome.id_home);
 
         if (updateError) {
           console.error(
@@ -153,7 +158,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
       setNotification("Không thể xóa phòng."); // Thiết lập thông báo thất bại
     } finally {
       setModalVisible(false); // Đóng modal sau khi xóa
-      setActionModalVisible(false); // Đóng modal hành động
+      setActionModalVisible(true); // Đóng modal hành động
     }
   };
 
@@ -317,11 +322,17 @@ const DetailHomeScreen = ({ route, navigation }) => {
                 styles.createInvoiceButton,
                 { opacity: room.is_active ? 1 : 0.5 },
               ]}
-              onPress={() => {
-                if (room.is_active) {
-                  console.log("Tạo hóa đơn được nhấn");
-                }
-              }}
+              onPress={() =>
+                navigation.navigate("CreateInvoice", {
+                  room_name: room.room_name,
+                  room_id: room.id_room,
+                  room_price: room.room_price,
+                  roomer: room.roomer,
+                  phone_number: room.phone_number,
+                  id_home: effectiveHome.id_home,
+                  quantity: room.quantity,
+                })
+              }
               disabled={!room.is_active}
             >
               <Text style={styles.createInvoiceButtonText}>Tạo hóa đơn</Text>
@@ -347,14 +358,16 @@ const DetailHomeScreen = ({ route, navigation }) => {
           onPress={() => navigation.goBack()}
         >
           <AntDesign name="arrowleft" size={26} color="#2C3E50" />
-          <Text style={styles.headerText}>{home.home_name}</Text>
+          <Text style={styles.headerText}>{effectiveHome.home_name}</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.infoContainer}>
         <TouchableOpacity
           style={styles.infoItem}
-          onPress={() => navigation.navigate("CreateRoom", { home })}
+          onPress={() =>
+            navigation.navigate("CreateRoom", { home: effectiveHome })
+          }
         >
           <FontAwesome name="plus-circle" size={30} color="#FF6347" />
           <Text style={styles.infoText}>Thêm phòng</Text>
@@ -369,7 +382,9 @@ const DetailHomeScreen = ({ route, navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.infoItem}
-          onPress={() => navigation.navigate("Settings")}
+          onPress={() =>
+            navigation.navigate("Settings", { id_home: effectiveHome.id_home })
+          }
         >
           <FontAwesome name="cog" size={30} color="#1E90FF" />
           <Text style={styles.infoText}>Cài đặt</Text>

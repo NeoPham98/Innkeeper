@@ -17,8 +17,9 @@ import { AntDesign, Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { supabaseDB } from "../DBconfig";
 
-const SettingsScreen = () => {
+const SettingsScreen = ({ route }) => {
   const navigation = useNavigation();
+  const { id_home } = route.params; // Nhận id_home từ params
   const [modalVisible, setModalVisible] = useState(false);
   const [electricPrice, setElectricPrice] = useState("");
   const [waterPrice, setWaterPrice] = useState("");
@@ -30,32 +31,67 @@ const SettingsScreen = () => {
   const [selectedServiceId, setSelectedServiceId] = useState(null);
   const [notification, setNotification] = useState("");
   const [refreshing, setRefreshing] = useState(false);
+  const [serviceName, setServiceName] = useState("");
+  const [servicePrice, setServicePrice] = useState("");
+  const [isEditModalVisible, setEditModalVisible] = useState(false);
+  const [editServiceName, setEditServiceName] = useState("");
+  const [editServicePrice, setEditServicePrice] = useState("");
+
+  const formatNumberWithCommas = (numberString) => {
+    const number = parseFloat(numberString.replace(/,/g, ""));
+    return isNaN(number) ? "" : number.toLocaleString("en-US");
+  };
 
   const fetchSettings = async () => {
-    setIsLoading(true);
     try {
       const { data, error } = await supabaseDB
         .from("Setting")
-        .select("electric_price, water_price")
-        .single();
+        .select("*")
+        .eq("id_home", id_home) // Đảm bảo rằng bạn đang lọc theo id_home
+        .limit(1); // Sử dụng .limit(1) để chỉ lấy một hàng
 
-      if (error) {
-        console.error("Error fetching settings:", error.message);
+      // Nếu không tìm thấy bản ghi, tạo mới mà không hiển thị lỗi
+      if (!data || data.length === 0) {
+        // Tạo mới bản ghi trong bảng Setting
+        const { error: insertError } = await supabaseDB
+          .from("Setting")
+          .insert([{ id_home: id_home, electric_price: 0, water_price: 0 }]); // Gán giá trị mặc định
+
+        // Không hiển thị lỗi nếu không thể tạo mới
+        if (insertError) {
+          console.error("Error creating new settings:", insertError.message);
+          return;
+        }
+
+        // Lấy lại bản ghi vừa tạo
+        const { data: newData } = await supabaseDB
+          .from("Setting")
+          .select("*")
+          .eq("id_home", id_home)
+          .limit(1);
+
+        // Lấy bản ghi đầu tiên
+        const settings = newData[0];
+        setElectricPrice(settings.electric_price);
+        setWaterPrice(settings.water_price);
         return;
       }
 
-      setElectricPrice(data.electric_price);
-      setWaterPrice(data.water_price);
+      // Lấy bản ghi đầu tiên
+      const settings = data[0];
+      setElectricPrice(settings.electric_price);
+      setWaterPrice(settings.water_price);
     } catch (error) {
       console.error("Error fetching settings:", error.message);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const fetchServices = async () => {
     try {
-      const { data, error } = await supabaseDB.from("Service").select("*");
+      const { data, error } = await supabaseDB
+        .from("Service")
+        .select("*")
+        .eq("id_home", id_home); // Lọc theo id_home
 
       if (error) {
         console.error("Error fetching services:", error.message);
@@ -72,6 +108,9 @@ const SettingsScreen = () => {
     if (!electricPrice || !waterPrice) {
       setNotificationMessage("Giá điện và giá nước không được để trống.");
       setNotificationVisible(true);
+      setTimeout(() => {
+        setNotificationVisible(false);
+      }, 2000);
       return;
     }
 
@@ -83,22 +122,42 @@ const SettingsScreen = () => {
           electric_price: parseFloat(electricPrice),
           water_price: parseFloat(waterPrice),
         })
-        .eq("id", 1); // Giả sử bạn có một trường id để xác định bản ghi cần cập nhật
+        .eq("id_home", id_home); // Cập nhật theo id_home
 
       if (error) throw error;
 
-      setNotificationMessage("Cập nhật thành công!");
+      // Hiển thị thông báo thành công
+      setNotification("Cập nhật thành công!");
+      setNotificationVisible(true);
+      setTimeout(() => {
+        setNotificationVisible(false);
+        setNotification("");
+      }, 2000); // Tự động ẩn thông báo sau 2 giây
     } catch (error) {
       console.error("Error updating settings:", error.message);
       setNotificationMessage("Cập nhật thất bại!");
+      setNotificationVisible(true);
+      setTimeout(() => {
+        setNotificationVisible(false);
+      }, 2000); // Tự động ẩn thông báo sau 2 giây
     } finally {
       setIsLoading(false);
-      setNotificationVisible(true);
     }
   };
 
   const handleEdit = () => {
-    // Implement the edit logic here
+    if (!selectedServiceId) return; // Kiểm tra nếu không có serviceId đã chọn
+
+    // Tìm dịch vụ đã chọn để điền thông tin vào modal
+    const selectedService = services.find(
+      (service) => service.service_id === selectedServiceId
+    );
+    if (selectedService) {
+      setEditServiceName(selectedService.service_name);
+      setEditServicePrice(selectedService.service_price.toString()); // Chuyển đổi giá thành chuỗi
+    }
+    setActionModalVisible(false); // Đóng modal hành động
+    setEditModalVisible(true); // Mở modal chỉnh sửa
   };
 
   const handleDelete = async () => {
@@ -128,6 +187,92 @@ const SettingsScreen = () => {
     await fetchSettings();
     await fetchServices();
     setRefreshing(false);
+  };
+
+  const handleAddService = async () => {
+    if (!serviceName || !servicePrice) {
+      setNotificationMessage("Tên dịch vụ và số tiền không được để trống.");
+      setNotificationVisible(true);
+      setTimeout(() => {
+        setNotificationVisible(false);
+      }, 3000);
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const { error } = await supabaseDB.from("Service").insert([
+        {
+          service_name: serviceName,
+          service_price: parseFloat(servicePrice),
+          id_home: id_home,
+        },
+      ]);
+
+      if (error) throw error;
+
+      setNotification("Thêm dịch vụ thành công!");
+      fetchServices(); // Reload lại danh sách dịch vụ
+      setTimeout(() => {
+        setNotification("");
+      }, 3000);
+
+      setModalVisible(false);
+    } catch (error) {
+      console.error("Error adding service:", error.message);
+      setNotificationMessage("Thêm dịch vụ thất bại!");
+      setTimeout(() => {
+        setNotificationMessage("");
+      }, 3000);
+    } finally {
+      setIsLoading(false);
+      setServiceName("");
+      setServicePrice("");
+    }
+  };
+
+  const handleEditService = async () => {
+    if (!editServiceName || !editServicePrice) {
+      setNotificationMessage("Tên dịch vụ và số tiền không được để trống.");
+      setNotificationVisible(true);
+      setTimeout(() => {
+        setNotificationVisible(false);
+      }, 2000);
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const { error } = await supabaseDB
+        .from("Service")
+        .update({
+          service_name: editServiceName,
+          service_price: parseFloat(editServicePrice),
+        })
+        .eq("service_id", selectedServiceId); // Sử dụng selectedServiceId để xác định bản ghi cần cập nhật
+
+      if (error) throw error;
+
+      setNotification("Cập nhật dịch vụ thành công!");
+      fetchServices(); // Reload lại danh sách dịch vụ
+      setEditModalVisible(false); // Đóng modal chỉnh sửa
+      setNotificationVisible(true);
+      setTimeout(() => {
+        setNotificationVisible(false);
+        setNotification(""); // Xóa thông báo
+      }, 3000);
+    } catch (error) {
+      console.error("Error updating service:", error.message);
+      setNotificationMessage("Cập nhật dịch vụ thất bại!");
+    } finally {
+      setIsLoading(false);
+      setEditServiceName("");
+      setEditServicePrice("");
+      setNotificationVisible(true);
+      setTimeout(() => {
+        setNotificationVisible(false);
+      }, 2000);
+    }
   };
 
   useEffect(() => {
@@ -172,23 +317,62 @@ const SettingsScreen = () => {
     </Modal>
   );
 
-  const renderNotificationModal = () => (
+  const renderEditModal = () => (
     <Modal
       animationType="slide"
       transparent={true}
-      visible={isNotificationVisible}
-      onRequestClose={() => setNotificationVisible(false)}
+      visible={isEditModalVisible}
+      onRequestClose={() => setEditModalVisible(false)}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.notificationModalOverlay}>
-          <View style={styles.notificationModalContent}>
-            <Text style={styles.modalTitle}>Thông báo</Text>
-            <Text style={styles.modalMessage}>{notificationMessage}</Text>
+      <TouchableWithoutFeedback onPress={() => setEditModalVisible(false)}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
             <TouchableOpacity
               style={styles.closeButton}
-              onPress={() => setNotificationVisible(false)}
+              onPress={() => setEditModalVisible(false)}
             >
-              <Text style={styles.closeButtonText}>Đóng</Text>
+              <AntDesign name="close" size={20} color="white" />
+            </TouchableOpacity>
+            <Text style={styles.modalTitle}>Chỉnh sửa dịch vụ</Text>
+            <Text
+              style={[
+                styles.modalLabel,
+                { textAlign: "left", alignSelf: "flex-start" },
+              ]}
+            >
+              Tên dịch vụ
+            </Text>
+            <TextInput
+              style={styles.modalInput}
+              placeholder="Nhập tên dịch vụ"
+              value={editServiceName}
+              onChangeText={setEditServiceName}
+            />
+            <Text
+              style={[
+                styles.modalLabel,
+                { textAlign: "left", alignSelf: "flex-start" },
+              ]}
+            >
+              Tên dịch vụ
+            </Text>
+            <TextInput
+              style={styles.modalInput}
+              placeholder="Nhập số tiền"
+              keyboardType="numeric"
+              value={
+                editServicePrice ? formatNumberWithCommas(editServicePrice) : ""
+              }
+              onChangeText={(text) => {
+                const numericValue = text.replace(/[^0-9]/g, "");
+                setEditServicePrice(numericValue);
+              }}
+            />
+            <TouchableOpacity
+              style={styles.modalButtonAdd}
+              onPress={handleEditService}
+            >
+              <Text style={styles.buttonText}>Cập nhật</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -233,9 +417,7 @@ const SettingsScreen = () => {
             <TextInput
               style={styles.input}
               placeholder="Ví dụ: 3,000 đ"
-              value={
-                electricPrice ? parseFloat(electricPrice).toLocaleString() : ""
-              }
+              value={electricPrice ? formatNumberWithCommas(electricPrice) : ""}
               onChangeText={(text) => {
                 const numericValue = text.replace(/[^0-9]/g, "");
                 setElectricPrice(numericValue);
@@ -247,7 +429,7 @@ const SettingsScreen = () => {
             <TextInput
               style={styles.input}
               placeholder="Ví dụ: 100,000 đ"
-              value={waterPrice ? parseFloat(waterPrice).toLocaleString() : ""}
+              value={waterPrice ? formatNumberWithCommas(waterPrice) : ""}
               onChangeText={(text) => {
                 const numericValue = text.replace(/[^0-9]/g, "");
                 setWaterPrice(numericValue);
@@ -263,10 +445,10 @@ const SettingsScreen = () => {
           <View style={styles.serviceWrapper}>
             <Text style={styles.subHeader}>Thêm dịch vụ trên hóa đơn</Text>
             {services.map((service) => (
-              <View key={service.id} style={styles.serviceContainer}>
+              <View key={service.service_id} style={styles.serviceContainer}>
                 <Text style={styles.serviceName}>{service.service_name}</Text>
                 <Text style={styles.servicePrice}>
-                  {parseFloat(service.service_price).toLocaleString()} đ
+                  {formatNumberWithCommas(service.service_price)} đ
                 </Text>
                 <TouchableOpacity
                   style={styles.menuButton}
@@ -287,7 +469,7 @@ const SettingsScreen = () => {
               style={styles.addButton}
               onPress={() => setModalVisible(true)}
             >
-              <AntDesign name="pluscircleo" size={24} color="#006D5B" />
+              <AntDesign name="pluscircleo" size={35} color="#006D5B" />
             </TouchableOpacity>
           </View>
         </View>
@@ -296,14 +478,28 @@ const SettingsScreen = () => {
           animationType="slide"
           transparent={true}
           visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)}
+          onRequestClose={() => {
+            setModalVisible(false);
+            setServiceName("");
+            setServicePrice("");
+          }}
         >
-          <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setModalVisible(false);
+              setServiceName("");
+              setServicePrice("");
+            }}
+          >
             <View style={styles.modalOverlay}>
               <View style={styles.modalContent}>
                 <TouchableOpacity
                   style={styles.closeButton}
-                  onPress={() => setModalVisible(false)}
+                  onPress={() => {
+                    setModalVisible(false);
+                    setServiceName("");
+                    setServicePrice("");
+                  }}
                 >
                   <AntDesign name="close" size={20} color="white" />
                 </TouchableOpacity>
@@ -319,6 +515,8 @@ const SettingsScreen = () => {
                 <TextInput
                   style={styles.modalInput}
                   placeholder="Nhập tên dịch vụ"
+                  value={serviceName}
+                  onChangeText={setServiceName}
                 />
                 <Text
                   style={[
@@ -332,10 +530,17 @@ const SettingsScreen = () => {
                   style={styles.modalInput}
                   placeholder="Nhập số tiền"
                   keyboardType="numeric"
+                  value={
+                    servicePrice ? formatNumberWithCommas(servicePrice) : ""
+                  }
+                  onChangeText={(text) => {
+                    const numericValue = text.replace(/[^0-9]/g, "");
+                    setServicePrice(numericValue);
+                  }}
                 />
                 <TouchableOpacity
                   style={styles.modalButtonAdd}
-                  onPress={() => setModalVisible(false)}
+                  onPress={handleAddService}
                 >
                   <Text style={styles.buttonText}>Thêm</Text>
                 </TouchableOpacity>
@@ -345,7 +550,8 @@ const SettingsScreen = () => {
         </Modal>
 
         {renderActionModal()}
-        {renderNotificationModal()}
+
+        {renderEditModal()}
       </ScrollView>
     </View>
   );
@@ -420,8 +626,8 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "bold",
     color: "#2C3E50",
-    textAlign: "center",
-    marginRight: 120,
+    // textAlign: "center",
+    marginRight: 30,
   },
   addButton: {
     marginTop: 13,

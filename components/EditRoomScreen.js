@@ -18,6 +18,11 @@ import { AntDesign } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { supabaseDB } from "../DBconfig";
+import { Fontisto } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
 const formatCurrency = (value) => {
   const numberValue = parseFloat(value.replace(/,/g, "")); // Xóa dấu phẩy trước khi chuyển đổi
@@ -49,6 +54,8 @@ const EditRoomScreen = ({ route, navigation }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [id_home, setIdHome] = useState(null);
   console.log("room:", room);
+  const [isUploadSuccessVisible, setUploadSuccessVisible] = useState(false);
+
   const handleSave = async () => {
     if (
       !roomName ||
@@ -106,8 +113,7 @@ const EditRoomScreen = ({ route, navigation }) => {
       if (error) throw error;
 
       setIsLoading(false);
-      setNotificationMessage("Chỉnh sửa phòng thành công!");
-      setNotificationVisible(true);
+      setUploadSuccessVisible(true);
       setTimeout(() => navigation.navigate("DetailHome", { home }), 2000);
     } catch (error) {
       setIsLoading(false);
@@ -177,6 +183,30 @@ const EditRoomScreen = ({ route, navigation }) => {
     setRoomPrice(formattedValue); // Cập nhật giá trị đã định dạng
   };
 
+  const renderUploadSuccessModal = () => (
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={isUploadSuccessVisible}
+      onRequestClose={() => setUploadSuccessVisible(false)}
+    >
+      <TouchableWithoutFeedback onPress={() => setUploadSuccessVisible(false)}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Thông báo</Text>
+            <Text style={styles.modalMessage}>Cập nhật phòng thành công!</Text>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setUploadSuccessVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Đóng</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
+  );
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -204,7 +234,7 @@ const EditRoomScreen = ({ route, navigation }) => {
             <View style={styles.rowContainer}>
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>
-                  <Text style={styles.required}>*</Text> Tên phòng
+                  <Fontisto name="room" size={16} color="#FF6F61" /> Tên phòng
                 </Text>
                 <TextInput
                   style={styles.input}
@@ -215,7 +245,8 @@ const EditRoomScreen = ({ route, navigation }) => {
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>
-                  <Text style={styles.required}>*</Text> Số người
+                  <AntDesign name="rocket1" size={16} color="#4A90E2" /> Số
+                  người
                 </Text>
                 <TextInput
                   style={styles.input}
@@ -228,7 +259,12 @@ const EditRoomScreen = ({ route, navigation }) => {
             </View>
 
             <Text style={styles.label}>
-              <Text style={styles.required}>*</Text> Khách thuê
+              <MaterialCommunityIcons
+                name="guy-fawkes-mask"
+                size={16}
+                color="#7ED321"
+              />{" "}
+              Khách thuê
             </Text>
             <TextInput
               style={styles.input}
@@ -237,7 +273,8 @@ const EditRoomScreen = ({ route, navigation }) => {
               onChangeText={setRoomer}
             />
             <Text style={styles.label}>
-              <Text style={styles.required}>*</Text> Số điện thoại
+              <Entypo name="old-phone" size={16} color="#F5A623" /> Số điện
+              thoại
             </Text>
             <TextInput
               style={styles.input}
@@ -247,7 +284,8 @@ const EditRoomScreen = ({ route, navigation }) => {
               keyboardType="numeric"
             />
             <Text style={styles.label}>
-              <Text style={styles.required}>*</Text> Quê quán / Địa chỉ
+              <Entypo name="location" size={16} color="#9013FE" /> Quê quán /
+              Địa chỉ
             </Text>
             <TextInput
               style={[styles.input, { height: 100 }]}
@@ -259,7 +297,7 @@ const EditRoomScreen = ({ route, navigation }) => {
               textAlignVertical="top"
             />
             <Text style={styles.label}>
-              <Text style={styles.required}>*</Text> CCCD / CMND
+              <Entypo name="v-card" size={16} color="#D0021B" /> CCCD / CMND
             </Text>
             <TextInput
               style={styles.input}
@@ -362,7 +400,13 @@ const EditRoomScreen = ({ route, navigation }) => {
                     <View key={index} style={styles.imageColumn}>
                       <TouchableOpacity
                         style={styles.imageUploadButton}
-                        onPress={() => handleImageUpload("contract", index)}
+                        onPress={() => {
+                          if (image) {
+                            openImagePreview(image); // Gọi hàm để xem ảnh hợp đồng
+                          } else {
+                            handleImageUpload("contract", index); // Tải lên ảnh nếu chưa có
+                          }
+                        }}
                       >
                         {image ? (
                           <Image
@@ -385,7 +429,7 @@ const EditRoomScreen = ({ route, navigation }) => {
             </View>
 
             <Text style={styles.label}>
-              <Text style={styles.required}>*</Text> Tiền cọc (₫)
+              <FontAwesome name="money" size={16} color="green" /> Tiền cọc (₫)
             </Text>
             <TextInput
               style={styles.input}
@@ -396,7 +440,8 @@ const EditRoomScreen = ({ route, navigation }) => {
             />
 
             <Text style={styles.label}>
-              <Text style={styles.required}>*</Text> Giá phòng (₫/tháng)
+              <FontAwesome name="money" size={16} color="green" /> Giá phòng
+              (₫/tháng)
             </Text>
             <TextInput
               style={styles.input}
@@ -407,7 +452,8 @@ const EditRoomScreen = ({ route, navigation }) => {
             />
 
             <Text style={styles.label}>
-              <Text style={styles.required}>*</Text> Ngày bắt đầu thuê
+              <Fontisto name="date" size={16} color="#9B59B6" /> Ngày bắt đầu
+              thuê
             </Text>
             <TouchableOpacity
               onPress={() => setShowDatePicker(true)}
@@ -492,15 +538,17 @@ const EditRoomScreen = ({ route, navigation }) => {
               activeOpacity={1}
               onPress={() => setModalVisible(false)} // Đóng modal khi nhấn ra ngoài ảnh
             >
-              <View style={styles.modalContent}>
+              <View style={styles.newModalContent}>
                 <Image
                   source={{ uri: selectedImage }}
                   style={styles.fullImage} // Đặt kích thước ảnh đầy đủ
-                  resizeMode="cover" // Hoặc "cover" nếu bạn muốn lấp đầy
+                  resizeMode="contain" // Hoặc "cover" nếu bạn muốn lấp đầy
                 />
               </View>
             </TouchableOpacity>
           </Modal>
+
+          {renderUploadSuccessModal()}
         </ScrollView>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
@@ -594,21 +642,28 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: "white",
     borderRadius: 15,
-    // padding: 30,
-    width: "90%",
-    height: "auto",
-    maxHeight: "67%",
+    padding: 30,
+    width: "85%",
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 6,
   },
   modalTitle: {
     fontSize: 24,
     fontWeight: "bold",
     color: "#E74C3C",
     marginBottom: 15,
+    textAlign: "center",
   },
   modalMessage: {
     fontSize: 18,
-    color: "#2C3E50",
+    color: "#333",
     textAlign: "center",
     marginBottom: 25,
   },
@@ -617,6 +672,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
+    marginTop: 10,
   },
   closeButtonText: {
     color: "white",
@@ -658,7 +714,7 @@ const styles = StyleSheet.create({
   imagePreview: {
     width: "100%",
     height: "100%",
-    borderRadius: 15,
+    // borderRadius: 15,
   },
   thumbnail: {
     width: 100,
@@ -697,6 +753,17 @@ const styles = StyleSheet.create({
   },
   required: {
     color: "red",
+  },
+  newModalContent: {
+    // backgroundColor: "white", // Nền trắng
+    borderRadius: 20, // Độ bo góc lớn hơn
+    width: "95%", // Đặt chiều rộng modal là 95% của màn hình
+    height: "auto", // Chiều cao tự động
+    maxHeight: "80%", // Giới hạn chiều cao tối đa của modal
+    alignItems: "center",
+    justifyContent: "center", // Căn giữa nội dung
+    padding: 15, // Thêm khoảng cách bên trong
+    shadowColor: "#000", // Thêm bóng cho modal
   },
 });
 

@@ -16,6 +16,8 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { supabaseDB } from "../DBconfig";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const LoginScreen = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -88,7 +90,7 @@ const LoginScreen = ({ navigation }) => {
             <Text style={styles.title}>Chủ trọ</Text>
             <Text style={styles.subtitle}>Quản lý nhà trọ thật dễ dàng</Text>
 
-            <Text style={styles.label}>Tài khoản</Text>
+            <Text style={styles.label}><MaterialCommunityIcons name="account-tie" size={16} color="black" /> Tài khoản</Text>
             <TextInput
               style={styles.input}
               placeholder="Ví dụ: abc1234@gmail.com"
@@ -98,7 +100,7 @@ const LoginScreen = ({ navigation }) => {
               onChangeText={setEmail}
             />
 
-            <Text style={styles.label}>Mật khẩu</Text>
+            <Text style={styles.label}><MaterialIcons name="password" size={16} color="black" /> Mật khẩu</Text>
             <View style={styles.passwordContainer}>
               <TextInput
                 style={styles.passwordInput}

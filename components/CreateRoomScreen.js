@@ -18,6 +18,12 @@ import { AntDesign } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { supabaseDB } from "../DBconfig";
+import Fontisto from "@expo/vector-icons/Fontisto";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import Entypo from "@expo/vector-icons/Entypo";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+
 const formatCurrency = (value) => {
   // Chuyển đổi giá trị thành số và định dạng với dấu phẩy
   const numberValue = parseFloat(value.replace(/,/g, "")); // Xóa dấu phẩy trước khi chuyển đổi
@@ -196,7 +202,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
             <View style={styles.rowContainer}>
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>
-                  <Text style={styles.required}>*</Text> Tên phòng
+                  <Fontisto name="room" size={16} color="#FF6F61" /> Tên phòng
                 </Text>
                 <TextInput
                   style={styles.input}
@@ -207,7 +213,8 @@ const CreateRoomScreen = ({ route, navigation }) => {
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>
-                  <Text style={styles.required}>*</Text> Số người
+                  <AntDesign name="rocket1" size={16} color="#4A90E2" /> Số
+                  người
                 </Text>
                 <TextInput
                   style={styles.input}
@@ -220,7 +227,12 @@ const CreateRoomScreen = ({ route, navigation }) => {
             </View>
 
             <Text style={styles.label}>
-              <Text style={styles.required}>*</Text> Khách thuê
+              <MaterialCommunityIcons
+                name="guy-fawkes-mask"
+                size={16}
+                color="#7ED321"
+              />{" "}
+              Khách thuê
             </Text>
             <TextInput
               style={styles.input}
@@ -229,7 +241,8 @@ const CreateRoomScreen = ({ route, navigation }) => {
               onChangeText={setRoomer}
             />
             <Text style={styles.label}>
-              <Text style={styles.required}>*</Text> Số điện thoại
+              <Entypo name="old-phone" size={16} color="#F5A623" /> Số điện
+              thoại
             </Text>
             <TextInput
               style={styles.input}
@@ -239,7 +252,8 @@ const CreateRoomScreen = ({ route, navigation }) => {
               keyboardType="numeric"
             />
             <Text style={styles.label}>
-              <Text style={styles.required}>*</Text> Quê quán / Địa chỉ
+              <Entypo name="location" size={16} color="#9013FE" /> Quê quán /
+              Địa chỉ
             </Text>
             <TextInput
               style={[styles.input, { height: 100 }]}
@@ -251,7 +265,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
               textAlignVertical="top"
             />
             <Text style={styles.label}>
-              <Text style={styles.required}>*</Text> CCCD / CMND
+              <Entypo name="v-card" size={16} color="#D0021B" /> CCCD / CMND
             </Text>
             <TextInput
               style={styles.input}
@@ -381,7 +395,8 @@ const CreateRoomScreen = ({ route, navigation }) => {
             </View>
 
             <Text style={styles.label}>
-              <Text style={styles.required}>*</Text> Tiền cọc (₫)
+              <FontAwesome name="money" size={16} color="green" /> Tiền cọc
+              (₫)
             </Text>
             <TextInput
               style={styles.input}
@@ -392,7 +407,8 @@ const CreateRoomScreen = ({ route, navigation }) => {
             />
 
             <Text style={styles.label}>
-              <Text style={styles.required}>*</Text> Giá phòng (₫/tháng)
+              <FontAwesome name="money" size={16} color="green" /> Giá phòng
+              (₫/tháng)
             </Text>
             <TextInput
               style={styles.input}
@@ -403,7 +419,8 @@ const CreateRoomScreen = ({ route, navigation }) => {
             />
 
             <Text style={styles.label}>
-              <Text style={styles.required}>*</Text> Ngày bắt đầu thuê
+              <Fontisto name="date" size={16} color="#9B59B6" /> Ngày bắt đầu
+              thuê
             </Text>
             <TouchableOpacity
               onPress={() => setShowDatePicker(true)}
@@ -432,7 +449,14 @@ const CreateRoomScreen = ({ route, navigation }) => {
               />
             )}
 
-            <Text style={styles.label}>Ghi chú</Text>
+            <Text style={styles.label}>
+              <MaterialCommunityIcons
+                name="note-edit"
+                size={16}
+                color="black"
+              />{" "}
+              Ghi chú
+            </Text>
             <TextInput
               style={[styles.input, { height: 100 }]}
               placeholder="Ví dụ: Ở 2 người"
