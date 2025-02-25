@@ -217,6 +217,7 @@ const EditRoomScreen = ({ route, navigation }) => {
           contentContainerStyle={{ flexGrow: 1 }}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
+          stickyHeaderIndices={[0]}
         >
           <View style={styles.headerContainer}>
             <TouchableOpacity
@@ -561,8 +562,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFD2CC",
   },
   headerContainer: {
+    position: 'sticky',
     paddingTop: 40,
     paddingHorizontal: 20,
+    backgroundColor: '#FFD2CC',
+    height: 80,
   },
   backButton: {
     flexDirection: "row",
@@ -577,7 +581,7 @@ const styles = StyleSheet.create({
     marginTop: -5,
   },
   content: {
-    marginTop: 30,
+    marginTop: 20,
     paddingTop: 20,
     paddingBottom: 30,
     height: "auto", // Giảm chiều dài khối
