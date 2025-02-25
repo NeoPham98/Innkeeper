@@ -97,6 +97,7 @@ const CreateInvoiceScreen = ({
   const [totalServicePrice, setTotalServicePrice] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [notification, setNotification] = useState("");
+  console.log(quantity);
 
   // Tính số điện
   const calculateElectricity = () => {
@@ -130,11 +131,16 @@ const CreateInvoiceScreen = ({
 
   // Tính tổng tiền
   const totalAmount =
-    totalElectricPrice +
-    totalWaterPrice +
-    totalWaterHeaterPrice +
-    parseFloat(roomCost || 0) +
-    totalServicePrice;
+    Math.floor(totalElectricPrice) +
+    Math.floor(totalWaterPrice) +
+    Math.floor(totalWaterHeaterPrice) +
+    Math.floor(parseFloat(roomCost || 0)) +
+    Math.floor(totalServicePrice);
+
+  const totalElectricityQuantity =
+    calculateElectricity() + calculateWaterHeater(); // Tổng số lượng điện
+  const totalElectricityAmount =
+    Math.floor(totalElectricPrice) + Math.floor(roundedTotalWaterHeaterPrice); // Tổng tiền điện
 
   const handleSave = async () => {
     // Tạo đối tượng hóa đơn
@@ -149,6 +155,7 @@ const CreateInvoiceScreen = ({
       old_water_number: oldWater,
       quantity: quantity,
       total_water_use: calculateWater(),
+      total_water_price: totalWaterPrice,
       new_electric_number: newElectricity,
       old_electric_number: oldElectricity,
       total_electric_use: calculateElectricity(),
@@ -162,6 +169,9 @@ const CreateInvoiceScreen = ({
       total_amount: totalAmount,
       room_name: effectiveRoomName,
       id_home: effectiveIdHome,
+      number_electric: totalElectricityQuantity,
+      number_price: totalElectricityAmount,
+      isShared: isChecked,
     };
 
     try {
@@ -182,7 +192,10 @@ const CreateInvoiceScreen = ({
       setNotification("Đã tạo hóa đơn thành công!");
 
       // Chuyển hướng đến màn hình thông tin hóa đơn
-      navigation.navigate("InvoiceDetail", { invoiceData });
+      navigation.navigate("InvoiceDetail", {
+        invoiceData,
+        isShared: isChecked,
+      });
       console.log(invoiceData);
       setTimeout(() => setNotification(""), 3000); // Tự động xóa thông báo sau 3 giây
     } catch (error) {
@@ -495,7 +508,7 @@ const CreateInvoiceScreen = ({
                 <TextInput
                   style={styles.rowInput}
                   placeholder="Nhập số..."
-                  value={newWater}
+                  value={quantity}
                   onChangeText={setNewWater}
                   keyboardType="numeric"
                   placeholderTextColor="#A9A9A9"
@@ -748,10 +761,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFD2CC",
   },
   headerContainer: {
-    position: 'sticky',
+    position: "sticky",
     paddingTop: 40,
     paddingHorizontal: 20,
-    backgroundColor: '#FFD2CC',
+    backgroundColor: "#FFD2CC",
     height: 80,
   },
   backButton: {
