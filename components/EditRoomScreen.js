@@ -53,7 +53,7 @@ const EditRoomScreen = ({ route, navigation }) => {
   const [startDate, setStartDate] = useState(new Date(room.rental_date));
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [id_home, setIdHome] = useState(null);
-  console.log("room:", room);
+
   const [isUploadSuccessVisible, setUploadSuccessVisible] = useState(false);
 
   const handleSave = async () => {

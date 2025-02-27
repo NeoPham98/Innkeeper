@@ -97,7 +97,7 @@ const CreateInvoiceScreen = ({
   const [totalServicePrice, setTotalServicePrice] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [notification, setNotification] = useState("");
-  console.log(quantity);
+ 
 
   // Tính số điện
   const calculateElectricity = () => {
@@ -196,7 +196,7 @@ const CreateInvoiceScreen = ({
         invoiceData,
         isShared: isChecked,
       });
-      console.log(invoiceData);
+  
       setTimeout(() => setNotification(""), 3000); // Tự động xóa thông báo sau 3 giây
     } catch (error) {
       setIsLoading(false);
@@ -258,9 +258,43 @@ const CreateInvoiceScreen = ({
     }
   };
 
+  const fetchLatestInvoice = async () => {
+    if (!effectiveRoomId) {
+      console.error("id_room is invalid");
+      return;
+    }
+
+    try {
+      const { data, error } = await supabaseDB
+        .from("Invoice")
+        .select("*")
+        .eq("id_room", effectiveRoomId)
+        .order("created_at", { ascending: false }) // Sắp xếp theo ngày tạo giảm dần
+        .limit(1); // Lấy hóa đơn gần nhất
+
+      if (error) {
+        console.error("Error fetching latest invoice:", error.message);
+        return;
+      }
+
+
+
+      // Cập nhật state với dữ liệu từ hóa đơn gần nhất
+      if (data[0]) {
+        const latestInvoice = data[0];
+        setOldElectricity(latestInvoice.new_electric_number);
+        setOldWaterHeater(latestInvoice.new_bnl);
+        setNewWater(quantity.toString()); // Chuyển quantity thành chuỗi và điền vào ô số nước mới
+      }
+    } catch (error) {
+      console.error("Error fetching latest invoice:", error.message);
+    }
+  };
+
   useEffect(() => {
     fetchServices();
     fetchSettings();
+    fetchLatestInvoice(); // Gọi hàm để lấy hóa đơn gần nhất
   }, [effectiveIdHome]);
 
   const handleCheckboxToggle = (serviceId) => {
@@ -508,7 +542,7 @@ const CreateInvoiceScreen = ({
                 <TextInput
                   style={styles.rowInput}
                   placeholder="Nhập số..."
-                  value={quantity}
+                  value={newWater}
                   onChangeText={setNewWater}
                   keyboardType="numeric"
                   placeholderTextColor="#A9A9A9"

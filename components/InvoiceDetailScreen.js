@@ -33,7 +33,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
         format: "png", // Sử dụng định dạng PNG
         quality: 1.0, // Chất lượng cao nhất
       });
-      console.log("Chụp ảnh thành công: ", uri);
+    
 
       // Chia sẻ ảnh
       await Sharing.shareAsync(uri, {

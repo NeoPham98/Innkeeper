@@ -372,10 +372,10 @@ const DetailHomeScreen = ({ route, navigation }) => {
           <FontAwesome name="plus-circle" size={30} color="#FF6347" />
           <Text style={styles.infoText}>Thêm phòng</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.infoItem}>
+        {/* <TouchableOpacity style={styles.infoItem}>
           <FontAwesome name="lightbulb-o" size={30} color="#FFD700" />
           <Text style={styles.infoText}>Ghi điện nước</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity style={styles.infoItem}
         onPress={() =>
           navigation.navigate("Bill", { id_home: effectiveHome.id_home, id_room: effectiveHome.id_room })
@@ -447,8 +447,8 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flexDirection: "row",
-    justifyContent: "center",
-    marginBottom: 20,
+    justifyContent: "space-between",
+    marginBottom: 10,
   },
   infoItem: {
     alignItems: "center",

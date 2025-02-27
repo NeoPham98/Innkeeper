@@ -24,7 +24,7 @@ const HomeScreen = ({ navigation, route }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedHome, setSelectedHome] = useState(null);
   const [notification, setNotification] = useState("");
-
+  const [monthlyRevenue, setMonthlyRevenue] = useState({});
 
   if (!id_account) {
     console.error(
@@ -51,7 +51,39 @@ const HomeScreen = ({ navigation, route }) => {
         return;
       }
 
-      setHomes(data || []);
+      // Lấy tổng số người đang trọ cho từng home
+      const homesWithOccupants = await Promise.all(
+        data.map(async (home) => {
+          const { data: occupantsData, error: occupantsError } =
+            await supabaseDB
+              .from("Rooms")
+              .select("quantity") // Giả sử bạn có trường quantity trong bảng Rooms
+              .eq("id_home", home.id_home);
+
+          if (occupantsError) {
+            console.error("Error fetching occupants:", occupantsError.message);
+            return home; // Trả về home mà không thay đổi nếu có lỗi
+          }
+
+          const totalOccupants = occupantsData.reduce(
+            (total, room) => total + room.quantity,
+            0
+          );
+          const invoiceCount = await fetchInvoices(home.id_home); // Đếm số hóa đơn
+          return {
+            ...home,
+            room_total_lacks_money: totalOccupants,
+            monthly_revenue: invoiceCount,
+          }; // Cập nhật số hóa đơn
+        })
+      );
+
+      setHomes(homesWithOccupants); // Cập nhật danh sách homes với số người đang trọ
+
+      // Gọi fetchInvoices cho từng home
+      homesWithOccupants.forEach((home) => {
+        fetchInvoices(home.id_home); // Gọi hàm fetchInvoices với id_home
+      });
     } catch (error) {
       console.error("Error fetching homes:", error.message);
       setHomes([]);
@@ -144,6 +176,101 @@ const HomeScreen = ({ navigation, route }) => {
     }
   };
 
+  const fetchInvoices = async (homeId) => {
+    try {
+      const { data, error } = await supabaseDB
+        .from("Invoice")
+        .select("id_invoice") // Chỉ lấy id_invoice
+        .eq("id_home", homeId);
+
+      if (error) {
+        console.error("Error fetching invoices:", error.message);
+        return 0; // Trả về 0 nếu có lỗi
+      }
+
+      return data.length; // Trả về số lượng hóa đơn
+    } catch (error) {
+      console.error("Error fetching invoices:", error.message);
+      return 0; // Trả về 0 nếu có lỗi
+    }
+  };
+
+  const fetchMonthlyRevenueByHome = async () => {
+    const currentMonth = new Date().getMonth() + 1; // Tháng hiện tại
+    const currentYear = new Date().getFullYear(); // Năm hiện tại
+
+    try {
+      const { data, error } = await supabaseDB
+        .from("Invoice")
+        .select("id_home, total_amount, created_at")
+        .gte(
+          "created_at",
+          new Date(currentYear, currentMonth - 1, 1).toISOString()
+        ) // Bắt đầu từ ngày 1 của tháng hiện tại
+        .lt("created_at", new Date(currentYear, currentMonth, 1).toISOString()); // Kết thúc trước ngày 1 của tháng sau
+
+      if (error) {
+        console.error("Error fetching invoices:", error.message);
+        return {}; // Trả về đối tượng rỗng nếu có lỗi
+      }
+
+      // Tính tổng doanh thu theo id_home
+      const revenueByHome = data.reduce((acc, invoice) => {
+        const { id_home, total_amount } = invoice;
+        const amount = parseFloat(total_amount); // Chuyển đổi total_amount thành số
+        acc[id_home] = (acc[id_home] || 0) + amount; // Cộng dồn doanh thu theo id_home
+        return acc;
+      }, {});
+
+      return revenueByHome; // Trả về đối tượng doanh thu theo id_home
+    } catch (error) {
+      console.error("Error calculating monthly revenue:", error.message);
+      return {}; // Trả về đối tượng rỗng nếu có lỗi
+    }
+  };
+
+  useEffect(() => {
+    const getMonthlyRevenue = async () => {
+      const revenue = await fetchMonthlyRevenueByHome();
+      setMonthlyRevenue(revenue); // Cập nhật state với doanh thu tháng theo id_home
+    };
+
+    getMonthlyRevenue();
+  }, []);
+
+  const addInvoice = async (newInvoice) => {
+    // Logic để thêm hóa đơn mới vào cơ sở dữ liệu
+    // ...
+
+    // Sau khi thêm hóa đơn, cập nhật doanh thu tháng
+    const revenue = await fetchMonthlyRevenueByHome();
+    setMonthlyRevenue(revenue); // Cập nhật doanh thu tháng theo id_home
+  };
+
+  // Hàm định dạng số với dấu phẩy
+  const formatNumberWithCommas = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  // Hàm để lấy tên tháng
+  const getMonthName = (monthIndex) => {
+    const monthNames = [
+      "Tháng 1",
+      "Tháng 2",
+      "Tháng 3",
+      "Tháng 4",
+      "Tháng 5",
+      "Tháng 6",
+      "Tháng 7",
+      "Tháng 8",
+      "Tháng 9",
+      "Tháng 10",
+      "Tháng 11",
+      "Tháng 12",
+    ];
+    return monthNames[monthIndex];
+  };
+
   const renderHomeCard = (home) => (
     <View style={styles.homeCard}>
       <View style={styles.homeHeader}>
@@ -172,23 +299,27 @@ const HomeScreen = ({ navigation, route }) => {
           <Text style={styles.statsValue}>{home.room_total_empty || 0}</Text>
         </View>
         <View style={styles.statsRow}>
-          <Text style={styles.statsLabel}>Số phòng thiếu tiền:</Text>
+          <Text style={styles.statsLabel}>Số người đang trọ:</Text>
           <Text style={styles.statsValue}>
             {home.room_total_lacks_money || 0}
           </Text>
         </View>
         <View style={styles.statsRow}>
-          <Text style={styles.statsLabel}>Số tiền còn thiếu:</Text>
-          <Text style={styles.statsValue}>{home.monthly_revenue || 0} đ</Text>
+          <Text style={styles.statsLabel}>Số hóa đơn đã tạo:</Text>
+          <Text style={styles.statsValue}>{home.monthly_revenue || 0}</Text>
         </View>
       </View>
 
       <View style={styles.separator} />
 
       <View style={styles.revenueContainer}>
-        <Text style={styles.revenueLabel}>Doanh thu tháng:</Text>
+        <Text style={styles.revenueLabel}>
+          Doanh thu {getMonthName(new Date().getMonth())}:
+        </Text>
         <View style={styles.revenueValueContainer}>
-          <Text style={styles.revenueValue}>{home.monthly_revenue || 0} đ</Text>
+          <Text style={styles.revenueValue}>
+            {formatNumberWithCommas(monthlyRevenue[home.id_home] || 0)} ₫
+          </Text>
           <TouchableOpacity
             style={styles.detailButton}
             onPress={() => navigation.navigate("DetailHome", { home })}
