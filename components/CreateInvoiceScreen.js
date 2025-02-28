@@ -818,7 +818,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 30,
     height: "auto",
-    width: "90%",
+    width: "100%", // IOS
     backgroundColor: "white",
     borderRadius: 20,
     alignSelf: "center",

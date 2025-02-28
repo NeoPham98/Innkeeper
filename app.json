@@ -1,49 +1,43 @@
 {
-    "expo": 
-    {
-        "name": "Nhà trọ",
-        "slug": "Inkeeper",
-        "version": "1.0.0",
-        "orientation": "portrait",
-        "icon": "./assets/logoApp.png",
-        "userInterfaceStyle": "light",
-        "newArchEnabled": true,
-        "splash": 
-        {
-            "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
-        },
-        "ios": 
-        {
-            "supportsTablet": true
-        },
-        "android": 
-        {
-            "adaptiveIcon": 
-            {
-                "foregroundImage": "./assets/logoApp.png",
-                "backgroundColor": "#ffffff"
-            },
-            "package": "com.datpq.Inkeeper"
-        },
-        "web": 
-        {
-            "favicon": "./assets/favicon.png"
-        },
-        "plugins": 
-        [
-            "expo-router"
-        ],
-        "extra": 
-        {
-            "router": 
-            {
-                "origin": false
-            },
-            "eas": 
-            {
-                "projectId": "a9c5077d-655a-499c-b6c8-f78f203c03b8"
-            }
-        }
+  "expo": {
+    "name": "Nhà trọ",
+    "slug": "Inkeeper",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/logoApp.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.datpq.Inkeeper",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logoApp.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.datpq.Inkeeper"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "a9c5077d-655a-499c-b6c8-f78f203c03b8"
+      }
     }
+  }
 }
