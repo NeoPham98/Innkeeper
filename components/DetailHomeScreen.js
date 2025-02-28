@@ -188,8 +188,10 @@ const DetailHomeScreen = ({ route, navigation }) => {
             >
               <AntDesign name="close" size={20} color="white" />
             </TouchableOpacity>
-            <Text style={styles.modalTitle}>Chọn hành động</Text>
-            <Text style={styles.modalMessage}>
+            <Text style={styles.modalTitle} allowFontScaling={false}>
+              Chọn hành động
+            </Text>
+            <Text style={styles.modalMessage} allowFontScaling={false}>
               Bạn muốn làm gì với phòng này?
             </Text>
             <View style={styles.buttonContainer}>
@@ -260,7 +262,9 @@ const DetailHomeScreen = ({ route, navigation }) => {
       <View style={styles.roomDetailCard}>
         <View style={styles.roomHeader}>
           <FontAwesome name="home" size={35} color="#333333" />
-          <Text style={styles.roomName}>{room.room_name}</Text>
+          <Text style={styles.roomName} allowFontScaling={false}>
+            {room.room_name}
+          </Text>
           <TouchableOpacity
             style={styles.menuButton}
             onPress={() => handleMenuPress(room)}
@@ -271,12 +275,20 @@ const DetailHomeScreen = ({ route, navigation }) => {
 
         <View style={styles.statsContainer}>
           <View style={styles.statsRow}>
-            <Text style={styles.statsLabel}>Người thuê:</Text>
-            <Text style={styles.statsValue}>{room.roomer || "Chưa có"}</Text>
+            <Text style={styles.statsLabel} allowFontScaling={false}>
+              Người thuê:
+            </Text>
+            <Text style={styles.statsValue} allowFontScaling={false}>
+              {room.roomer || "Chưa có"}
+            </Text>
           </View>
           <View style={styles.statsRow}>
-            <Text style={styles.statsLabel}>Số người:</Text>
-            <Text style={styles.statsValue}>{room.quantity || 0}</Text>
+            <Text style={styles.statsLabel} allowFontScaling={false}>
+              Số người:
+            </Text>
+            <Text style={styles.statsValue} allowFontScaling={false}>
+              {room.quantity || 0}
+            </Text>
           </View>
           {/* <View style={styles.statsRow}>
             <Text style={styles.statsLabel}>Quê quán:</Text>
@@ -286,20 +298,26 @@ const DetailHomeScreen = ({ route, navigation }) => {
           </View> */}
 
           <View style={styles.statsRow}>
-            <Text style={styles.statsLabel}>Số điện thoại:</Text>
-            <Text style={styles.statsValue}>
+            <Text style={styles.statsLabel} allowFontScaling={false}>
+              Số điện thoại:
+            </Text>
+            <Text style={styles.statsValue} allowFontScaling={false}>
               {room.phone_number || "Chưa có"}
             </Text>
           </View>
           <View style={styles.statsRow}>
-            <Text style={styles.statsLabel}>Ngày bắt đầu thuê:</Text>
-            <Text style={styles.statsValue}>
+            <Text style={styles.statsLabel} allowFontScaling={false}>
+              Ngày bắt đầu thuê:
+            </Text>
+            <Text style={styles.statsValue} allowFontScaling={false}>
               {new Date(room.rental_date).toLocaleDateString() || "Chưa có"}
             </Text>
           </View>
           <View style={styles.statsRow}>
-            <Text style={styles.statsLabel}>Giá phòng:</Text>
-            <Text style={styles.statsValue}>
+            <Text style={styles.statsLabel} allowFontScaling={false}>
+              Giá phòng:
+            </Text>
+            <Text style={styles.statsValue} allowFontScaling={false}>
               {formatCurrency(room.room_price)} đ
             </Text>
           </View>
@@ -307,7 +325,9 @@ const DetailHomeScreen = ({ route, navigation }) => {
         <View style={styles.separator} />
         <View style={styles.revenueContainer}>
           <View style={styles.switchContainer}>
-            <Text style={styles.statsLabel}>Trạng thái:</Text>
+            <Text style={styles.statsLabel} allowFontScaling={false}>
+              Trạng thái:
+            </Text>
             <Switch
               value={room.is_active}
               onValueChange={handleToggleSwitch}
@@ -335,7 +355,12 @@ const DetailHomeScreen = ({ route, navigation }) => {
               }
               disabled={!room.is_active}
             >
-              <Text style={styles.createInvoiceButtonText}>Tạo hóa đơn</Text>
+              <Text
+                style={styles.createInvoiceButtonText}
+                allowFontScaling={false}
+              >
+                Tạo hóa đơn
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -348,7 +373,9 @@ const DetailHomeScreen = ({ route, navigation }) => {
       {/* Hiển thị thông báo nếu có */}
       {notification ? (
         <View style={styles.notification}>
-          <Text style={styles.notificationText}>{notification}</Text>
+          <Text style={styles.notificationText} allowFontScaling={false}>
+            {notification}
+          </Text>
         </View>
       ) : null}
 
@@ -358,7 +385,9 @@ const DetailHomeScreen = ({ route, navigation }) => {
           onPress={() => navigation.goBack()}
         >
           <AntDesign name="arrowleft" size={26} color="#2C3E50" />
-          <Text style={styles.headerText}>{effectiveHome.home_name}</Text>
+          <Text style={styles.headerText} allowFontScaling={false}>
+            {effectiveHome.home_name}
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -370,7 +399,9 @@ const DetailHomeScreen = ({ route, navigation }) => {
           }
         >
           <FontAwesome name="plus-circle" size={30} color="#FF6347" />
-          <Text style={styles.infoText}>Thêm phòng</Text>
+          <Text style={styles.infoText} allowFontScaling={false}>
+            Thêm phòng
+          </Text>
         </TouchableOpacity>
         {/* <TouchableOpacity style={styles.infoItem}>
           <FontAwesome name="lightbulb-o" size={30} color="#FFD700" />
@@ -387,7 +418,9 @@ const DetailHomeScreen = ({ route, navigation }) => {
         >
           <AntDesign name="filetext1" size={30} color="#32CD32" />
           {/* <FontAwesome name="money" size={30} color="#32CD32" /> */}
-          <Text style={styles.infoText}>Hóa đơn</Text>
+          <Text style={styles.infoText} allowFontScaling={false}>
+            Hóa đơn
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.infoItem}
@@ -396,7 +429,9 @@ const DetailHomeScreen = ({ route, navigation }) => {
           }
         >
           <FontAwesome name="cog" size={30} color="#1E90FF" />
-          <Text style={styles.infoText}>Cài đặt</Text>
+          <Text style={styles.infoText} allowFontScaling={false}>
+            Cài đặt
+          </Text>
         </TouchableOpacity>
       </View>
 

@@ -225,16 +225,20 @@ const EditRoomScreen = ({ route, navigation }) => {
               onPress={() => navigation.goBack()}
             >
               <AntDesign name="arrowleft" size={24} color="#2C3E50" />
-              <Text style={styles.headerText}>Chỉnh sửa phòng</Text>
+              <Text style={styles.headerText} allowFontScaling={false}>
+                Chỉnh sửa phòng
+              </Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.content}>
-            <Text style={styles.title}>Thông tin phòng</Text>
+            <Text style={styles.title} allowFontScaling={false}>
+              Thông tin phòng
+            </Text>
 
             <View style={styles.rowContainer}>
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>
+                <Text style={styles.label} allowFontScaling={false}>
                   <Fontisto name="room" size={16} color="#FF6F61" /> Tên phòng
                 </Text>
                 <TextInput
@@ -242,10 +246,11 @@ const EditRoomScreen = ({ route, navigation }) => {
                   placeholder="Ví dụ: Phòng 1"
                   value={roomName}
                   onChangeText={setRoomName}
+                  allowFontScaling={false}
                 />
               </View>
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>
+                <Text style={styles.label} allowFontScaling={false}>
                   <AntDesign name="rocket1" size={16} color="#4A90E2" /> Số
                   người
                 </Text>
@@ -255,11 +260,12 @@ const EditRoomScreen = ({ route, navigation }) => {
                   value={quantity}
                   onChangeText={setQuantity}
                   keyboardType="numeric"
+                  allowFontScaling={false}
                 />
               </View>
             </View>
 
-            <Text style={styles.label}>
+            <Text style={styles.label} allowFontScaling={false}>
               <MaterialCommunityIcons
                 name="guy-fawkes-mask"
                 size={16}
@@ -272,8 +278,9 @@ const EditRoomScreen = ({ route, navigation }) => {
               placeholder="Ví dụ: Nguyễn Văn A"
               value={roomer}
               onChangeText={setRoomer}
+              allowFontScaling={false}
             />
-            <Text style={styles.label}>
+            <Text style={styles.label} allowFontScaling={false}>
               <Entypo name="old-phone" size={16} color="#F5A623" /> Số điện
               thoại
             </Text>
@@ -283,8 +290,9 @@ const EditRoomScreen = ({ route, navigation }) => {
               value={phoneNumber}
               onChangeText={setPhoneNumber}
               keyboardType="numeric"
+              allowFontScaling={false}
             />
-            <Text style={styles.label}>
+            <Text style={styles.label} allowFontScaling={false}>
               <Entypo name="location" size={16} color="#9013FE" /> Quê quán /
               Địa chỉ
             </Text>
@@ -296,8 +304,9 @@ const EditRoomScreen = ({ route, navigation }) => {
               multiline={true}
               numberOfLines={6}
               textAlignVertical="top"
+              allowFontScaling={false}
             />
-            <Text style={styles.label}>
+            <Text style={styles.label} allowFontScaling={false}>
               <Entypo name="v-card" size={16} color="#D0021B" /> CCCD / CMND
             </Text>
             <TextInput
@@ -306,6 +315,7 @@ const EditRoomScreen = ({ route, navigation }) => {
               value={cccdNumber}
               onChangeText={setCccdNumber}
               keyboardType="numeric"
+              allowFontScaling={false}
             />
 
             {/* Phần upload ảnh CMND */}
@@ -429,7 +439,7 @@ const EditRoomScreen = ({ route, navigation }) => {
               </View>
             </View>
 
-            <Text style={styles.label}>
+            <Text style={styles.label} allowFontScaling={false}>
               <FontAwesome name="money" size={16} color="green" /> Tiền cọc (₫)
             </Text>
             <TextInput
@@ -438,9 +448,10 @@ const EditRoomScreen = ({ route, navigation }) => {
               value={deposit}
               onChangeText={handleDepositChange}
               keyboardType="numeric"
+              allowFontScaling={false}
             />
 
-            <Text style={styles.label}>
+            <Text style={styles.label} allowFontScaling={false}>
               <FontAwesome name="money" size={16} color="green" /> Giá phòng
               (₫/tháng)
             </Text>
@@ -450,9 +461,10 @@ const EditRoomScreen = ({ route, navigation }) => {
               value={roomPrice}
               onChangeText={handleRoomPriceChange}
               keyboardType="numeric"
+              allowFontScaling={false}
             />
 
-            <Text style={styles.label}>
+            <Text style={styles.label} allowFontScaling={false}>
               <Fontisto name="date" size={16} color="#9B59B6" /> Ngày bắt đầu
               thuê
             </Text>
@@ -465,6 +477,7 @@ const EditRoomScreen = ({ route, navigation }) => {
                 placeholder="Chọn ngày bắt đầu"
                 value={startDate.toLocaleDateString()}
                 editable={false}
+                allowFontScaling={false}
               />
               <AntDesign
                 name="calendar"
@@ -483,7 +496,9 @@ const EditRoomScreen = ({ route, navigation }) => {
               />
             )}
 
-            <Text style={styles.label}>Ghi chú</Text>
+            <Text style={styles.label} allowFontScaling={false}>
+              Ghi chú
+            </Text>
             <TextInput
               style={[styles.input, { height: 100 }]}
               placeholder="Ví dụ: Ở 2 người"
@@ -492,6 +507,7 @@ const EditRoomScreen = ({ route, navigation }) => {
               multiline={true}
               numberOfLines={6}
               textAlignVertical="top"
+              allowFontScaling={false}
             />
 
             <TouchableOpacity
@@ -562,10 +578,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFD2CC",
   },
   headerContainer: {
-    position: 'sticky',
+    position: "sticky",
     // paddingTop: 40,
     paddingHorizontal: 20,
-    backgroundColor: '#FFD2CC',
+    backgroundColor: "#FFD2CC",
     height: 80,
   },
   backButton: {

@@ -193,19 +193,22 @@ const CreateRoomScreen = ({ route, navigation }) => {
               onPress={() => navigation.goBack()}
             >
               <AntDesign name="arrowleft" size={24} color="#2C3E50" />
-              <Text style={styles.headerText}>Tạo phòng</Text>
+              <Text style={styles.headerText} allowFontScaling={false}>
+                Tạo phòng
+              </Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.content}>
-            <Text style={styles.title}>Thông tin phòng</Text>
+            <Text style={styles.title} allowFontScaling={false}>Thông tin phòng</Text>
 
             <View style={styles.rowContainer}>
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>
+                <Text style={styles.label} allowFontScaling={false}>
                   <Fontisto name="room" size={16} color="#FF6F61" /> Tên phòng
                 </Text>
                 <TextInput
+                  allowFontScaling={false}
                   style={styles.input}
                   placeholder="Ví dụ: Phòng 1"
                   value={roomName}
@@ -213,11 +216,12 @@ const CreateRoomScreen = ({ route, navigation }) => {
                 />
               </View>
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>
+                <Text style={styles.label} allowFontScaling={false}>
                   <AntDesign name="rocket1" size={16} color="#4A90E2" /> Số
                   người
                 </Text>
                 <TextInput
+                  allowFontScaling={false}
                   style={styles.input}
                   placeholder="Ví dụ: 1"
                   value={quantity}
@@ -227,7 +231,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
               </View>
             </View>
 
-            <Text style={styles.label}>
+            <Text style={styles.label} allowFontScaling={false}>
               <MaterialCommunityIcons
                 name="guy-fawkes-mask"
                 size={16}
@@ -236,27 +240,30 @@ const CreateRoomScreen = ({ route, navigation }) => {
               Khách thuê
             </Text>
             <TextInput
+              allowFontScaling={false}
               style={styles.input}
               placeholder="Ví dụ: Nguyễn Văn A"
               value={roomer}
               onChangeText={setRoomer}
             />
-            <Text style={styles.label}>
+            <Text style={styles.label} allowFontScaling={false}>
               <Entypo name="old-phone" size={16} color="#F5A623" /> Số điện
               thoại
             </Text>
             <TextInput
+              allowFontScaling={false}
               style={styles.input}
               placeholder="Ví dụ: 0387022221"
               value={phoneNumber}
               onChangeText={setPhoneNumber}
               keyboardType="numeric"
             />
-            <Text style={styles.label}>
+            <Text style={styles.label} allowFontScaling={false}>
               <Entypo name="location" size={16} color="#9013FE" /> Quê quán /
               Địa chỉ
             </Text>
             <TextInput
+              allowFontScaling={false}
               style={[styles.input, { height: 100 }]}
               placeholder="Ví dụ: Hà Nội"
               value={hometown}
@@ -265,10 +272,11 @@ const CreateRoomScreen = ({ route, navigation }) => {
               numberOfLines={6}
               textAlignVertical="top"
             />
-            <Text style={styles.label}>
+            <Text style={styles.label} allowFontScaling={false}>
               <Entypo name="v-card" size={16} color="#D0021B" /> CCCD / CMND
             </Text>
             <TextInput
+              allowFontScaling={false}
               style={styles.input}
               placeholder="Ví dụ: 046440849881"
               value={cccdNumber}
@@ -281,7 +289,9 @@ const CreateRoomScreen = ({ route, navigation }) => {
               <View style={styles.imageRow}>
                 <View style={styles.imageColumn}>
                   <View style={styles.labelContainer}>
-                    <Text style={styles.label}>Ảnh CCCD trước</Text>
+                    <Text style={styles.label} allowFontScaling={false}>
+                      Ảnh CCCD trước
+                    </Text>
                     {idCardFront && (
                       <TouchableOpacity
                         onPress={() => setIdCardFront(null)}
@@ -317,7 +327,9 @@ const CreateRoomScreen = ({ route, navigation }) => {
 
                 <View style={styles.imageColumn}>
                   <View style={styles.labelContainer}>
-                    <Text style={styles.label}>Ảnh CCCD sau</Text>
+                    <Text style={styles.label} allowFontScaling={false}>
+                      Ảnh CCCD sau
+                    </Text>
                     {idCardBack && (
                       <TouchableOpacity
                         onPress={() => setIdCardBack(null)}
@@ -354,7 +366,9 @@ const CreateRoomScreen = ({ route, navigation }) => {
               {/* Thêm phần upload ảnh hợp đồng */}
               <View style={styles.imageColumn}>
                 <View style={styles.labelContainer}>
-                  <Text style={styles.label}>Ảnh hợp đồng</Text>
+                  <Text style={styles.label} allowFontScaling={false}>
+                    Ảnh hợp đồng
+                  </Text>
                   {contractImage.every((image) => image === null) ? null : (
                     <TouchableOpacity
                       onPress={() => setContractImage([null, null])} // Xóa tất cả ảnh
@@ -395,11 +409,11 @@ const CreateRoomScreen = ({ route, navigation }) => {
               </View>
             </View>
 
-            <Text style={styles.label}>
-              <FontAwesome name="money" size={16} color="green" /> Tiền cọc
-              (₫)
+            <Text style={styles.label} allowFontScaling={false}>
+              <FontAwesome name="money" size={16} color="green" /> Tiền cọc (₫)
             </Text>
             <TextInput
+              allowFontScaling={false}
               style={styles.input}
               placeholder="Ví dụ: 1,000,000 ₫"
               value={formattedDeposit}
@@ -407,11 +421,12 @@ const CreateRoomScreen = ({ route, navigation }) => {
               keyboardType="numeric"
             />
 
-            <Text style={styles.label}>
+            <Text style={styles.label} allowFontScaling={false}>
               <FontAwesome name="money" size={16} color="green" /> Giá phòng
               (₫/tháng)
             </Text>
             <TextInput
+              allowFontScaling={false}
               style={styles.input}
               placeholder="Ví dụ: 1,000,000 ₫"
               value={formattedRoomPrice}
@@ -419,7 +434,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
               keyboardType="numeric"
             />
 
-            <Text style={styles.label}>
+            <Text style={styles.label} allowFontScaling={false}>
               <Fontisto name="date" size={16} color="#9B59B6" /> Ngày bắt đầu
               thuê
             </Text>
@@ -428,6 +443,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
               style={{ width: "100%" }}
             >
               <TextInput
+                allowFontScaling={false}
                 style={styles.input}
                 placeholder="Chọn ngày bắt đầu"
                 value={startDate.toLocaleDateString()}
@@ -450,7 +466,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
               />
             )}
 
-            <Text style={styles.label}>
+            <Text style={styles.label} allowFontScaling={false}>
               <MaterialCommunityIcons
                 name="note-edit"
                 size={16}
@@ -459,6 +475,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
               Ghi chú
             </Text>
             <TextInput
+              allowFontScaling={false}
               style={[styles.input, { height: 100 }]}
               placeholder="Ví dụ: Ở 2 người"
               value={note}
@@ -473,7 +490,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
               onPress={handleSave}
               disabled={isLoading}
             >
-              <Text style={styles.saveText}>
+              <Text style={styles.saveText} allowFontScaling={false}>
                 {isLoading ? "Đang lưu..." : "Lưu lại"}
               </Text>
             </TouchableOpacity>
@@ -488,13 +505,13 @@ const CreateRoomScreen = ({ route, navigation }) => {
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <View style={styles.modalOverlay}>
                 <View style={styles.modalContent}>
-                  <Text style={styles.modalTitle}>Thông báo</Text>
-                  <Text style={styles.modalMessage}>{notificationMessage}</Text>
+                  <Text style={styles.modalTitle} allowFontScaling={false}>Thông báo</Text>
+                  <Text style={styles.modalMessage} allowFontScaling={false}>{notificationMessage}</Text>
                   <TouchableOpacity
                     style={styles.closeButton}
                     onPress={() => setNotificationVisible(false)}
                   >
-                    <Text style={styles.closeButtonText}>Đóng</Text>
+                    <Text style={styles.closeButtonText} allowFontScaling={false}>Đóng</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -535,12 +552,11 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     zIndex: 1,
-    position: 'sticky',
+    position: "sticky",
     // paddingTop: 40,
     paddingHorizontal: 20,
-    backgroundColor: '#FFD2CC',
+    backgroundColor: "#FFD2CC",
     height: 80,
-    
   },
   backButton: {
     flexDirection: "row",

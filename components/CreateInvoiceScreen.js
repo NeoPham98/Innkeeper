@@ -97,7 +97,6 @@ const CreateInvoiceScreen = ({
   const [totalServicePrice, setTotalServicePrice] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [notification, setNotification] = useState("");
- 
 
   // Tính số điện
   const calculateElectricity = () => {
@@ -196,7 +195,7 @@ const CreateInvoiceScreen = ({
         invoiceData,
         isShared: isChecked,
       });
-  
+
       setTimeout(() => setNotification(""), 3000); // Tự động xóa thông báo sau 3 giây
     } catch (error) {
       setIsLoading(false);
@@ -276,8 +275,6 @@ const CreateInvoiceScreen = ({
         console.error("Error fetching latest invoice:", error.message);
         return;
       }
-
-
 
       // Cập nhật state với dữ liệu từ hóa đơn gần nhất
       if (data[0]) {
@@ -383,14 +380,18 @@ const CreateInvoiceScreen = ({
               onPress={() => navigation.goBack()}
             >
               <AntDesign name="arrowleft" size={24} color="black" />
-              <Text style={styles.headerText}>Tạo hóa đơn</Text>
+              <Text style={styles.headerText} allowFontScaling={false}>
+                Tạo hóa đơn
+              </Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.content}>
-            <Text style={styles.title}>{effectiveRoomName}</Text>
+            <Text style={styles.title} allowFontScaling={false}>
+              {effectiveRoomName}
+            </Text>
 
-            <Text style={styles.label}>
+            <Text style={styles.label} allowFontScaling={false}>
               <FontAwesome name="calendar" size={16} color="black" /> Ngày tạo
             </Text>
             <TouchableOpacity
@@ -398,6 +399,7 @@ const CreateInvoiceScreen = ({
               style={{ width: "100%" }}
             >
               <TextInput
+                allowFontScaling={false}
                 style={styles.input}
                 placeholder="Chọn ngày tạo"
                 value={creationDate.toLocaleDateString()}
@@ -425,11 +427,12 @@ const CreateInvoiceScreen = ({
 
             <View style={styles.row}>
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>
+                <Text style={styles.label} allowFontScaling={false}>
                   <MaterialIcons name="people-alt" size={16} color="#28A745" />{" "}
                   Người thuê
                 </Text>
                 <TextInput
+                  allowFontScaling={false}
                   style={styles.rowInput}
                   placeholder="Ví dụ: Nguyễn Văn A"
                   value={tenantName}
@@ -439,7 +442,7 @@ const CreateInvoiceScreen = ({
               </View>
 
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>
+                <Text style={styles.label} allowFontScaling={false}>
                   <MaterialCommunityIcons
                     name="phone-classic"
                     size={16}
@@ -448,6 +451,7 @@ const CreateInvoiceScreen = ({
                   Số điện thoại
                 </Text>
                 <TextInput
+                  allowFontScaling={false}
                   style={styles.rowInput}
                   placeholder="Ví dụ: 0123456789"
                   value={phoneNumber}
@@ -458,13 +462,15 @@ const CreateInvoiceScreen = ({
             </View>
 
             <View style={styles.separatorContainer}>
-              <Text style={styles.separatorText}>1. Thông số đầu kỳ</Text>
+              <Text style={styles.separatorText} allowFontScaling={false}>
+                1. Thông số đầu kỳ
+              </Text>
               <View style={styles.separator} />
             </View>
 
             <View style={styles.row}>
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>
+                <Text style={styles.label} allowFontScaling={false}>
                   <MaterialIcons
                     name="electric-bolt"
                     size={16}
@@ -473,6 +479,7 @@ const CreateInvoiceScreen = ({
                   Số điện cũ
                 </Text>
                 <TextInput
+                  allowFontScaling={false}
                   style={styles.rowInput}
                   placeholder="Nhập số..."
                   value={oldElectricity}
@@ -482,10 +489,11 @@ const CreateInvoiceScreen = ({
               </View>
 
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>
+                <Text style={styles.label} allowFontScaling={false}>
                   <Ionicons name="water" size={16} color="#3498DB" /> Số nước cũ
                 </Text>
                 <TextInput
+                  allowFontScaling={false}
                   style={styles.rowInput}
                   placeholder="Nhập số..."
                   value={oldWater}
@@ -495,11 +503,12 @@ const CreateInvoiceScreen = ({
               </View>
 
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>
+                <Text style={styles.label} allowFontScaling={false}>
                   <FontAwesome5 name="hot-tub" size={16} color="#E74C3C" /> Số
                   BNL cũ
                 </Text>
                 <TextInput
+                  allowFontScaling={false}
                   style={styles.rowInput}
                   placeholder="Nhập số..."
                   value={oldWaterHeater}
@@ -510,13 +519,15 @@ const CreateInvoiceScreen = ({
             </View>
 
             <View style={styles.separatorContainer}>
-              <Text style={styles.separatorText}>2. Thông số cuối kỳ</Text>
+              <Text style={styles.separatorText} allowFontScaling={false}>
+                2. Thông số cuối kỳ
+              </Text>
               <View style={styles.separator} />
             </View>
 
             <View style={styles.row}>
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>
+                <Text style={styles.label} allowFontScaling={false}>
                   <MaterialIcons
                     name="electric-bolt"
                     size={16}
@@ -525,6 +536,7 @@ const CreateInvoiceScreen = ({
                   Số điện mới
                 </Text>
                 <TextInput
+                  allowFontScaling={false}
                   style={styles.rowInput}
                   placeholder="Nhập số..."
                   value={newElectricity}
@@ -535,11 +547,12 @@ const CreateInvoiceScreen = ({
               </View>
 
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>
+                <Text style={styles.label} allowFontScaling={false}>
                   <Ionicons name="water" size={16} color="#3498DB" /> Số nước
                   mới
                 </Text>
                 <TextInput
+                  allowFontScaling={false}
                   style={styles.rowInput}
                   placeholder="Nhập số..."
                   value={newWater}
@@ -559,13 +572,14 @@ const CreateInvoiceScreen = ({
                   width: "100%",
                 }}
               >
-                <Text style={styles.label}>
+                <Text style={styles.label} allowFontScaling={false}>
                   {"  "}
                   <FontAwesome5 name="hot-tub" size={16} color="#E74C3C" /> Số
                   BNL mới
                 </Text>
 
                 <CheckBox
+                allowFontScaling={false}
                   checked={isChecked}
                   onPress={() => {
                     setIsChecked(!isChecked);
@@ -578,13 +592,14 @@ const CreateInvoiceScreen = ({
                   checkedIcon="check-square"
                   uncheckedIcon="square-o"
                   title="Chia đầu người"
-                  textStyle={{ marginLeft: 10 }}
+                  textStyle={{ marginLeft: 10, fontSize: 8 }}
                 />
               </View>
             </View>
             <View style={styles.row}>
               <View style={styles.inputContainer}>
                 <TextInput
+                  allowFontScaling={false}
                   style={[styles.rowInput, { width: "100%" }]}
                   placeholder="Nhập số..."
                   value={newWaterHeater}
@@ -596,6 +611,7 @@ const CreateInvoiceScreen = ({
               <View style={styles.inputContainer}>
                 {isChecked && (
                   <TextInput
+                    allowFontScaling={false}
                     style={[styles.rowInput, { width: "100%" }]}
                     placeholder="Nhập số..."
                     value={newInputValue}
@@ -608,7 +624,9 @@ const CreateInvoiceScreen = ({
             </View>
 
             <View style={styles.separatorContainer}>
-              <Text style={styles.separatorText}>3. Dịch vụ thêm</Text>
+              <Text style={styles.separatorText} allowFontScaling={false}>
+                3. Dịch vụ thêm
+              </Text>
               <View style={styles.separator} />
             </View>
 
@@ -627,6 +645,7 @@ const CreateInvoiceScreen = ({
                       {service.service_name}
                     </Text>
                     <TextInput
+                      allowFontScaling={false}
                       style={[styles.rowInput, { width: "80%" }]}
                       placeholder="Nhập giá dịch vụ"
                       value={
@@ -649,11 +668,12 @@ const CreateInvoiceScreen = ({
               ))
             )}
 
-            <Text style={styles.label}>
+            <Text style={styles.label} allowFontScaling={false}>
               <FontAwesome6 name="money-bill-alt" size={16} color="green" />{" "}
               Tiền phòng
             </Text>
             <TextInput
+              allowFontScaling={false}
               style={styles.input}
               placeholder="Ví dụ: 1,000,000 ₫"
               value={formatNumber(roomCost) + " ₫"}
@@ -661,71 +681,73 @@ const CreateInvoiceScreen = ({
               keyboardType="numeric"
               editable={false}
             />
-            <View style={styles.separatorContainer}>
-              <Text style={styles.separatorText}>4. Bảng tính giá tiền</Text>
+            <View style={styles.separatorContainer} >
+              <Text style={styles.separatorText} allowFontScaling={false}>
+                4. Bảng tính giá tiền
+              </Text>
               <View style={styles.separator} />
             </View>
 
             <View style={styles.tableContainer}>
               <View style={styles.tableHeader}>
-                <Text style={styles.tableHeaderText}></Text>
-                <Text style={styles.tableHeaderText}>Số lượng</Text>
-                <Text style={styles.tableHeaderText}>Đơn giá</Text>
-                <Text style={styles.tableHeaderText}>Thành tiền</Text>
+                <Text style={styles.tableHeaderText} allowFontScaling={false}></Text>
+                <Text style={styles.tableHeaderText} allowFontScaling={false}>Số lượng</Text>
+                <Text style={styles.tableHeaderText} allowFontScaling={false}>Đơn giá</Text>
+                <Text style={styles.tableHeaderText} allowFontScaling={false}>Thành tiền</Text>
               </View>
               <View style={styles.tableRow}>
-                <Text style={[styles.tableCell, { textAlign: "left" }]}>
+                <Text style={[styles.tableCell, { textAlign: "left" }]} allowFontScaling={false}>
                   Tiền điện
                 </Text>
-                <Text style={styles.tableCell}>{calculateElectricity()}</Text>
-                <Text style={styles.tableCell}>
+                <Text style={styles.tableCell} allowFontScaling={false}>{calculateElectricity()}</Text>
+                <Text style={styles.tableCell} allowFontScaling={false}>
                   {formatNumber(electricPrice) + " ₫"}
                 </Text>
-                <Text style={styles.tableCell}>
+                <Text style={styles.tableCell} allowFontScaling={false}>
                   {formatNumber(totalElectricPrice) + " ₫"}
                 </Text>
               </View>
               <View style={styles.tableRow}>
-                <Text style={[styles.tableCell, { textAlign: "left" }]}>
+                <Text style={[styles.tableCell, { textAlign: "left" }]} allowFontScaling={false}>
                   Tiền BNL
                 </Text>
-                <Text style={styles.tableCell}>{calculateWaterHeater()}</Text>
-                <Text style={styles.tableCell}>
+                <Text style={styles.tableCell} allowFontScaling={false}>{calculateWaterHeater()}</Text>
+                <Text style={styles.tableCell} allowFontScaling={false}>
                   {formatNumber(electricPrice) + " ₫"}
                 </Text>
-                <Text style={styles.tableCell}>
+                <Text style={styles.tableCell} allowFontScaling={false}>
                   {formatNumber(roundedTotalWaterHeaterPrice) + " ₫"}
                 </Text>
               </View>
               <View style={styles.tableRow}>
-                <Text style={[styles.tableCell, { textAlign: "left" }]}>
+                <Text style={[styles.tableCell, { textAlign: "left" }]} allowFontScaling={false}>
                   Tiền nước
                 </Text>
-                <Text style={styles.tableCell}>{calculateWater()}</Text>
-                <Text style={styles.tableCell}>
+                <Text style={styles.tableCell} allowFontScaling={false}>{calculateWater()}</Text>
+                <Text style={styles.tableCell} allowFontScaling={false}>
                   {formatNumber(waterPrice) + " ₫"}
                 </Text>
-                <Text style={styles.tableCell}>
+                <Text style={styles.tableCell} allowFontScaling={false}>
                   {formatNumber(totalWaterPrice) + " ₫"}
                 </Text>
               </View>
               <View style={styles.tableRow}>
-                <Text style={[styles.tableCell, { textAlign: "left" }]}>
+                <Text style={[styles.tableCell, { textAlign: "left" }]} allowFontScaling={false}>
                   Tiền phòng
                 </Text>
-                <Text style={styles.tableCell}>-</Text>
-                <Text style={styles.tableCell}>-</Text>
-                <Text style={styles.tableCell}>
+                <Text style={styles.tableCell} allowFontScaling={false}>-</Text>
+                <Text style={styles.tableCell} allowFontScaling={false}>-</Text>
+                <Text style={styles.tableCell} allowFontScaling={false}>
                   {formatNumber(roomCost) + " ₫"}
                 </Text>
               </View>
               <View style={styles.tableRow}>
-                <Text style={[styles.tableCell, { textAlign: "left" }]}>
+                <Text style={[styles.tableCell, { textAlign: "left" }]} allowFontScaling={false}>
                   Dịch vụ
                 </Text>
-                <Text style={styles.tableCell}>-</Text>
-                <Text style={styles.tableCell}>-</Text>
-                <Text style={styles.tableCell}>
+                <Text style={styles.tableCell} allowFontScaling={false}>-</Text>
+                <Text style={styles.tableCell} allowFontScaling={false}>-</Text>
+                <Text style={styles.tableCell} allowFontScaling={false}>
                   {formatNumber(totalServicePrice) + " ₫"}
                 </Text>
               </View>
@@ -734,17 +756,19 @@ const CreateInvoiceScreen = ({
                   style={[
                     styles.tableCell,
                     { textAlign: "left", fontSize: 14, fontWeight: "bold" },
-                  ]}
+                    ]}
+                  allowFontScaling={false}
                 >
                   Tổng tiền
                 </Text>
-                <Text style={styles.tableCell}>-</Text>
-                <Text style={styles.tableCell}>-</Text>
+                <Text style={styles.tableCell} allowFontScaling={false}>-</Text>
+                <Text style={styles.tableCell} allowFontScaling={false}>-</Text>
                 <Text
                   style={[
                     styles.tableCell,
                     { fontSize: 14, fontWeight: "bold", color: "#E74C3C" },
                   ]}
+                  allowFontScaling={false}
                 >
                   {formatNumber(totalAmount) + " ₫"}
                 </Text>
@@ -756,7 +780,7 @@ const CreateInvoiceScreen = ({
               onPress={handleSave}
               disabled={isLoading}
             >
-              <Text style={styles.saveText}>
+              <Text style={styles.saveText} allowFontScaling={false}>
                 {isLoading ? "Đang lưu..." : "Tạo hóa đơn"}
               </Text>
             </TouchableOpacity>

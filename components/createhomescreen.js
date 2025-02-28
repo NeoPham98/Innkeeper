@@ -81,7 +81,9 @@ const CreateHomeScreen = ({ navigation, route }) => {
           <View style={styles.container}>
             {notification ? (
               <View style={styles.notification}>
-                <Text style={styles.notificationText}>{notification}</Text>
+                <Text style={styles.notificationText} allowFontScaling={false}>
+                  {notification}
+                </Text>
               </View>
             ) : null}
             <View style={styles.headerContainer}>
@@ -90,7 +92,9 @@ const CreateHomeScreen = ({ navigation, route }) => {
                 onPress={() => navigation.navigate("Home", { id_account })}
               >
                 <AntDesign name="arrowleft" size={24} color="#2C3E50" />
-                <Text style={styles.headerText}>Tạo nhà</Text>
+                <Text style={styles.headerText} allowFontScaling={false}>
+                  Tạo nhà
+                </Text>
               </TouchableOpacity>
             </View>
 
@@ -100,28 +104,40 @@ const CreateHomeScreen = ({ navigation, route }) => {
             />
 
             <View style={styles.content}>
-              <Text style={styles.title}>Thông tin nhà</Text>
+              <Text style={styles.title} allowFontScaling={false}>
+                Thông tin nhà
+              </Text>
 
-              <Text style={styles.label}>Tên nhà</Text>
+              <Text style={styles.label} allowFontScaling={false}>
+                Tên nhà
+              </Text>
               <TextInput
+              
                 style={styles.input}
                 placeholder="Ví dụ: Nhà trọ Trảng Dài"
                 value={houseName}
                 onChangeText={setHouseName}
+                allowFontScaling={false}
+                textAlignVertical="top"
               />
-              <Text style={styles.label}>Địa chỉ</Text>
+              <Text style={styles.label} allowFontScaling={false}>
+                Địa chỉ
+              </Text>
               <TextInput
+              
                 style={styles.input}
                 placeholder="Ví dụ: 18/158 Trảng Dài"
                 value={address}
                 onChangeText={setAddress}
+                allowFontScaling={false}
+                textAlignVertical="top"
               />
               <TouchableOpacity
                 style={[styles.saveButton, isLoading && { opacity: 0.7 }]}
                 onPress={handleSave}
                 disabled={isLoading}
               >
-                <Text style={styles.saveText}>
+                <Text style={styles.saveText} allowFontScaling={false}>
                   {isLoading ? "Đang lưu..." : "Lưu lại"}
                 </Text>
               </TouchableOpacity>
@@ -136,15 +152,22 @@ const CreateHomeScreen = ({ navigation, route }) => {
               <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={styles.modalOverlay}>
                   <View style={styles.modalContent}>
-                    <Text style={styles.modalTitle}>Thông báo</Text>
-                    <Text style={styles.modalMessage}>
+                    <Text style={styles.modalTitle} allowFontScaling={false}>
+                      Thông báo
+                    </Text>
+                    <Text style={styles.modalMessage} allowFontScaling={false}>
                       {notificationMessage}
                     </Text>
                     <TouchableOpacity
                       style={styles.closeButton}
                       onPress={() => setNotificationVisible(false)}
                     >
-                      <Text style={styles.closeButtonText}>Đóng</Text>
+                      <Text
+                        style={styles.closeButtonText}
+                        allowFontScaling={false}
+                      >
+                        Đóng
+                      </Text>
                     </TouchableOpacity>
                   </View>
                 </View>

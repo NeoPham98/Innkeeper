@@ -296,19 +296,19 @@ const SettingsScreen = ({ route }) => {
             >
               <AntDesign name="close" size={20} color="white" />
             </TouchableOpacity>
-            <Text style={styles.modalTitle}>Chọn hành động</Text>
-            <Text style={styles.modalMessage}>
+            <Text style={styles.modalTitle} allowFontScaling={false}>Chọn hành động</Text>
+            <Text style={styles.modalMessage} allowFontScaling={false}>
               Bạn muốn làm gì với dịch vụ này?
             </Text>
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.modalButton} onPress={handleEdit}>
-                <Text style={styles.modalButtonText}>Chỉnh sửa</Text>
+                <Text style={styles.modalButtonText} allowFontScaling={false}>Chỉnh sửa</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.modalButton}
                 onPress={handleDelete}
               >
-                <Text style={styles.modalButtonText}>Xóa</Text>
+                <Text style={styles.modalButtonText} allowFontScaling={false}>Xóa</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -333,13 +333,13 @@ const SettingsScreen = ({ route }) => {
             >
               <AntDesign name="close" size={20} color="white" />
             </TouchableOpacity>
-            <Text style={styles.modalTitle}>Chỉnh sửa dịch vụ</Text>
+            <Text style={styles.modalTitle} allowFontScaling={false}>Chỉnh sửa dịch vụ</Text>
             <Text
               style={[
                 styles.modalLabel,
                 { textAlign: "left", alignSelf: "flex-start" },
               ]}
-            >
+              allowFontScaling={false}>
               Tên dịch vụ
             </Text>
             <TextInput
@@ -353,11 +353,12 @@ const SettingsScreen = ({ route }) => {
                 styles.modalLabel,
                 { textAlign: "left", alignSelf: "flex-start" },
               ]}
-            >
-              Tên dịch vụ
+              allowFontScaling={false}>
+              Số tiền
             </Text>
             <TextInput
               style={styles.modalInput}
+              allowFontScaling={false}
               placeholder="Nhập số tiền"
               keyboardType="numeric"
               value={
@@ -372,7 +373,7 @@ const SettingsScreen = ({ route }) => {
               style={styles.modalButtonAdd}
               onPress={handleEditService}
             >
-              <Text style={styles.buttonText}>Cập nhật</Text>
+              <Text style={styles.buttonText} allowFontScaling={false}>Cập nhật</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -389,7 +390,7 @@ const SettingsScreen = ({ route }) => {
       )}
       {notification ? (
         <View style={styles.notification}>
-          <Text style={styles.notificationText}>{notification}</Text>
+          <Text style={styles.notificationText} allowFontScaling={false}>{notification}</Text>
         </View>
       ) : null}
       <ScrollView
@@ -407,14 +408,21 @@ const SettingsScreen = ({ route }) => {
           onPress={() => navigation.goBack()}
         >
           <AntDesign name="arrowleft" size={26} color="#2C3E50" />
-          <Text style={styles.headerText}>Cài đặt nhà trọ</Text>
+          <Text style={styles.headerText} allowFontScaling={false}>
+            Cài đặt nhà trọ
+          </Text>
         </TouchableOpacity>
 
         <View style={styles.cardsContainer}>
           <View style={styles.defaultValueContainer}>
-            <Text style={styles.subHeader}>Giá trị mặc định cho các phòng</Text>
-            <Text style={styles.label}>Giá điện (đ/kWh)</Text>
+            <Text style={styles.subHeader} allowFontScaling={false}>
+              Giá trị mặc định cho các phòng
+            </Text>
+            <Text style={styles.label} allowFontScaling={false}>
+              Giá điện (đ/kWh)
+            </Text>
             <TextInput
+            allowFontScaling={false}
               style={styles.input}
               placeholder="Ví dụ: 3,000 đ"
               value={electricPrice ? formatNumberWithCommas(electricPrice) : ""}
@@ -425,8 +433,11 @@ const SettingsScreen = ({ route }) => {
               keyboardType="numeric"
             />
 
-            <Text style={styles.label}>Giá nước (đ/người)</Text>
+            <Text style={styles.label} allowFontScaling={false}>
+              Giá nước (đ/người)
+            </Text>
             <TextInput
+            allowFontScaling={false}
               style={styles.input}
               placeholder="Ví dụ: 100,000 đ"
               value={waterPrice ? formatNumberWithCommas(waterPrice) : ""}
@@ -438,16 +449,18 @@ const SettingsScreen = ({ route }) => {
             />
 
             <TouchableOpacity style={styles.button} onPress={updateSettings}>
-              <Text style={styles.buttonText}>Cập nhật</Text>
+              <Text style={styles.buttonText} allowFontScaling={false}>Cập nhật</Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.serviceWrapper}>
-            <Text style={styles.subHeader}>Thêm dịch vụ trên hóa đơn</Text>
+            <Text style={styles.subHeader} allowFontScaling={false}>Thêm dịch vụ trên hóa đơn</Text>
             {services.map((service) => (
               <View key={service.service_id} style={styles.serviceContainer}>
-                <Text style={styles.serviceName}>{service.service_name}</Text>
-                <Text style={styles.servicePrice}>
+                <Text style={styles.serviceName} allowFontScaling={false}>
+                  {service.service_name}
+                </Text>
+                <Text style={styles.servicePrice} allowFontScaling={false}>
                   {formatNumberWithCommas(service.service_price)} đ
                 </Text>
                 <TouchableOpacity
@@ -503,8 +516,9 @@ const SettingsScreen = ({ route }) => {
                 >
                   <AntDesign name="close" size={20} color="white" />
                 </TouchableOpacity>
-                <Text style={styles.modalTitle}>Thêm dịch vụ</Text>
+                <Text style={styles.modalTitle} allowFontScaling={false}>Thêm dịch vụ</Text>
                 <Text
+                allowFontScaling={false}
                   style={[
                     styles.modalLabel,
                     { textAlign: "left", alignSelf: "flex-start" },
@@ -513,12 +527,14 @@ const SettingsScreen = ({ route }) => {
                   Tên dịch vụ
                 </Text>
                 <TextInput
+                allowFontScaling={false}
                   style={styles.modalInput}
                   placeholder="Nhập tên dịch vụ"
                   value={serviceName}
                   onChangeText={setServiceName}
                 />
                 <Text
+                allowFontScaling={false}
                   style={[
                     styles.modalLabel,
                     { textAlign: "left", alignSelf: "flex-start" },
@@ -527,6 +543,7 @@ const SettingsScreen = ({ route }) => {
                   Số tiền
                 </Text>
                 <TextInput
+                allowFontScaling={false}
                   style={styles.modalInput}
                   placeholder="Nhập số tiền"
                   keyboardType="numeric"
@@ -542,7 +559,7 @@ const SettingsScreen = ({ route }) => {
                   style={styles.modalButtonAdd}
                   onPress={handleAddService}
                 >
-                  <Text style={styles.buttonText}>Thêm</Text>
+                  <Text style={styles.buttonText} allowFontScaling={false}>Thêm</Text>
                 </TouchableOpacity>
               </View>
             </View>

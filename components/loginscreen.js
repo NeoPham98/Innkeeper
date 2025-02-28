@@ -16,8 +16,8 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { supabaseDB } from "../DBconfig";
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const LoginScreen = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -87,11 +87,23 @@ const LoginScreen = ({ navigation }) => {
           </View>
 
           <View style={styles.content}>
-            <Text style={styles.title}>Chủ trọ</Text>
-            <Text style={styles.subtitle}>Quản lý nhà trọ thật dễ dàng</Text>
+            <Text style={styles.title} allowFontScaling={false}>
+              Chủ trọ
+            </Text>
+            <Text style={styles.subtitle} allowFontScaling={false}>
+              Quản lý nhà trọ thật dễ dàng
+            </Text>
 
-            <Text style={styles.label}><MaterialCommunityIcons name="account-tie" size={16} color="black" /> Tài khoản</Text>
+            <Text style={styles.label} allowFontScaling={false}>
+              <MaterialCommunityIcons
+                name="account-tie"
+                size={16}
+                color="black"
+              />{" "}
+              Tài khoản
+            </Text>
             <TextInput
+            allowFontScaling={false}
               style={styles.input}
               placeholder="Ví dụ: abc1234@gmail.com"
               keyboardType="email-address"
@@ -100,9 +112,12 @@ const LoginScreen = ({ navigation }) => {
               onChangeText={setEmail}
             />
 
-            <Text style={styles.label}><MaterialIcons name="password" size={16} color="black" /> Mật khẩu</Text>
+            <Text style={styles.label} allowFontScaling={false}>
+              <MaterialIcons name="password" size={16} color="black" /> Mật khẩu
+            </Text>
             <View style={styles.passwordContainer}>
               <TextInput
+              allowFontScaling={false}
                 style={styles.passwordInput}
                 placeholder="Nhập mật khẩu"
                 secureTextEntry={!showPassword}
@@ -128,7 +143,7 @@ const LoginScreen = ({ navigation }) => {
                 onPress={handleLogin}
                 disabled={loading}
               >
-                <Text style={styles.loginButtonText}>
+                <Text style={styles.loginButtonText} allowFontScaling={false}>
                   {loading ? "Đang đăng nhập..." : "Đăng nhập"}
                 </Text>
               </TouchableOpacity>
@@ -152,14 +167,20 @@ const LoginScreen = ({ navigation }) => {
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <Ionicons name="alert-circle" size={30} color="#E74C3C" />
-              <Text style={styles.modalTitle}>Lỗi đăng nhập</Text>
+              <Text style={styles.modalTitle} allowFontScaling={false}>
+                Lỗi đăng nhập
+              </Text>
             </View>
-            <Text style={styles.modalMessage}>{errorMessage}</Text>
+            <Text style={styles.modalMessage} allowFontScaling={false}>
+              {errorMessage}
+            </Text>
             <TouchableOpacity
               style={styles.modalButton}
               onPress={() => setShowError(false)}
             >
-              <Text style={styles.modalButtonText}>Đóng</Text>
+              <Text style={styles.modalButtonText} allowFontScaling={false}>
+                Đóng
+              </Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>

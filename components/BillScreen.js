@@ -44,24 +44,26 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
 
   const renderInvoiceItem = ({ item }) => (
     <View style={styles.tableRow}>
-      <Text style={styles.dateText}>
+      <Text style={styles.dateText} allowFontScaling={false}>
         {new Date(item.created_at).toLocaleDateString("vi-VN")}
       </Text>
-      <Text style={styles.roomNameText}>{item.room_name}</Text>
-      <Text style={styles.totalText}>
+      <Text style={styles.roomNameText} allowFontScaling={false}>
+        {item.room_name}
+      </Text>
+      <Text style={styles.totalText} allowFontScaling={false}>
         {Number(item.total_amount).toLocaleString("en-US")} ₫
       </Text>
       <TouchableOpacity
         style={styles.actionButton}
         onPress={() => handleView(item)}
       >
-        <Text style={styles.actionText}>Xem</Text>
+        <Text style={styles.actionText} allowFontScaling={false}>Xem</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.actionButton}
         onPress={() => handleDelete(item)}
       >
-        <Text style={styles.actionText}>Xóa</Text>
+        <Text style={styles.actionText} allowFontScaling={false}>Xóa</Text>
       </TouchableOpacity>
     </View>
   );
@@ -99,7 +101,9 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
     <View style={styles.container}>
       {notification ? ( // Hiển thị thông báo nếu có
         <View style={styles.notification}>
-          <Text style={styles.notificationText}>{notification}</Text>
+          <Text style={styles.notificationText} allowFontScaling={false}>
+            {notification}
+          </Text>
         </View>
       ) : null}
       <View style={styles.headerContainer}>
@@ -108,15 +112,23 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
           onPress={() => navigation.goBack()}
         >
           <AntDesign name="arrowleft" size={24} color="#2C3E50" />
-          <Text style={styles.headerText}>Danh sách hóa đơn</Text>
+          <Text style={styles.headerText} allowFontScaling={false}>
+            Danh sách hóa đơn
+          </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.tableContainer}>
         <View style={styles.tableHeader}>
-          <Text style={styles.tableHeaderText}>Ngày tạo</Text>
-          <Text style={styles.tableHeaderText}>Tên Phòng</Text>
-          <Text style={styles.tableHeaderText}>Tổng tiền</Text>
-          <Text style={styles.tableHeaderText}></Text>
+          <Text style={styles.tableHeaderText} allowFontScaling={false}>
+            Ngày tạo
+          </Text>
+          <Text style={styles.tableHeaderText} allowFontScaling={false}>
+            Tên Phòng
+          </Text>
+          <Text style={styles.tableHeaderText} allowFontScaling={false}>
+            Tổng tiền
+          </Text>
+          <Text style={styles.tableHeaderText} allowFontScaling={false}></Text>
         </View>
         <FlatList
           data={invoiceData}

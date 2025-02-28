@@ -274,7 +274,9 @@ const HomeScreen = ({ navigation, route }) => {
   const renderHomeCard = (home) => (
     <View style={styles.homeCard}>
       <View style={styles.homeHeader}>
-        <Text style={styles.homeName}>{home.home_name}</Text>
+        <Text allowFontScaling={false} style={styles.homeName}>
+          {home.home_name}
+        </Text>
         <TouchableOpacity
           onPress={() =>
             handleMenu(home.id_home, home.home_name, home.home_address)
@@ -286,45 +288,63 @@ const HomeScreen = ({ navigation, route }) => {
 
       <View style={styles.locationRow}>
         <MaterialIcons name="location-on" size={24} color="#FF9999" />
-        <Text style={styles.locationText}>{home.home_address}</Text>
+        <Text allowFontScaling={false} style={styles.locationText}>
+          {home.home_address}
+        </Text>
       </View>
 
       <View style={styles.statsContainer}>
         <View style={styles.statsRow}>
-          <Text style={styles.statsLabel}>Số phòng:</Text>
-          <Text style={styles.statsValue}>{home.room_total || 0}</Text>
+          <Text allowFontScaling={false} style={styles.statsLabel}>
+            Số phòng:
+          </Text>
+          <Text allowFontScaling={false} style={styles.statsValue}>
+            {home.room_total || 0}
+          </Text>
         </View>
         <View style={styles.statsRow}>
-          <Text style={styles.statsLabel}>Số phòng trống:</Text>
-          <Text style={styles.statsValue}>{home.room_total_empty || 0}</Text>
+          <Text allowFontScaling={false} style={styles.statsLabel}>
+            Số phòng trống:
+          </Text>
+          <Text allowFontScaling={false} style={styles.statsValue}>
+            {home.room_total_empty || 0}
+          </Text>
         </View>
         <View style={styles.statsRow}>
-          <Text style={styles.statsLabel}>Số người đang trọ:</Text>
-          <Text style={styles.statsValue}>
+          <Text allowFontScaling={false} style={styles.statsLabel}>
+            Số người đang trọ:
+          </Text>
+          <Text allowFontScaling={false} style={styles.statsValue}>
             {home.room_total_lacks_money || 0}
           </Text>
         </View>
         <View style={styles.statsRow}>
-          <Text style={styles.statsLabel}>Số hóa đơn đã tạo:</Text>
-          <Text style={styles.statsValue}>{home.monthly_revenue || 0}</Text>
+          <Text allowFontScaling={false} style={styles.statsLabel}>
+            Số hóa đơn đã tạo:
+          </Text>
+          <Text allowFontScaling={false} style={styles.statsValue}>
+            {home.monthly_revenue || 0}
+          </Text>
         </View>
       </View>
 
       <View style={styles.separator} />
 
       <View style={styles.revenueContainer}>
-        <Text style={styles.revenueLabel}>
+        <Text allowFontScaling={false} style={styles.revenueLabel}>
           Doanh thu {getMonthName(new Date().getMonth())}:
         </Text>
         <View style={styles.revenueValueContainer}>
-          <Text style={styles.revenueValue}>
+          <Text allowFontScaling={false} style={styles.revenueValue}>
             {formatNumberWithCommas(monthlyRevenue[home.id_home] || 0)} ₫
           </Text>
           <TouchableOpacity
             style={styles.detailButton}
             onPress={() => navigation.navigate("DetailHome", { home })}
           >
-            <Text style={styles.detailButtonText}>Chi tiết</Text>
+            <Text allowFontScaling={false} style={styles.detailButtonText}>
+              Chi tiết
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -335,7 +355,9 @@ const HomeScreen = ({ navigation, route }) => {
     <>
       {notification ? (
         <View style={styles.notification}>
-          <Text style={styles.notificationText}>{notification}</Text>
+          <Text allowFontScaling={false} style={styles.notificationText}>
+            {notification}
+          </Text>
         </View>
       ) : null}
       <ScrollView
@@ -377,7 +399,7 @@ const HomeScreen = ({ navigation, route }) => {
               >
                 <AntDesign name="pluscircleo" size={50} color="#006D5B" />
               </TouchableOpacity>
-              <Text style={styles.infoText}>
+              <Text style={styles.infoText} allowFontScaling={false}>
                 Bấm dấu "+" để tạo nhà trọ mới
               </Text>
             </View>
@@ -418,8 +440,10 @@ const HomeScreen = ({ navigation, route }) => {
               >
                 <AntDesign name="close" size={20} color="white" />
               </TouchableOpacity>
-              <Text style={styles.modalTitle}>Chọn hành động</Text>
-              <Text style={styles.modalMessage}>
+              <Text allowFontScaling={false} style={styles.modalTitle}>
+                Chọn hành động
+              </Text>
+              <Text allowFontScaling={false} style={styles.modalMessage}>
                 Bạn muốn làm gì với nhà này?
               </Text>
               <View style={styles.buttonContainer}>
@@ -436,13 +460,17 @@ const HomeScreen = ({ navigation, route }) => {
                     setModalVisible(false);
                   }}
                 >
-                  <Text style={styles.modalButtonText}>Chỉnh sửa</Text>
+                  <Text allowFontScaling={false} style={styles.modalButtonText}>
+                    Chỉnh sửa
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.modalButton}
                   onPress={handleDeleteHome}
                 >
-                  <Text style={styles.modalButtonText}>Xóa</Text>
+                  <Text allowFontScaling={false} style={styles.modalButtonText}>
+                    Xóa
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -565,7 +593,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 12,
     position: "relative",
-    paddingRight: 90,
+    // paddingRight: 50, //IOS
+    //paddingRight: 90, //Android
   },
   statsLabel: {
     fontSize: 16,

@@ -18,7 +18,6 @@ const EditHomeScreen = ({ route, navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [notification, setNotification] = useState("");
   const updateHome = async () => {
-    
     try {
       setIsLoading(true);
 
@@ -33,7 +32,6 @@ const EditHomeScreen = ({ route, navigation }) => {
       navigation.navigate("Home", {
         notification: "Cập nhật nhà trọ thành công!",
         id_account: id_account,
-
       });
     } catch (error) {
       setIsLoading(false);
@@ -49,7 +47,9 @@ const EditHomeScreen = ({ route, navigation }) => {
           onPress={() => navigation.navigate("Home", { id_account })}
         >
           <AntDesign name="arrowleft" size={24} color="#2C3E50" />
-          <Text style={styles.headerText}>Chỉnh sửa</Text>
+          <Text style={styles.headerText} allowFontScaling={false}>
+            Chỉnh sửa
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -59,17 +59,25 @@ const EditHomeScreen = ({ route, navigation }) => {
       />
 
       <View style={styles.content}>
-        <Text style={styles.title}>Chỉnh sửa thông tin nhà</Text>
+        <Text style={styles.title} allowFontScaling={false}>
+          Chỉnh sửa thông tin nhà
+        </Text>
 
-        <Text style={styles.label}>Tên nhà</Text>
+        <Text style={styles.label} allowFontScaling={false}>
+          Tên nhà
+        </Text>
         <TextInput
+          allowFontScaling={false}
           style={styles.input}
           placeholder="Ví dụ: Nhà trọ Trảng Dài"
           value={homeName}
           onChangeText={setHomeName}
         />
-        <Text style={styles.label}>Địa chỉ</Text>
+        <Text style={styles.label} allowFontScaling={false}>
+          Địa chỉ
+        </Text>
         <TextInput
+          allowFontScaling={false}
           style={styles.input}
           placeholder="Ví dụ: 18/158 Trảng Dài"
           value={homeAddress}
@@ -80,7 +88,7 @@ const EditHomeScreen = ({ route, navigation }) => {
           onPress={updateHome}
           disabled={isLoading}
         >
-          <Text style={styles.saveText}>
+          <Text style={styles.saveText} allowFontScaling={false}>
             {isLoading ? "Đang lưu..." : "Lưu lại"}
           </Text>
         </TouchableOpacity>

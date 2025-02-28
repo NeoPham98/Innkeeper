@@ -33,14 +33,13 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
         format: "png", // Sử dụng định dạng PNG
         quality: 1.0, // Chất lượng cao nhất
       });
-    
 
       // Chia sẻ ảnh
       await Sharing.shareAsync(uri, {
         dialogTitle: "Chia sẻ hóa đơn",
         UTI: "public.image", // Định dạng file
       });
-      navigation.pop(2)
+      navigation.pop(2);
     } catch (error) {
       console.error("Chụp ảnh thất bại: ", error);
       Alert.alert("Thông báo", "Chụp ảnh thất bại!");
@@ -132,19 +131,23 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
           onPress={() => navigation.pop(2)}
         >
           <AntDesign name="arrowleft" size={24} color="black" />
-          <Text style={styles.headerText}>Hóa đơn</Text>
+          <Text style={styles.headerText} allowFontScaling={false}>
+            Hóa đơn
+          </Text>
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={styles.content}>
         <ViewShot ref={viewRef} options={{ format: "png", quality: 1.0 }}>
           <View style={{ padding: 20, backgroundColor: "white" }}>
-            <Text style={styles.roomNameText}>{invoiceData.room_name}</Text>
+            <Text style={styles.roomNameText} allowFontScaling={false}>
+              {invoiceData.room_name}
+            </Text>
             <View style={styles.row}>
-              <Text>
+              <Text allowFontScaling={false}>
                 <FontAwesome name="calendar" size={16} color="black" /> Ngày lập
                 hóa đơn:
               </Text>
-              <Text style={styles.rightText}>
+              <Text style={styles.rightText} allowFontScaling={false}>
                 {formatDate(invoiceData.created_at)}
               </Text>
             </View>
@@ -154,10 +157,12 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                 { justifyContent: "flex-start" },
               ]}
             >
-              <Text style={styles.separatorText}>Thông tin cá nhân</Text>
+              <Text style={styles.separatorText} allowFontScaling={false}>
+                Thông tin cá nhân
+              </Text>
             </View>
             <View style={styles.row}>
-              <Text style={styles.textWithBorder}>
+              <Text style={styles.textWithBorder} allowFontScaling={false}>
                 <MaterialCommunityIcons
                   name="face-man"
                   size={16}
@@ -166,12 +171,15 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                 Họ tên:
               </Text>
 
-              <Text style={[styles.rightText, styles.textWithBorder]}>
+              <Text
+                style={[styles.rightText, styles.textWithBorder]}
+                allowFontScaling={false}
+              >
                 {invoiceData.roomer}
               </Text>
             </View>
             <View style={styles.row}>
-              <Text style={styles.textWithBorder}>
+              <Text style={styles.textWithBorder} allowFontScaling={false}>
                 <MaterialCommunityIcons
                   name="phone-classic"
                   size={16}
@@ -179,7 +187,10 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                 />{" "}
                 Số điện thoại:
               </Text>
-              <Text style={[styles.rightText, styles.textWithBorder]}>
+              <Text
+                style={[styles.rightText, styles.textWithBorder]}
+                allowFontScaling={false}
+              >
                 {invoiceData.phone_number}
               </Text>
             </View>
@@ -190,31 +201,42 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                 { justifyContent: "flex-start" },
               ]}
             >
-              <Text style={[styles.separatorText, { marginTop: 10 }]}>
+              <Text
+                style={[styles.separatorText, { marginTop: 10 }]}
+                allowFontScaling={false}
+              >
                 Thông tin điện nước
               </Text>
             </View>
-            <Text style={styles.subHeader}>1. Nước</Text>
+            <Text style={styles.subHeader} allowFontScaling={false}>
+              1. Nước
+            </Text>
             <View style={styles.row}>
-              <Text style={styles.textWithBorder}>
+              <Text style={styles.textWithBorder} allowFontScaling={false}>
                 <AntDesign name="github" size={16} color="black" />
                 {""} Số người:
               </Text>
-              <Text style={[styles.rightText, styles.textWithBorder]}>
+              <Text
+                style={[styles.rightText, styles.textWithBorder]}
+                allowFontScaling={false}
+              >
                 {invoiceData.quantity}
               </Text>
             </View>
             <View style={styles.row}>
-              <Text style={styles.textWithBorder}>
+              <Text style={styles.textWithBorder} allowFontScaling={false}>
                 <Ionicons name="pricetags" size={16} color="#2ECC71" /> Giá
                 nước:
               </Text>
-              <Text style={[styles.rightText, styles.textWithBorder]}>
+              <Text
+                style={[styles.rightText, styles.textWithBorder]}
+                allowFontScaling={false}
+              >
                 {formatCurrency(settings.water_price)} đ
               </Text>
             </View>
             <View style={styles.row}>
-              <Text style={styles.textWithBorder}>
+              <Text style={styles.textWithBorder} allowFontScaling={false}>
                 <Ionicons name="water" size={16} color="#3498DB" /> Tiền nước:
               </Text>
               <Text
@@ -223,41 +245,53 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                   styles.textWithBorder,
                   styles.priceText,
                 ]}
+                allowFontScaling={false}
               >
                 {formatCurrency(invoiceData.total_water_price)} đ
               </Text>
             </View>
 
-            <Text style={styles.subHeader}>2. Điện</Text>
+            <Text style={styles.subHeader} allowFontScaling={false}>
+              2. Điện
+            </Text>
             <View style={styles.row}>
-              <Text style={styles.textWithBorder}>
+              <Text style={styles.textWithBorder} allowFontScaling={false}>
                 <MaterialIcons name="electric-bolt" size={16} color="#E67E22" />{" "}
                 Số điện:
               </Text>
-              <Text style={[styles.rightText, styles.textWithBorder]}>
+              <Text
+                style={[styles.rightText, styles.textWithBorder]}
+                allowFontScaling={false}
+              >
                 {invoiceData.total_electric_use}
               </Text>
             </View>
             <View style={styles.row}>
-              <Text style={styles.textWithBorder}>
+              <Text style={styles.textWithBorder} allowFontScaling={false}>
                 <FontAwesome5 name="hot-tub" size={16} color="#E74C3C" /> Số
                 bình nóng lạnh:
               </Text>
-              <Text style={[styles.rightText, styles.textWithBorder]}>
+              <Text
+                style={[styles.rightText, styles.textWithBorder]}
+                allowFontScaling={false}
+              >
                 {invoiceData.total_bnl_use}
               </Text>
             </View>
             <View style={styles.row}>
-              <Text style={styles.textWithBorder}>
+              <Text style={styles.textWithBorder} allowFontScaling={false}>
                 <Ionicons name="pricetags" size={16} color="#2ECC71" /> Giá
                 điện:
               </Text>
-              <Text style={[styles.rightText, styles.textWithBorder]}>
+              <Text
+                style={[styles.rightText, styles.textWithBorder]}
+                allowFontScaling={false}
+              >
                 {formatCurrency(settings.electric_price)} đ
               </Text>
             </View>
             <View style={styles.row}>
-              <Text style={styles.textWithBorder}>
+              <Text style={styles.textWithBorder} allowFontScaling={false}>
                 <MaterialIcons
                   name="electrical-services"
                   size={16}
@@ -271,6 +305,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                   styles.textWithBorder,
                   styles.priceText,
                 ]}
+                allowFontScaling={false}
               >
                 {formatCurrency(invoiceData.number_price)} đ
               </Text>
@@ -282,24 +317,30 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                 { justifyContent: "flex-start" },
               ]}
             >
-              <Text style={[styles.separatorText, { marginTop: 10 }]}>
+              <Text
+                style={[styles.separatorText, { marginTop: 10 }]}
+                allowFontScaling={false}
+              >
                 Thông tin dịch vụ
               </Text>
             </View>
             {services.map((service) => (
               <View key={service.service_id} style={styles.row}>
-                <Text style={styles.textWithBorder}>
+                <Text style={styles.textWithBorder} allowFontScaling={false}>
                   <Entypo name="pin" size={16} color="#FF4D4D" />{" "}
                   {service.service_name}:
                 </Text>
 
-                <Text style={[styles.rightText, styles.textWithBorder]}>
+                <Text
+                  style={[styles.rightText, styles.textWithBorder]}
+                  allowFontScaling={false}
+                >
                   {formatCurrency(service.service_price)} ₫
                 </Text>
               </View>
             ))}
             <View style={styles.row}>
-              <Text style={styles.textWithBorder}>
+              <Text style={styles.textWithBorder} allowFontScaling={false}>
                 <FontAwesome6
                   name="money-bill-1-wave"
                   size={16}
@@ -313,13 +354,19 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                   styles.textWithBorder,
                   styles.priceText,
                 ]}
+                allowFontScaling={false}
               >
                 {formatCurrency(invoiceData.room_price)} đ
               </Text>
             </View>
             <View style={styles.row}>
-              <Text style={styles.totalText}>Tổng số tiền:</Text>
-              <Text style={[styles.rightText, styles.priceTextTotal]}>
+              <Text style={styles.totalText} allowFontScaling={false}>
+                Tổng số tiền:
+              </Text>
+              <Text
+                style={[styles.rightText, styles.priceTextTotal]}
+                allowFontScaling={false}
+              >
                 {formatCurrency(invoiceData.total_amount)} đ
               </Text>
             </View>
