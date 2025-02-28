@@ -479,7 +479,7 @@ const styles = StyleSheet.create({
   header: {
     alignItems: "center",
     marginBottom: 20,
-    marginTop: 60,
+    marginTop: 0,
   },
   houseImage: {
     width: 200,

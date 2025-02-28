@@ -796,7 +796,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     position: "sticky",
-    paddingTop: 40,
+    // paddingTop: 40,
     paddingHorizontal: 20,
     backgroundColor: "#FFD2CC",
     height: 80,
@@ -814,8 +814,8 @@ const styles = StyleSheet.create({
     marginTop: -5,
   },
   content: {
-    marginTop: 20,
-    paddingTop: 20,
+    // marginTop: 20,
+    paddingTop: 10,
     paddingBottom: 30,
     height: "auto",
     width: "90%",

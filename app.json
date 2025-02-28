@@ -5,7 +5,7 @@
         "slug": "Inkeeper",
         "version": "1.0.0",
         "orientation": "portrait",
-        "icon": "./assets/house.png",
+        "icon": "./assets/logoApp.png",
         "userInterfaceStyle": "light",
         "newArchEnabled": true,
         "splash": 
@@ -21,7 +21,7 @@
         {
             "adaptiveIcon": 
             {
-                "foregroundImage": "./assets/house.png",
+                "foregroundImage": "./assets/logoApp.png",
                 "backgroundColor": "#ffffff"
             },
             "package": "com.datpq.Inkeeper"

@@ -565,7 +565,7 @@ const styles = StyleSheet.create({
   },
   cardsContainer: {
     alignItems: "center",
-    marginTop: 50,
+    marginTop: 30,
   },
   subHeader: {
     fontSize: 18,

@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFD2CC",
   },
   headerContainer: {
-    paddingTop: 40,
+    // paddingTop: 40,
     paddingHorizontal: 20,
     paddingBottom: 0,
     flexDirection: "row",

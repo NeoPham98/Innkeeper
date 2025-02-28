@@ -376,11 +376,16 @@ const DetailHomeScreen = ({ route, navigation }) => {
           <FontAwesome name="lightbulb-o" size={30} color="#FFD700" />
           <Text style={styles.infoText}>Ghi điện nước</Text>
         </TouchableOpacity> */}
-        <TouchableOpacity style={styles.infoItem}
-        onPress={() =>
-          navigation.navigate("Bill", { id_home: effectiveHome.id_home, id_room: effectiveHome.id_room })
-        }>
-        <AntDesign name="filetext1" size={30} color="#32CD32" />
+        <TouchableOpacity
+          style={styles.infoItem}
+          onPress={() =>
+            navigation.navigate("Bill", {
+              id_home: effectiveHome.id_home,
+              id_room: effectiveHome.id_room,
+            })
+          }
+        >
+          <AntDesign name="filetext1" size={30} color="#32CD32" />
           {/* <FontAwesome name="money" size={30} color="#32CD32" /> */}
           <Text style={styles.infoText}>Hóa đơn</Text>
         </TouchableOpacity>
@@ -432,7 +437,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
-    marginTop: 30,
+    marginTop: 0,
   },
   backButton: {
     flexDirection: "row",
