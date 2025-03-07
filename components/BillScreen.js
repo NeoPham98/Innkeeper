@@ -88,6 +88,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
         .delete()
         .eq("id_invoice", numericId);
       if (error) throw error;
+
       // Cập nhật lại danh sách hóa đơn sau khi xóa
       fetchInvoices();
       setNotification("Xóa hóa đơn thành công!"); // Cập nhật thông báo
@@ -282,11 +283,19 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     position: "absolute",
-    top: 40,
-    left: 10,
-    right: 10,
+    top: 100,
+    left: 20,
+    right: 20,
     alignItems: "center",
-    zIndex: 1,
+    zIndex: 999,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   notificationText: {
     color: "#2C3E50",

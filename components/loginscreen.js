@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: "90%",
-    height: 50,
+    height: 57,
     borderWidth: 1,
     borderColor: "#E0E0E0",
     borderRadius: 10,
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-    width: "48%",
+    width: "60%",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
   },
   passwordInput: {
     flex: 1,
-    height: 50,
+    height: 57,
     borderWidth: 1,
     borderColor: "#E0E0E0",
     borderRadius: 10,
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
   eyeIcon: {
     position: "absolute",
     right: 15,
-    height: 50,
+    height: 57,
     justifyContent: "center",
     bottom: 14,
   },

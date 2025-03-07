@@ -51,39 +51,56 @@ const HomeScreen = ({ navigation, route }) => {
         return;
       }
 
+      // Lấy doanh thu tháng hiện tại cho tất cả nhà
+      const currentMonth = new Date().getMonth() + 1;
+      const currentYear = new Date().getFullYear();
+      const { data: invoiceData, error: invoiceError } = await supabaseDB
+        .from("Invoice")
+        .select("id_home, total_amount, created_at")
+        .gte("created_at", new Date(currentYear, currentMonth - 1, 1).toISOString())
+        .lt("created_at", new Date(currentYear, currentMonth, 1).toISOString());
+
+      if (invoiceError) {
+        console.error("Error fetching invoices:", invoiceError.message);
+      }
+
+      // Tính tổng doanh thu theo id_home
+      const revenueByHome = (invoiceData || []).reduce((acc, invoice) => {
+        const { id_home, total_amount } = invoice;
+        acc[id_home] = (acc[id_home] || 0) + parseFloat(total_amount);
+        return acc;
+      }, {});
+
       // Lấy tổng số người đang trọ cho từng home
       const homesWithOccupants = await Promise.all(
         data.map(async (home) => {
-          const { data: occupantsData, error: occupantsError } =
-            await supabaseDB
-              .from("Rooms")
-              .select("quantity") // Giả sử bạn có trường quantity trong bảng Rooms
-              .eq("id_home", home.id_home);
+          const { data: occupantsData, error: occupantsError } = await supabaseDB
+            .from("Rooms")
+            .select("quantity")
+            .eq("id_home", home.id_home);
 
           if (occupantsError) {
             console.error("Error fetching occupants:", occupantsError.message);
-            return home; // Trả về home mà không thay đổi nếu có lỗi
+            return home;
           }
 
           const totalOccupants = occupantsData.reduce(
             (total, room) => total + room.quantity,
             0
           );
-          const invoiceCount = await fetchInvoices(home.id_home); // Đếm số hóa đơn
+          const invoiceCount = await fetchInvoices(home.id_home);
+          
           return {
             ...home,
             room_total_lacks_money: totalOccupants,
             monthly_revenue: invoiceCount,
-          }; // Cập nhật số hóa đơn
+          };
         })
       );
 
-      setHomes(homesWithOccupants); // Cập nhật danh sách homes với số người đang trọ
+      setHomes(homesWithOccupants);
+      setMonthlyRevenue(revenueByHome); // Cập nhật state monthlyRevenue
 
-      // Gọi fetchInvoices cho từng home
-      homesWithOccupants.forEach((home) => {
-        fetchInvoices(home.id_home); // Gọi hàm fetchInvoices với id_home
-      });
     } catch (error) {
       console.error("Error fetching homes:", error.message);
       setHomes([]);
@@ -96,17 +113,11 @@ const HomeScreen = ({ navigation, route }) => {
     fetchHomes();
 
     const unsubscribe = navigation.addListener("focus", () => {
-      fetchHomes(); // Gọi lại hàm fetchHomes khi quay lại màn hình
+      fetchHomes();
     });
 
-    // Lắng nghe nếu có updateHomes từ params
-    const { updateHomes } = route.params || {};
-    if (updateHomes) {
-      fetchHomes(); // Gọi lại hàm fetchHomes nếu có yêu cầu cập nhật
-    }
-
-    return unsubscribe; // Dọn dẹp listener khi component unmount
-  }, [navigation, route.params]); // Thêm route.params vào dependency
+    return unsubscribe;
+  }, [navigation]);
 
   useEffect(() => {
     const { notification } = route.params || {};
@@ -114,7 +125,7 @@ const HomeScreen = ({ navigation, route }) => {
       setNotification(notification);
       setTimeout(() => setNotification(""), 3000);
     }
-  }, [route.params]);
+  }, [route.params?.notification]);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);

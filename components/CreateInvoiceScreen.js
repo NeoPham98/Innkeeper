@@ -592,7 +592,7 @@ const CreateInvoiceScreen = ({
                   checkedIcon="check-square"
                   uncheckedIcon="square-o"
                   title="Chia đầu người"
-                  textStyle={{ marginLeft: 10, fontSize: 8 }}
+                  textStyle={{ marginLeft: 10, fontSize: 14 }}
                 />
               </View>
             </View>
