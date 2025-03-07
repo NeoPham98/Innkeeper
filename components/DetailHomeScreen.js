@@ -403,10 +403,13 @@ const DetailHomeScreen = ({ route, navigation }) => {
             Thêm phòng
           </Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity style={styles.infoItem}>
-          <FontAwesome name="lightbulb-o" size={30} color="#FFD700" />
-          <Text style={styles.infoText}>Ghi điện nước</Text>
-        </TouchableOpacity> */}
+        <TouchableOpacity 
+          style={styles.infoItem}
+          onPress={() => navigation.navigate('Chart', { id_home: effectiveHome.id_home })}
+        >
+          <FontAwesome name="line-chart" size={30} color="#FFD700" />
+          <Text style={styles.infoText} allowFontScaling={false}>Biểu đồ</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.infoItem}
           onPress={() =>

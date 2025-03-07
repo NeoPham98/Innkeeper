@@ -12,6 +12,7 @@ import SettingsScreen from "./components/SettingsScreen";
 import CreateInvoiceScreen from "./components/CreateInvoiceScreen";
 import InvoiceDetailScreen from "./components/InvoiceDetailScreen";
 import BillScreen from "./components/BillScreen";
+import ChartScreen from "./components/ChartScreen";
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -32,6 +33,7 @@ export default function App() {
         <Stack.Screen name="CreateInvoice" component={CreateInvoiceScreen} />
         <Stack.Screen name="InvoiceDetail" component={InvoiceDetailScreen} />
         <Stack.Screen name="Bill" component={BillScreen} />
+        <Stack.Screen name="Chart" component={ChartScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
