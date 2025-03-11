@@ -47,15 +47,15 @@ const SettingsScreen = ({ route }) => {
       const { data, error } = await supabaseDB
         .from("Setting")
         .select("*")
-        .eq("id_home", id_home) // Đảm bảo rằng bạn đang lọc theo id_home
-        .limit(1); // Sử dụng .limit(1) để chỉ lấy một hàng
+        .eq("id_home", id_home) // ₫ảm bảo rằng bạn ₫ang lọc theo id_home
+        .limit(1); // Sử dụng .limit(1) ₫ể chỉ lấy một hàng
 
       // Nếu không tìm thấy bản ghi, tạo mới mà không hiển thị lỗi
       if (!data || data.length === 0) {
         // Tạo mới bản ghi trong bảng Setting
         const { error: insertError } = await supabaseDB
           .from("Setting")
-          .insert([{ id_home: id_home, electric_price: 0, water_price: 0 }]); // Gán giá trị mặc định
+          .insert([{ id_home: id_home, electric_price: 0, water_price: 0 }]); // Gán giá trị mặc ₫ịnh
 
         // Không hiển thị lỗi nếu không thể tạo mới
         if (insertError) {
@@ -70,14 +70,14 @@ const SettingsScreen = ({ route }) => {
           .eq("id_home", id_home)
           .limit(1);
 
-        // Lấy bản ghi đầu tiên
+        // Lấy bản ghi ₫ầu tiên
         const settings = newData[0];
         setElectricPrice(settings.electric_price);
         setWaterPrice(settings.water_price);
         return;
       }
 
-      // Lấy bản ghi đầu tiên
+      // Lấy bản ghi ₫ầu tiên
       const settings = data[0];
       setElectricPrice(settings.electric_price);
       setWaterPrice(settings.water_price);
@@ -106,7 +106,7 @@ const SettingsScreen = ({ route }) => {
 
   const updateSettings = async () => {
     if (!electricPrice || !waterPrice) {
-      setNotificationMessage("Giá điện và giá nước không được để trống.");
+      setNotificationMessage("Giá ₫iện và giá nước không ₫ược ₫ể trống.");
       setNotificationVisible(true);
       setTimeout(() => {
         setNotificationVisible(false);
@@ -132,42 +132,42 @@ const SettingsScreen = ({ route }) => {
       setTimeout(() => {
         setNotificationVisible(false);
         setNotification("");
-      }, 2000); // Tự động ẩn thông báo sau 2 giây
+      }, 2000); // Tự ₫ộng ẩn thông báo sau 2 giây
     } catch (error) {
       console.error("Error updating settings:", error.message);
       setNotificationMessage("Cập nhật thất bại!");
       setNotificationVisible(true);
       setTimeout(() => {
         setNotificationVisible(false);
-      }, 2000); // Tự động ẩn thông báo sau 2 giây
+      }, 2000); // Tự ₫ộng ẩn thông báo sau 2 giây
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleEdit = () => {
-    if (!selectedServiceId) return; // Kiểm tra nếu không có serviceId đã chọn
+    if (!selectedServiceId) return; // Kiểm tra nếu không có serviceId ₫ã chọn
 
-    // Tìm dịch vụ đã chọn để điền thông tin vào modal
+    // Tìm dịch vụ ₫ã chọn ₫ể ₫iền thông tin vào modal
     const selectedService = services.find(
       (service) => service.service_id === selectedServiceId
     );
     if (selectedService) {
       setEditServiceName(selectedService.service_name);
-      setEditServicePrice(selectedService.service_price.toString()); // Chuyển đổi giá thành chuỗi
+      setEditServicePrice(selectedService.service_price.toString()); // Chuyển ₫ổi giá thành chuỗi
     }
-    setActionModalVisible(false); // Đóng modal hành động
+    setActionModalVisible(false); // ₫óng modal hành ₫ộng
     setEditModalVisible(true); // Mở modal chỉnh sửa
   };
 
   const handleDelete = async () => {
-    if (!selectedServiceId) return; // Kiểm tra nếu không có serviceId đã chọn
+    if (!selectedServiceId) return; // Kiểm tra nếu không có serviceId ₫ã chọn
     try {
       setIsLoading(true);
       const { error } = await supabaseDB
         .from("Service")
         .delete()
-        .eq("service_id", selectedServiceId); // Sử dụng selectedServiceId để xác định bản ghi cần xóa
+        .eq("service_id", selectedServiceId); // Sử dụng selectedServiceId ₫ể xác ₫ịnh bản ghi cần xóa
 
       if (error) throw error;
 
@@ -191,7 +191,7 @@ const SettingsScreen = ({ route }) => {
 
   const handleAddService = async () => {
     if (!serviceName || !servicePrice) {
-      setNotificationMessage("Tên dịch vụ và số tiền không được để trống.");
+      setNotificationMessage("Tên dịch vụ và số tiền không ₫ược ₫ể trống.");
       setNotificationVisible(true);
       setTimeout(() => {
         setNotificationVisible(false);
@@ -233,7 +233,7 @@ const SettingsScreen = ({ route }) => {
 
   const handleEditService = async () => {
     if (!editServiceName || !editServicePrice) {
-      setNotificationMessage("Tên dịch vụ và số tiền không được để trống.");
+      setNotificationMessage("Tên dịch vụ và số tiền không ₫ược ₫ể trống.");
       setNotificationVisible(true);
       setTimeout(() => {
         setNotificationVisible(false);
@@ -249,13 +249,13 @@ const SettingsScreen = ({ route }) => {
           service_name: editServiceName,
           service_price: parseFloat(editServicePrice),
         })
-        .eq("service_id", selectedServiceId); // Sử dụng selectedServiceId để xác định bản ghi cần cập nhật
+        .eq("service_id", selectedServiceId); // Sử dụng selectedServiceId ₫ể xác ₫ịnh bản ghi cần cập nhật
 
       if (error) throw error;
 
       setNotification("Cập nhật dịch vụ thành công!");
       fetchServices(); // Reload lại danh sách dịch vụ
-      setEditModalVisible(false); // Đóng modal chỉnh sửa
+      setEditModalVisible(false); // ₫óng modal chỉnh sửa
       setNotificationVisible(true);
       setTimeout(() => {
         setNotificationVisible(false);
@@ -296,7 +296,7 @@ const SettingsScreen = ({ route }) => {
             >
               <AntDesign name="close" size={20} color="white" />
             </TouchableOpacity>
-            <Text style={styles.modalTitle} allowFontScaling={false}>Chọn hành động</Text>
+            <Text style={styles.modalTitle} allowFontScaling={false}>Chọn hành ₫ộng</Text>
             <Text style={styles.modalMessage} allowFontScaling={false}>
               Bạn muốn làm gì với dịch vụ này?
             </Text>
@@ -409,22 +409,22 @@ const SettingsScreen = ({ route }) => {
         >
           <AntDesign name="arrowleft" size={26} color="#2C3E50" />
           <Text style={styles.headerText} allowFontScaling={false}>
-            Cài đặt nhà trọ
+            Cài ₫ặt nhà trọ
           </Text>
         </TouchableOpacity>
 
         <View style={styles.cardsContainer}>
           <View style={styles.defaultValueContainer}>
             <Text style={styles.subHeader} allowFontScaling={false}>
-              Giá trị mặc định cho các phòng
+              Giá trị mặc ₫ịnh cho các phòng
             </Text>
             <Text style={styles.label} allowFontScaling={false}>
-              Giá điện (đ/kWh)
+              Giá ₫iện (₫/kWh)
             </Text>
             <TextInput
             allowFontScaling={false}
               style={styles.input}
-              placeholder="Ví dụ: 3,000 đ"
+              placeholder="Ví dụ: 3,000 ₫"
               value={electricPrice ? formatNumberWithCommas(electricPrice) : ""}
               onChangeText={(text) => {
                 const numericValue = text.replace(/[^0-9]/g, "");
@@ -434,12 +434,12 @@ const SettingsScreen = ({ route }) => {
             />
 
             <Text style={styles.label} allowFontScaling={false}>
-              Giá nước (đ/người)
+              Giá nước (₫/người)
             </Text>
             <TextInput
             allowFontScaling={false}
               style={styles.input}
-              placeholder="Ví dụ: 100,000 đ"
+              placeholder="Ví dụ: 100,000 ₫"
               value={waterPrice ? formatNumberWithCommas(waterPrice) : ""}
               onChangeText={(text) => {
                 const numericValue = text.replace(/[^0-9]/g, "");
@@ -454,14 +454,14 @@ const SettingsScreen = ({ route }) => {
           </View>
 
           <View style={styles.serviceWrapper}>
-            <Text style={styles.subHeader} allowFontScaling={false}>Thêm dịch vụ trên hóa đơn</Text>
+            <Text style={styles.subHeader} allowFontScaling={false}>Thêm dịch vụ trên hóa ₫ơn</Text>
             {services.map((service) => (
               <View key={service.service_id} style={styles.serviceContainer}>
                 <Text style={styles.serviceName} allowFontScaling={false}>
                   {service.service_name}
                 </Text>
                 <Text style={styles.servicePrice} allowFontScaling={false}>
-                  {formatNumberWithCommas(service.service_price)} đ
+                  {formatNumberWithCommas(service.service_price)} ₫
                 </Text>
                 <TouchableOpacity
                   style={styles.menuButton}

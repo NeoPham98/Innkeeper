@@ -34,14 +34,14 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      showErrorMessage("Vui lòng nhập đầy đủ Tài khoản và Mật khẩu");
+      showErrorMessage("Vui lòng nhập ₫ầy ₫ủ Tài khoản và Mật khẩu");
       return;
     }
 
     try {
       setLoading(true);
 
-      // Query đến bảng Account để kiểm tra thông tin đăng nhập
+      // Query ₫ến bảng Account ₫ể kiểm tra thông tin ₫ăng nhập
       const { data, error } = await supabaseDB
         .from("Account")
         .select("*")
@@ -49,7 +49,7 @@ const LoginScreen = ({ navigation }) => {
         .eq("password", password);
 
       if (error) {
-        showErrorMessage("Có lỗi xảy ra khi đăng nhập");
+        showErrorMessage("Có lỗi xảy ra khi ₫ăng nhập");
         return;
       }
 
@@ -63,7 +63,7 @@ const LoginScreen = ({ navigation }) => {
         showErrorMessage("Tài khoản hoặc Mật khẩu không chính xác");
       }
     } catch (error) {
-      showErrorMessage("Có lỗi xảy ra khi đăng nhập");
+      showErrorMessage("Có lỗi xảy ra khi ₫ăng nhập");
     } finally {
       setLoading(false);
     }
@@ -144,7 +144,7 @@ const LoginScreen = ({ navigation }) => {
                 disabled={loading}
               >
                 <Text style={styles.loginButtonText} allowFontScaling={false}>
-                  {loading ? "Đang đăng nhập..." : "Đăng nhập"}
+                  {loading ? "₫ang ₫ăng nhập..." : "₫ăng nhập"}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -168,7 +168,7 @@ const LoginScreen = ({ navigation }) => {
             <View style={styles.modalHeader}>
               <Ionicons name="alert-circle" size={30} color="#E74C3C" />
               <Text style={styles.modalTitle} allowFontScaling={false}>
-                Lỗi đăng nhập
+                Lỗi ₫ăng nhập
               </Text>
             </View>
             <Text style={styles.modalMessage} allowFontScaling={false}>
@@ -179,7 +179,7 @@ const LoginScreen = ({ navigation }) => {
               onPress={() => setShowError(false)}
             >
               <Text style={styles.modalButtonText} allowFontScaling={false}>
-                Đóng
+                ₫óng
               </Text>
             </TouchableOpacity>
           </View>

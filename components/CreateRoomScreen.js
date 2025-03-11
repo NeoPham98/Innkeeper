@@ -25,9 +25,9 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 const formatCurrency = (value) => {
-  // Chuyển đổi giá trị thành số và định dạng với dấu phẩy
-  const numberValue = parseFloat(value.replace(/,/g, "")); // Xóa dấu phẩy trước khi chuyển đổi
-  return isNaN(numberValue) ? "" : numberValue.toLocaleString("en-US"); // Định dạng số
+  // Chuyển ₫ổi giá trị thành số và ₫ịnh dạng với dấu phẩy
+  const numberValue = parseFloat(value.replace(/,/g, "")); // Xóa dấu phẩy trước khi chuyển ₫ổi
+  return isNaN(numberValue) ? "" : numberValue.toLocaleString("en-US"); // ₫ịnh dạng số
 };
 
 const CreateRoomScreen = ({ route, navigation }) => {
@@ -61,13 +61,13 @@ const CreateRoomScreen = ({ route, navigation }) => {
       !quantity ||
       !roomer ||
       !phoneNumber ||
-      !hometown ||
-      !cccdNumber ||
-      !deposit ||
+      // !hometown ||
+      // !cccdNumber ||
+      // !deposit ||
       !roomPrice ||
       !startDate
     ) {
-      setNotificationMessage("Vui lòng nhập đầy đủ thông tin");
+      setNotificationMessage("Vui lòng nhập ₫ầy ₫ủ thông tin");
       setNotificationVisible(true);
       return;
     }
@@ -106,7 +106,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
       if (error) throw error;
 
       setIsLoading(false);
-      setNotificationMessage("Đã tạo phòng thành công!");
+      setNotificationMessage("₫ã tạo phòng thành công!");
       setNotificationVisible(true);
       setTimeout(() => navigation.navigate("DetailHome", { home }), 2000);
     } catch (error) {
@@ -161,16 +161,16 @@ const CreateRoomScreen = ({ route, navigation }) => {
 
   const handleDepositChange = (value) => {
     setDeposit(value);
-    setFormattedDeposit(formatCurrency(value)); // Cập nhật giá trị đã định dạng
-    // Chuyển đổi giá trị thành số trước khi lưu vào DB
+    setFormattedDeposit(formatCurrency(value)); // Cập nhật giá trị ₫ã ₫ịnh dạng
+    // Chuyển ₫ổi giá trị thành số trước khi lưu vào DB
     const numericValue = parseFloat(value.replace(/,/g, ""));
     setDeposit(numericValue); // Lưu giá trị số
   };
 
   const handleRoomPriceChange = (value) => {
     setRoomPrice(value);
-    setFormattedRoomPrice(formatCurrency(value)); // Cập nhật giá trị đã định dạng
-    // Chuyển đổi giá trị thành số trước khi lưu vào DB
+    setFormattedRoomPrice(formatCurrency(value)); // Cập nhật giá trị ₫ã ₫ịnh dạng
+    // Chuyển ₫ổi giá trị thành số trước khi lưu vào DB
     const numericValue = parseFloat(value.replace(/,/g, ""));
     setRoomPrice(numericValue); // Lưu giá trị số
   };
@@ -247,7 +247,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
               onChangeText={setRoomer}
             />
             <Text style={styles.label} allowFontScaling={false}>
-              <Entypo name="old-phone" size={16} color="#F5A623" /> Số điện
+              <Entypo name="old-phone" size={16} color="#F5A623" /> Số ₫iện
               thoại
             </Text>
             <TextInput
@@ -260,7 +260,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
             />
             <Text style={styles.label} allowFontScaling={false}>
               <Entypo name="location" size={16} color="#9013FE" /> Quê quán /
-              Địa chỉ
+              ₫ịa chỉ
             </Text>
             <TextInput
               allowFontScaling={false}
@@ -363,11 +363,11 @@ const CreateRoomScreen = ({ route, navigation }) => {
                   </TouchableOpacity>
                 </View>
               </View>
-              {/* Thêm phần upload ảnh hợp đồng */}
+              {/* Thêm phần upload ảnh hợp ₫ồng */}
               <View style={styles.imageColumn}>
                 <View style={styles.labelContainer}>
                   <Text style={styles.label} allowFontScaling={false}>
-                    Ảnh hợp đồng
+                    Ảnh hợp ₫ồng
                   </Text>
                   {contractImage.every((image) => image === null) ? null : (
                     <TouchableOpacity
@@ -435,7 +435,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
             />
 
             <Text style={styles.label} allowFontScaling={false}>
-              <Fontisto name="date" size={16} color="#9B59B6" /> Ngày bắt đầu
+              <Fontisto name="date" size={16} color="#9B59B6" /> Ngày bắt ₫ầu
               thuê
             </Text>
             <TouchableOpacity
@@ -445,7 +445,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
               <TextInput
                 allowFontScaling={false}
                 style={styles.input}
-                placeholder="Chọn ngày bắt đầu"
+                placeholder="Chọn ngày bắt ₫ầu"
                 value={startDate.toLocaleDateString()}
                 editable={false}
               />
@@ -491,7 +491,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
               disabled={isLoading}
             >
               <Text style={styles.saveText} allowFontScaling={false}>
-                {isLoading ? "Đang lưu..." : "Lưu lại"}
+                {isLoading ? "₫ang lưu..." : "Lưu lại"}
               </Text>
             </TouchableOpacity>
           </View>
@@ -511,14 +511,14 @@ const CreateRoomScreen = ({ route, navigation }) => {
                     style={styles.closeButton}
                     onPress={() => setNotificationVisible(false)}
                   >
-                    <Text style={styles.closeButtonText} allowFontScaling={false}>Đóng</Text>
+                    <Text style={styles.closeButtonText} allowFontScaling={false}>₫óng</Text>
                   </TouchableOpacity>
                 </View>
               </View>
             </TouchableWithoutFeedback>
           </Modal>
 
-          {/* Modal để hiển thị ảnh phóng to */}
+          {/* Modal ₫ể hiển thị ảnh phóng to */}
           <Modal
             visible={isModalVisible}
             transparent={true}
@@ -528,13 +528,13 @@ const CreateRoomScreen = ({ route, navigation }) => {
             <TouchableOpacity
               style={styles.modalOverlay}
               activeOpacity={1}
-              onPress={() => setModalVisible(false)} // Đóng modal khi nhấn ra ngoài ảnh
+              onPress={() => setModalVisible(false)} // ₫óng modal khi nhấn ra ngoài ảnh
             >
               <View style={styles.modalContent}>
                 <Image
                   source={{ uri: selectedImage }}
-                  style={styles.fullImage} // Đặt kích thước ảnh đầy đủ
-                  resizeMode="cover" // Hoặc "cover" nếu bạn muốn lấp đầy
+                  style={styles.fullImage} // ₫ặt kích thước ảnh ₫ầy ₫ủ
+                  resizeMode="cover" // Hoặc "cover" nếu bạn muốn lấp ₫ầy
                 />
               </View>
             </TouchableOpacity>
@@ -681,7 +681,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   imageColumn: {
-    width: "100%", // Để hai cột có chiều rộng gần bằng nhau
+    width: "100%", // ₫ể hai cột có chiều rộng gần bằng nhau
     flex: 1,
     alignItems: "center",
     justifyContent: "space-between",
@@ -727,15 +727,15 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: "row", // Căn chỉnh theo hàng
     justifyContent: "space-between", // Căn giữa các ô
-    width: "100%", // Đảm bảo chiều rộng đầy đủ
+    width: "100%", // ₫ảm bảo chiều rộng ₫ầy ₫ủ
   },
   inputContainer: {
-    width: "48%", // Đặt chiều rộng cho mỗi ô input
+    width: "48%", // ₫ặt chiều rộng cho mỗi ô input
   },
   dateIcon: {
     position: "absolute",
     right: 10,
-    top: 10, // Điều chỉnh vị trí icon cho phù hợp
+    top: 10, // ₫iều chỉnh vị trí icon cho phù hợp
   },
   required: {
     color: "red",

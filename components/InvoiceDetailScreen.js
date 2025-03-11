@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { supabaseDB } from "../DBconfig"; // Đảm bảo import supabaseDB
+import { supabaseDB } from "../DBconfig"; // ₫ảm bảo import supabaseDB
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
@@ -30,14 +30,14 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
   const handleSend = async () => {
     try {
       const uri = await viewRef.current.capture({
-        format: "png", // Sử dụng định dạng PNG
+        format: "png", // Sử dụng ₫ịnh dạng PNG
         quality: 1.0, // Chất lượng cao nhất
       });
 
       // Chia sẻ ảnh
       await Sharing.shareAsync(uri, {
-        dialogTitle: "Chia sẻ hóa đơn",
-        UTI: "public.image", // Định dạng file
+        dialogTitle: "Chia sẻ hóa ₫ơn",
+        UTI: "public.image", // ₫ịnh dạng file
       });
       navigation.pop(2);
     } catch (error) {
@@ -46,16 +46,16 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
     }
   };
 
-  // Hàm định dạng ngày
+  // Hàm ₫ịnh dạng ngày
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Tháng bắt đầu từ 0
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Tháng bắt ₫ầu từ 0
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
 
-  // Hàm định dạng số với dấu phẩy
+  // Hàm ₫ịnh dạng số với dấu phẩy
   const formatCurrency = (amount) => {
     return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
@@ -132,7 +132,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
         >
           <AntDesign name="arrowleft" size={24} color="black" />
           <Text style={styles.headerText} allowFontScaling={false}>
-            Hóa đơn
+            Hóa ₫ơn
           </Text>
         </TouchableOpacity>
       </View>
@@ -145,7 +145,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
             <View style={styles.row}>
               <Text allowFontScaling={false}>
                 <FontAwesome name="calendar" size={16} color="black" /> Ngày lập
-                hóa đơn:
+                hóa ₫ơn:
               </Text>
               <Text style={styles.rightText} allowFontScaling={false}>
                 {formatDate(invoiceData.created_at)}
@@ -185,7 +185,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                   size={16}
                   color="#FFC107"
                 />{" "}
-                Số điện thoại:
+                Số ₫iện thoại:
               </Text>
               <Text
                 style={[styles.rightText, styles.textWithBorder]}
@@ -205,7 +205,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                 style={[styles.separatorText, { marginTop: 10 }]}
                 allowFontScaling={false}
               >
-                Thông tin điện nước
+                Thông tin ₫iện nước
               </Text>
             </View>
             <Text style={styles.subHeader} allowFontScaling={false}>
@@ -232,7 +232,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                 style={[styles.rightText, styles.textWithBorder]}
                 allowFontScaling={false}
               >
-                {formatCurrency(settings.water_price)} đ
+                {formatCurrency(settings.water_price)} ₫
               </Text>
             </View>
             <View style={styles.row}>
@@ -247,17 +247,17 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                 ]}
                 allowFontScaling={false}
               >
-                {formatCurrency(invoiceData.total_water_price)} đ
+                {formatCurrency(invoiceData.total_water_price)} ₫
               </Text>
             </View>
 
             <Text style={styles.subHeader} allowFontScaling={false}>
-              2. Điện
+              2. ₫iện
             </Text>
             <View style={styles.row}>
               <Text style={styles.textWithBorder} allowFontScaling={false}>
                 <MaterialIcons name="electric-bolt" size={16} color="#E67E22" />{" "}
-                Số điện:
+                Số ₫iện:
               </Text>
               <Text
                 style={[styles.rightText, styles.textWithBorder]}
@@ -281,13 +281,13 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
             <View style={styles.row}>
               <Text style={styles.textWithBorder} allowFontScaling={false}>
                 <Ionicons name="pricetags" size={16} color="#2ECC71" /> Giá
-                điện:
+                ₫iện:
               </Text>
               <Text
                 style={[styles.rightText, styles.textWithBorder]}
                 allowFontScaling={false}
               >
-                {formatCurrency(settings.electric_price)} đ
+                {formatCurrency(settings.electric_price)} ₫
               </Text>
             </View>
             <View style={styles.row}>
@@ -297,7 +297,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                   size={16}
                   color="black"
                 />
-                Tiền điện{isShared ? " (đã chia BNL)" : ""}:
+                Tiền ₫iện{isShared ? " (₫ã chia BNL)" : ""}:
               </Text>
               <Text
                 style={[
@@ -307,7 +307,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                 ]}
                 allowFontScaling={false}
               >
-                {formatCurrency(invoiceData.number_price)} đ
+                {formatCurrency(invoiceData.number_price)} ₫
               </Text>
             </View>
 
@@ -356,7 +356,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                 ]}
                 allowFontScaling={false}
               >
-                {formatCurrency(invoiceData.room_price)} đ
+                {formatCurrency(invoiceData.room_price)} ₫
               </Text>
             </View>
             <View style={styles.row}>
@@ -367,7 +367,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                 style={[styles.rightText, styles.priceTextTotal]}
                 allowFontScaling={false}
               >
-                {formatCurrency(invoiceData.total_amount)} đ
+                {formatCurrency(invoiceData.total_amount)} ₫
               </Text>
             </View>
           </View>

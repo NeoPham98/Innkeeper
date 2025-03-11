@@ -12,22 +12,22 @@ import { AntDesign } from "@expo/vector-icons";
 import { supabaseDB } from "../DBconfig"; // Thêm import supabaseDB
 
 const InvoiceDetailScreen = ({ navigation, route }) => {
-  const { invoices } = route.params; // Nhận danh sách hóa đơn từ params
-  const [invoiceData, setInvoiceData] = useState([]); // Thêm state để lưu dữ liệu hóa đơn
+  const { invoices } = route.params; // Nhận danh sách hóa ₫ơn từ params
+  const [invoiceData, setInvoiceData] = useState([]); // Thêm state ₫ể lưu dữ liệu hóa ₫ơn
   const [notification, setNotification] = useState(""); // Thêm state cho thông báo
-  const [loading, setLoading] = useState(false); // Thêm state để quản lý trạng thái loading
+  const [loading, setLoading] = useState(false); // Thêm state ₫ể quản lý trạng thái loading
 
-  // Hàm để lấy dữ liệu từ bảng Invoiceto
+  // Hàm ₫ể lấy dữ liệu từ bảng Invoiceto
   const fetchInvoices = async () => {
-    setLoading(true); // Bắt đầu loading
+    setLoading(true); // Bắt ₫ầu loading
     try {
       const { data, error } = await supabaseDB.from("Invoice").select("*");
       if (error) throw error;
 
-      // Chuyển đổi service_id từ chuỗi thành mảng số
+      // Chuyển ₫ổi service_id từ chuỗi thành mảng số
       const formattedData = data.map((invoice) => ({
         ...invoice,
-        service_id: JSON.parse(invoice.service_id || "[]"), // Chuyển đổi chuỗi thành mảng
+        service_id: JSON.parse(invoice.service_id || "[]"), // Chuyển ₫ổi chuỗi thành mảng
       }));
 
       setInvoiceData(formattedData); // Lưu dữ liệu vào state
@@ -39,7 +39,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    fetchInvoices(); // Gọi hàm khi màn hình được tải
+    fetchInvoices(); // Gọi hàm khi màn hình ₫ược tải
   }, []);
 
   const renderInvoiceItem = ({ item }) => (
@@ -68,18 +68,18 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
     </View>
   );
 
-  // Hàm xử lý xem hóa đơn
+  // Hàm xử lý xem hóa ₫ơn
   const handleView = (item) => {
-    const numericId = parseInt(item.id_invoice, 10); // Chuyển đổi id_invoice thành số nguyên
+    const numericId = parseInt(item.id_invoice, 10); // Chuyển ₫ổi id_invoice thành số nguyên
     if (isNaN(numericId)) {
       console.error("ID is not a valid number:", item.id_invoice);
       return; // Ngừng thực hiện nếu ID không hợp lệ
     }
-    // Chuyển hướng đến màn hình chi tiết hóa đơn
+    // Chuyển hướng ₫ến màn hình chi tiết hóa ₫ơn
     navigation.navigate("InvoiceDetail", { invoiceData: item });
   };
 
-  // Hàm xử lý xóa hóa đơn
+  // Hàm xử lý xóa hóa ₫ơn
   const handleDelete = async (item) => {
     try {
       const numericId = Number(item.id_invoice);
@@ -89,9 +89,9 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
         .eq("id_invoice", numericId);
       if (error) throw error;
 
-      // Cập nhật lại danh sách hóa đơn sau khi xóa
+      // Cập nhật lại danh sách hóa ₫ơn sau khi xóa
       fetchInvoices();
-      setNotification("Xóa hóa đơn thành công!"); // Cập nhật thông báo
+      setNotification("Xóa hóa ₫ơn thành công!"); // Cập nhật thông báo
       setTimeout(() => setNotification(""), 3000); // Xóa thông báo sau 3 giây
     } catch (error) {
       console.error("Error deleting invoice:", error.message);
@@ -114,7 +114,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
         >
           <AntDesign name="arrowleft" size={24} color="#2C3E50" />
           <Text style={styles.headerText} allowFontScaling={false}>
-            Danh sách hóa đơn
+            Danh sách hóa ₫ơn
           </Text>
         </TouchableOpacity>
       </View>

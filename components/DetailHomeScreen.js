@@ -23,12 +23,12 @@ import EditRoomScreen from "./EditRoomScreen";
 
 const DetailHomeScreen = ({ route, navigation }) => {
   const { home } = route.params || {}; // Nhận thông tin nhà từ params
-  const effectiveHome = home || {}; // Gán giá trị mặc định cho home
+  const effectiveHome = home || {}; // Gán giá trị mặc ₫ịnh cho home
   const [rooms, setRooms] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [isActionModalVisible, setActionModalVisible] = useState(false); // Trạng thái cho modal hành động
+  const [isActionModalVisible, setActionModalVisible] = useState(false); // Trạng thái cho modal hành ₫ộng
   const [notification, setNotification] = useState(""); // Thêm state cho thông báo
 
   const fetchRooms = async () => {
@@ -44,10 +44,10 @@ const DetailHomeScreen = ({ route, navigation }) => {
         return;
       }
 
-      // Đếm số lượng id_room
+      // ₫ếm số lượng id_room
       const roomCount = data ? data.length : 0;
 
-      // Đếm số lượng phòng có is_active = true
+      // ₫ếm số lượng phòng có is_active = true
       const inActiveRoomCount = data
         ? data.filter((room) => room.is_active === false).length
         : 0;
@@ -57,7 +57,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
         .from("Home")
         .update({
           room_total: roomCount,
-          room_total_empty: inActiveRoomCount, // Cập nhật số lượng phòng đang hoạt động
+          room_total_empty: inActiveRoomCount, // Cập nhật số lượng phòng ₫ang hoạt ₫ộng
         })
         .eq("id_home", effectiveHome.id_home);
 
@@ -98,19 +98,19 @@ const DetailHomeScreen = ({ route, navigation }) => {
 
   const handleMenuPress = (room) => {
     setSelectedRoom(room);
-    setActionModalVisible(true); // Mở modal hành động
+    setActionModalVisible(true); // Mở modal hành ₫ộng
   };
 
   const handleEdit = () => {
-    setActionModalVisible(false); // Đóng modal hành động trước khi điều hướng
+    setActionModalVisible(false); // ₫óng modal hành ₫ộng trước khi ₫iều hướng
     navigation.navigate("EditRoom", {
       room: selectedRoom,
       home: effectiveHome,
-    }); // Điều hướng đến màn chỉnh sửa
+    }); // ₫iều hướng ₫ến màn chỉnh sửa
   };
 
   const handleDelete = async () => {
-    if (!selectedRoom) return; // Kiểm tra xem có phòng được chọn không
+    if (!selectedRoom) return; // Kiểm tra xem có phòng ₫ược chọn không
     try {
       const { error } = await supabaseDB
         .from("Rooms")
@@ -128,10 +128,10 @@ const DetailHomeScreen = ({ route, navigation }) => {
         setNotification("Xóa phòng thành công!"); // Thiết lập thông báo thành công
 
         // Cập nhật room_total và room_total_empty trong bảng Home
-        const roomCount = rooms.length - 1; // Đếm số lượng phòng còn lại
+        const roomCount = rooms.length - 1; // ₫ếm số lượng phòng còn lại
         const inActiveRoomCount = rooms.filter(
           (room) => room.is_active === false
-        ).length; // Đếm số lượng phòng đang hoạt động
+        ).length; // ₫ếm số lượng phòng ₫ang hoạt ₫ộng
         const { updateError } = await supabaseDB
           .from("Home")
           .update({
@@ -157,8 +157,8 @@ const DetailHomeScreen = ({ route, navigation }) => {
       console.error("Error deleting room:", error.message);
       setNotification("Không thể xóa phòng."); // Thiết lập thông báo thất bại
     } finally {
-      setModalVisible(false); // Đóng modal sau khi xóa
-      setActionModalVisible(true); // Đóng modal hành động
+      setModalVisible(false); // ₫óng modal sau khi xóa
+      setActionModalVisible(true); // ₫óng modal hành ₫ộng
     }
   };
 
@@ -189,7 +189,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
               <AntDesign name="close" size={20} color="white" />
             </TouchableOpacity>
             <Text style={styles.modalTitle} allowFontScaling={false}>
-              Chọn hành động
+              Chọn hành ₫ộng
             </Text>
             <Text style={styles.modalMessage} allowFontScaling={false}>
               Bạn muốn làm gì với phòng này?
@@ -236,13 +236,13 @@ const DetailHomeScreen = ({ route, navigation }) => {
           )
         );
 
-        // Gọi lại hàm fetchRooms để cập nhật dữ liệu từ cơ sở dữ liệu
+        // Gọi lại hàm fetchRooms ₫ể cập nhật dữ liệu từ cơ sở dữ liệu
         await fetchRooms();
 
         Toast.show({
           text1: "Cập nhật thành công",
-          text2: `Trạng thái phòng đã được cập nhật thành ${
-            newStatus ? "hoạt động" : "không hoạt động"
+          text2: `Trạng thái phòng ₫ã ₫ược cập nhật thành ${
+            newStatus ? "hoạt ₫ộng" : "không hoạt ₫ộng"
           }.`,
           type: "success",
           style: { fontSize: 18 },
@@ -250,10 +250,10 @@ const DetailHomeScreen = ({ route, navigation }) => {
       }
     };
 
-    // Hàm định dạng giá tiền với dấu phẩy
+    // Hàm ₫ịnh dạng giá tiền với dấu phẩy
     const formatCurrency = (value) => {
       if (value) {
-        return parseFloat(value).toLocaleString("vi-VN"); // Định dạng số với dấu phẩy
+        return parseFloat(value).toLocaleString("vi-VN"); // ₫ịnh dạng số với dấu phẩy
       }
       return "0"; // Trả về "0" nếu không có giá trị
     };
@@ -299,7 +299,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
 
           <View style={styles.statsRow}>
             <Text style={styles.statsLabel} allowFontScaling={false}>
-              Số điện thoại:
+              Số ₫iện thoại:
             </Text>
             <Text style={styles.statsValue} allowFontScaling={false}>
               {room.phone_number || "Chưa có"}
@@ -307,7 +307,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
           </View>
           <View style={styles.statsRow}>
             <Text style={styles.statsLabel} allowFontScaling={false}>
-              Ngày bắt đầu thuê:
+              Ngày bắt ₫ầu thuê:
             </Text>
             <Text style={styles.statsValue} allowFontScaling={false}>
               {new Date(room.rental_date).toLocaleDateString() || "Chưa có"}
@@ -318,7 +318,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
               Giá phòng:
             </Text>
             <Text style={styles.statsValue} allowFontScaling={false}>
-              {formatCurrency(room.room_price)} đ
+              {formatCurrency(room.room_price)} ₫
             </Text>
           </View>
         </View>
@@ -359,7 +359,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
                 style={styles.createInvoiceButtonText}
                 allowFontScaling={false}
               >
-                Tạo hóa đơn
+                Tạo hóa ₫ơn
               </Text>
             </TouchableOpacity>
           </View>
@@ -408,7 +408,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
           onPress={() => navigation.navigate('Chart', { id_home: effectiveHome.id_home })}
         >
           <FontAwesome name="line-chart" size={30} color="#FFD700" />
-          <Text style={styles.infoText} allowFontScaling={false}>Biểu đồ</Text>
+          <Text style={styles.infoText} allowFontScaling={false}>Biểu ₫ồ</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.infoItem}
@@ -422,7 +422,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
           <AntDesign name="filetext1" size={30} color="#32CD32" />
           {/* <FontAwesome name="money" size={30} color="#32CD32" /> */}
           <Text style={styles.infoText} allowFontScaling={false}>
-            Hóa đơn
+            Hóa ₫ơn
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -433,7 +433,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
         >
           <FontAwesome name="cog" size={30} color="#1E90FF" />
           <Text style={styles.infoText} allowFontScaling={false}>
-            Cài đặt
+            Cài ₫ặt
           </Text>
         </TouchableOpacity>
       </View>
@@ -441,7 +441,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
       {isLoading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#006D5B" />
-          <Text>Đang tải dữ liệu...</Text>
+          <Text>₫ang tải dữ liệu...</Text>
         </View>
       ) : (
         <ScrollView

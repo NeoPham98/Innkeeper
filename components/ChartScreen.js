@@ -68,7 +68,7 @@ const ChartScreen = ({ route, navigation }) => {
     setSelectedYear(prevYear => prevYear + increment);
   };
 
-  // Định dạng số tiền thành VND
+  // ₫ịnh dạng số tiền thành VND
   const formatMoney = (amount) => {
     try {
       // Làm tròn số về 0 chữ số thập phân và chuyển về string
@@ -84,7 +84,7 @@ const ChartScreen = ({ route, navigation }) => {
     }
   };
 
-  // Định dạng label trục Y
+  // ₫ịnh dạng label trục Y
   const formatYLabel = (value) => {
     // Thêm dấu phẩy ngăn cách hàng nghìn
     const millions = value / 1000000;
@@ -106,7 +106,7 @@ const ChartScreen = ({ route, navigation }) => {
           onPress={() => navigation.goBack()}
         >
           <AntDesign name="arrowleft" size={26} color="#2C3E50" />
-          <Text style={styles.headerTitle} allowFontScaling={false}>Biểu Đồ Doanh Thu</Text>
+          <Text style={styles.headerTitle} allowFontScaling={false}>Biểu ₫ồ Doanh Thu</Text>
         </TouchableOpacity>
       </View>
 
@@ -121,7 +121,7 @@ const ChartScreen = ({ route, navigation }) => {
       </View>
 
       <View style={styles.chartContainer}>
-        <Text style={styles.chartTitle} allowFontScaling={false}>Doanh Thu Theo Tháng (VNĐ)</Text>
+        <Text style={styles.chartTitle} allowFontScaling={false}>Doanh Thu Theo Tháng (VN₫)</Text>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <LineChart
             data={revenueData}

@@ -71,7 +71,7 @@ const HomeScreen = ({ navigation, route }) => {
         return acc;
       }, {});
 
-      // Lấy tổng số người đang trọ cho từng home
+      // Lấy tổng số người ₫ang trọ cho từng home
       const homesWithOccupants = await Promise.all(
         data.map(async (home) => {
           const { data: occupantsData, error: occupantsError } = await supabaseDB
@@ -163,7 +163,7 @@ const HomeScreen = ({ navigation, route }) => {
   };
 
   const reloadHomes = async () => {
-    await fetchHomes(); // Gọi lại hàm fetchHomes để lấy dữ liệu mới
+    await fetchHomes(); // Gọi lại hàm fetchHomes ₫ể lấy dữ liệu mới
   };
 
   const fetchRooms = async () => {
@@ -199,7 +199,7 @@ const HomeScreen = ({ navigation, route }) => {
         return 0; // Trả về 0 nếu có lỗi
       }
 
-      return data.length; // Trả về số lượng hóa đơn
+      return data.length; // Trả về số lượng hóa ₫ơn
     } catch (error) {
       console.error("Error fetching invoices:", error.message);
       return 0; // Trả về 0 nếu có lỗi
@@ -217,26 +217,26 @@ const HomeScreen = ({ navigation, route }) => {
         .gte(
           "created_at",
           new Date(currentYear, currentMonth - 1, 1).toISOString()
-        ) // Bắt đầu từ ngày 1 của tháng hiện tại
+        ) // Bắt ₫ầu từ ngày 1 của tháng hiện tại
         .lt("created_at", new Date(currentYear, currentMonth, 1).toISOString()); // Kết thúc trước ngày 1 của tháng sau
 
       if (error) {
         console.error("Error fetching invoices:", error.message);
-        return {}; // Trả về đối tượng rỗng nếu có lỗi
+        return {}; // Trả về ₫ối tượng rỗng nếu có lỗi
       }
 
       // Tính tổng doanh thu theo id_home
       const revenueByHome = data.reduce((acc, invoice) => {
         const { id_home, total_amount } = invoice;
-        const amount = parseFloat(total_amount); // Chuyển đổi total_amount thành số
+        const amount = parseFloat(total_amount); // Chuyển ₫ổi total_amount thành số
         acc[id_home] = (acc[id_home] || 0) + amount; // Cộng dồn doanh thu theo id_home
         return acc;
       }, {});
 
-      return revenueByHome; // Trả về đối tượng doanh thu theo id_home
+      return revenueByHome; // Trả về ₫ối tượng doanh thu theo id_home
     } catch (error) {
       console.error("Error calculating monthly revenue:", error.message);
-      return {}; // Trả về đối tượng rỗng nếu có lỗi
+      return {}; // Trả về ₫ối tượng rỗng nếu có lỗi
     }
   };
 
@@ -250,20 +250,20 @@ const HomeScreen = ({ navigation, route }) => {
   }, []);
 
   const addInvoice = async (newInvoice) => {
-    // Logic để thêm hóa đơn mới vào cơ sở dữ liệu
+    // Logic ₫ể thêm hóa ₫ơn mới vào cơ sở dữ liệu
     // ...
 
-    // Sau khi thêm hóa đơn, cập nhật doanh thu tháng
+    // Sau khi thêm hóa ₫ơn, cập nhật doanh thu tháng
     const revenue = await fetchMonthlyRevenueByHome();
     setMonthlyRevenue(revenue); // Cập nhật doanh thu tháng theo id_home
   };
 
-  // Hàm định dạng số với dấu phẩy
+  // Hàm ₫ịnh dạng số với dấu phẩy
   const formatNumberWithCommas = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
-  // Hàm để lấy tên tháng
+  // Hàm ₫ể lấy tên tháng
   const getMonthName = (monthIndex) => {
     const monthNames = [
       "Tháng 1",
@@ -323,7 +323,7 @@ const HomeScreen = ({ navigation, route }) => {
         </View>
         <View style={styles.statsRow}>
           <Text allowFontScaling={false} style={styles.statsLabel}>
-            Số người đang trọ:
+            Số người ₫ang trọ:
           </Text>
           <Text allowFontScaling={false} style={styles.statsValue}>
             {home.room_total_lacks_money || 0}
@@ -331,7 +331,7 @@ const HomeScreen = ({ navigation, route }) => {
         </View>
         <View style={styles.statsRow}>
           <Text allowFontScaling={false} style={styles.statsLabel}>
-            Số hóa đơn đã tạo:
+            Số hóa ₫ơn ₫ã tạo:
           </Text>
           <Text allowFontScaling={false} style={styles.statsValue}>
             {home.monthly_revenue || 0}
@@ -411,7 +411,7 @@ const HomeScreen = ({ navigation, route }) => {
                 <AntDesign name="pluscircleo" size={50} color="#006D5B" />
               </TouchableOpacity>
               <Text style={styles.infoText} allowFontScaling={false}>
-                Bấm dấu "+" để tạo nhà trọ mới
+                Bấm dấu "+" ₫ể tạo nhà trọ mới
               </Text>
             </View>
 
@@ -430,7 +430,7 @@ const HomeScreen = ({ navigation, route }) => {
               )
             ) : (
               <View style={{ width: "100%", alignItems: "center" }}>
-                {/* Có thể để trống hoặc thêm một thành phần khác nếu cần */}
+                {/* Có thể ₫ể trống hoặc thêm một thành phần khác nếu cần */}
               </View>
             )}
           </View>
@@ -452,7 +452,7 @@ const HomeScreen = ({ navigation, route }) => {
                 <AntDesign name="close" size={20} color="white" />
               </TouchableOpacity>
               <Text allowFontScaling={false} style={styles.modalTitle}>
-                Chọn hành động
+                Chọn hành ₫ộng
               </Text>
               <Text allowFontScaling={false} style={styles.modalMessage}>
                 Bạn muốn làm gì với nhà này?

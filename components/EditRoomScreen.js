@@ -25,8 +25,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
 const formatCurrency = (value) => {
-  const numberValue = parseFloat(value.replace(/,/g, "")); // Xóa dấu phẩy trước khi chuyển đổi
-  return isNaN(numberValue) ? "" : numberValue.toLocaleString("en-US"); // Định dạng số
+  const numberValue = parseFloat(value.replace(/,/g, "")); // Xóa dấu phẩy trước khi chuyển ₫ổi
+  return isNaN(numberValue) ? "" : numberValue.toLocaleString("en-US"); // ₫ịnh dạng số
 };
 
 const EditRoomScreen = ({ route, navigation }) => {
@@ -68,7 +68,7 @@ const EditRoomScreen = ({ route, navigation }) => {
       !roomPrice ||
       !startDate
     ) {
-      setNotificationMessage("Vui lòng nhập đầy đủ thông tin");
+      setNotificationMessage("Vui lòng nhập ₫ầy ₫ủ thông tin");
       setNotificationVisible(true);
       return;
     }
@@ -85,7 +85,7 @@ const EditRoomScreen = ({ route, navigation }) => {
         startDate.getTime() + 7 * 60 * 60 * 1000
       );
 
-      // Thêm dòng này để đảm bảo tiền cọc và tiền phòng được điền đúng
+      // Thêm dòng này ₫ể ₫ảm bảo tiền cọc và tiền phòng ₫ược ₫iền ₫úng
       const depositValue = deposit.replace(/,/g, "").trim();
       const roomPriceValue = roomPrice.replace(/,/g, "").trim();
 
@@ -168,19 +168,19 @@ const EditRoomScreen = ({ route, navigation }) => {
   const handleDepositChange = (value) => {
     // Cập nhật giá trị nhập vào
     setDeposit(value);
-    // Định dạng lại giá trị với dấu phẩy
-    const numericValue = value.replace(/,/g, ""); // Xóa dấu phẩy để chuyển đổi thành số
-    const formattedValue = formatCurrency(numericValue); // Định dạng lại với dấu phẩy
-    setDeposit(formattedValue); // Cập nhật giá trị đã định dạng
+    // ₫ịnh dạng lại giá trị với dấu phẩy
+    const numericValue = value.replace(/,/g, ""); // Xóa dấu phẩy ₫ể chuyển ₫ổi thành số
+    const formattedValue = formatCurrency(numericValue); // ₫ịnh dạng lại với dấu phẩy
+    setDeposit(formattedValue); // Cập nhật giá trị ₫ã ₫ịnh dạng
   };
 
   const handleRoomPriceChange = (value) => {
     // Cập nhật giá trị nhập vào
     setRoomPrice(value);
-    // Định dạng lại giá trị với dấu phẩy
-    const numericValue = value.replace(/,/g, ""); // Xóa dấu phẩy để chuyển đổi thành số
-    const formattedValue = formatCurrency(numericValue); // Định dạng lại với dấu phẩy
-    setRoomPrice(formattedValue); // Cập nhật giá trị đã định dạng
+    // ₫ịnh dạng lại giá trị với dấu phẩy
+    const numericValue = value.replace(/,/g, ""); // Xóa dấu phẩy ₫ể chuyển ₫ổi thành số
+    const formattedValue = formatCurrency(numericValue); // ₫ịnh dạng lại với dấu phẩy
+    setRoomPrice(formattedValue); // Cập nhật giá trị ₫ã ₫ịnh dạng
   };
 
   const renderUploadSuccessModal = () => (
@@ -199,7 +199,7 @@ const EditRoomScreen = ({ route, navigation }) => {
               style={styles.closeButton}
               onPress={() => setUploadSuccessVisible(false)}
             >
-              <Text style={styles.closeButtonText}>Đóng</Text>
+              <Text style={styles.closeButtonText}>₫óng</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -281,7 +281,7 @@ const EditRoomScreen = ({ route, navigation }) => {
               allowFontScaling={false}
             />
             <Text style={styles.label} allowFontScaling={false}>
-              <Entypo name="old-phone" size={16} color="#F5A623" /> Số điện
+              <Entypo name="old-phone" size={16} color="#F5A623" /> Số ₫iện
               thoại
             </Text>
             <TextInput
@@ -294,7 +294,7 @@ const EditRoomScreen = ({ route, navigation }) => {
             />
             <Text style={styles.label} allowFontScaling={false}>
               <Entypo name="location" size={16} color="#9013FE" /> Quê quán /
-              Địa chỉ
+              ₫ịa chỉ
             </Text>
             <TextInput
               style={[styles.input, { height: 100 }]}
@@ -393,10 +393,10 @@ const EditRoomScreen = ({ route, navigation }) => {
                   </TouchableOpacity>
                 </View>
               </View>
-              {/* Thêm phần upload ảnh hợp đồng */}
+              {/* Thêm phần upload ảnh hợp ₫ồng */}
               <View style={styles.imageColumn}>
                 <View style={styles.labelContainer}>
-                  <Text style={styles.label}>Ảnh hợp đồng</Text>
+                  <Text style={styles.label}>Ảnh hợp ₫ồng</Text>
                   {contractImage.every((image) => image === null) ? null : (
                     <TouchableOpacity
                       onPress={() => setContractImage([null, null])} // Xóa tất cả ảnh
@@ -413,7 +413,7 @@ const EditRoomScreen = ({ route, navigation }) => {
                         style={styles.imageUploadButton}
                         onPress={() => {
                           if (image) {
-                            openImagePreview(image); // Gọi hàm để xem ảnh hợp đồng
+                            openImagePreview(image); // Gọi hàm ₫ể xem ảnh hợp ₫ồng
                           } else {
                             handleImageUpload("contract", index); // Tải lên ảnh nếu chưa có
                           }
@@ -465,7 +465,7 @@ const EditRoomScreen = ({ route, navigation }) => {
             />
 
             <Text style={styles.label} allowFontScaling={false}>
-              <Fontisto name="date" size={16} color="#9B59B6" /> Ngày bắt đầu
+              <Fontisto name="date" size={16} color="#9B59B6" /> Ngày bắt ₫ầu
               thuê
             </Text>
             <TouchableOpacity
@@ -474,7 +474,7 @@ const EditRoomScreen = ({ route, navigation }) => {
             >
               <TextInput
                 style={styles.input}
-                placeholder="Chọn ngày bắt đầu"
+                placeholder="Chọn ngày bắt ₫ầu"
                 value={startDate.toLocaleDateString()}
                 editable={false}
                 allowFontScaling={false}
@@ -516,7 +516,7 @@ const EditRoomScreen = ({ route, navigation }) => {
               disabled={isLoading}
             >
               <Text style={styles.saveText}>
-                {isLoading ? "Đang lưu..." : "Lưu lại"}
+                {isLoading ? "₫ang lưu..." : "Lưu lại"}
               </Text>
             </TouchableOpacity>
           </View>
@@ -536,14 +536,14 @@ const EditRoomScreen = ({ route, navigation }) => {
                     style={styles.closeButton}
                     onPress={() => setNotificationVisible(false)}
                   >
-                    <Text style={styles.closeButtonText}>Đóng</Text>
+                    <Text style={styles.closeButtonText}>₫óng</Text>
                   </TouchableOpacity>
                 </View>
               </View>
             </TouchableWithoutFeedback>
           </Modal>
 
-          {/* Modal để hiển thị ảnh phóng to */}
+          {/* Modal ₫ể hiển thị ảnh phóng to */}
           <Modal
             visible={isModalVisible}
             transparent={true}
@@ -553,13 +553,13 @@ const EditRoomScreen = ({ route, navigation }) => {
             <TouchableOpacity
               style={styles.modalOverlay}
               activeOpacity={1}
-              onPress={() => setModalVisible(false)} // Đóng modal khi nhấn ra ngoài ảnh
+              onPress={() => setModalVisible(false)} // ₫óng modal khi nhấn ra ngoài ảnh
             >
               <View style={styles.newModalContent}>
                 <Image
                   source={{ uri: selectedImage }}
-                  style={styles.fullImage} // Đặt kích thước ảnh đầy đủ
-                  resizeMode="contain" // Hoặc "cover" nếu bạn muốn lấp đầy
+                  style={styles.fullImage} // ₫ặt kích thước ảnh ₫ầy ₫ủ
+                  resizeMode="contain" // Hoặc "cover" nếu bạn muốn lấp ₫ầy
                 />
               </View>
             </TouchableOpacity>
@@ -715,7 +715,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   imageColumn: {
-    width: "100%", // Để hai cột có chiều rộng gần bằng nhau
+    width: "100%", // ₫ể hai cột có chiều rộng gần bằng nhau
     flex: 1,
     alignItems: "center",
     justifyContent: "space-between",
@@ -761,25 +761,25 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: "row", // Căn chỉnh theo hàng
     justifyContent: "space-between", // Căn giữa các ô
-    width: "100%", // Đảm bảo chiều rộng đầy đủ
+    width: "100%", // ₫ảm bảo chiều rộng ₫ầy ₫ủ
   },
   inputContainer: {
-    width: "48%", // Đặt chiều rộng cho mỗi ô input
+    width: "48%", // ₫ặt chiều rộng cho mỗi ô input
   },
   dateIcon: {
     position: "absolute",
     right: 10,
-    top: 10, // Điều chỉnh vị trí icon cho phù hợp
+    top: 10, // ₫iều chỉnh vị trí icon cho phù hợp
   },
   required: {
     color: "red",
   },
   newModalContent: {
     // backgroundColor: "white", // Nền trắng
-    borderRadius: 20, // Độ bo góc lớn hơn
-    width: "95%", // Đặt chiều rộng modal là 95% của màn hình
-    height: "auto", // Chiều cao tự động
-    maxHeight: "80%", // Giới hạn chiều cao tối đa của modal
+    borderRadius: 20, // ₫ộ bo góc lớn hơn
+    width: "95%", // ₫ặt chiều rộng modal là 95% của màn hình
+    height: "auto", // Chiều cao tự ₫ộng
+    maxHeight: "80%", // Giới hạn chiều cao tối ₫a của modal
     alignItems: "center",
     justifyContent: "center", // Căn giữa nội dung
     padding: 15, // Thêm khoảng cách bên trong
