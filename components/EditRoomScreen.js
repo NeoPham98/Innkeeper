@@ -68,7 +68,7 @@ const EditRoomScreen = ({ route, navigation }) => {
       !roomPrice ||
       !startDate
     ) {
-      setNotificationMessage("Vui lòng nhập ₫ầy ₫ủ thông tin");
+      setNotificationMessage("Vui lòng nhập đầy đủ thông tin");
       setNotificationVisible(true);
       return;
     }
@@ -199,7 +199,7 @@ const EditRoomScreen = ({ route, navigation }) => {
               style={styles.closeButton}
               onPress={() => setUploadSuccessVisible(false)}
             >
-              <Text style={styles.closeButtonText}>₫óng</Text>
+              <Text style={styles.closeButtonText}>Đóng</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -281,7 +281,7 @@ const EditRoomScreen = ({ route, navigation }) => {
               allowFontScaling={false}
             />
             <Text style={styles.label} allowFontScaling={false}>
-              <Entypo name="old-phone" size={16} color="#F5A623" /> Số ₫iện
+              <Entypo name="old-phone" size={16} color="#F5A623" /> Số điện
               thoại
             </Text>
             <TextInput
@@ -294,7 +294,7 @@ const EditRoomScreen = ({ route, navigation }) => {
             />
             <Text style={styles.label} allowFontScaling={false}>
               <Entypo name="location" size={16} color="#9013FE" /> Quê quán /
-              ₫ịa chỉ
+              địa chỉ
             </Text>
             <TextInput
               style={[styles.input, { height: 100 }]}
@@ -396,7 +396,7 @@ const EditRoomScreen = ({ route, navigation }) => {
               {/* Thêm phần upload ảnh hợp ₫ồng */}
               <View style={styles.imageColumn}>
                 <View style={styles.labelContainer}>
-                  <Text style={styles.label}>Ảnh hợp ₫ồng</Text>
+                  <Text style={styles.label}>Ảnh hợp đồng</Text>
                   {contractImage.every((image) => image === null) ? null : (
                     <TouchableOpacity
                       onPress={() => setContractImage([null, null])} // Xóa tất cả ảnh
@@ -465,7 +465,7 @@ const EditRoomScreen = ({ route, navigation }) => {
             />
 
             <Text style={styles.label} allowFontScaling={false}>
-              <Fontisto name="date" size={16} color="#9B59B6" /> Ngày bắt ₫ầu
+              <Fontisto name="date" size={16} color="#9B59B6" /> Ngày bắt đầu
               thuê
             </Text>
             <TouchableOpacity
@@ -474,7 +474,7 @@ const EditRoomScreen = ({ route, navigation }) => {
             >
               <TextInput
                 style={styles.input}
-                placeholder="Chọn ngày bắt ₫ầu"
+                placeholder="Chọn ngày bắt đầu"
                 value={startDate.toLocaleDateString()}
                 editable={false}
                 allowFontScaling={false}
@@ -516,7 +516,7 @@ const EditRoomScreen = ({ route, navigation }) => {
               disabled={isLoading}
             >
               <Text style={styles.saveText}>
-                {isLoading ? "₫ang lưu..." : "Lưu lại"}
+                {isLoading ? "Đang lưu..." : "Lưu lại"}
               </Text>
             </TouchableOpacity>
           </View>
@@ -536,7 +536,7 @@ const EditRoomScreen = ({ route, navigation }) => {
                     style={styles.closeButton}
                     onPress={() => setNotificationVisible(false)}
                   >
-                    <Text style={styles.closeButtonText}>₫óng</Text>
+                    <Text style={styles.closeButtonText}>Đóng</Text>
                   </TouchableOpacity>
                 </View>
               </View>

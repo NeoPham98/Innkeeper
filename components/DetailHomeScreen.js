@@ -189,7 +189,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
               <AntDesign name="close" size={20} color="white" />
             </TouchableOpacity>
             <Text style={styles.modalTitle} allowFontScaling={false}>
-              Chọn hành ₫ộng
+              Chọn hành động
             </Text>
             <Text style={styles.modalMessage} allowFontScaling={false}>
               Bạn muốn làm gì với phòng này?
@@ -241,8 +241,8 @@ const DetailHomeScreen = ({ route, navigation }) => {
 
         Toast.show({
           text1: "Cập nhật thành công",
-          text2: `Trạng thái phòng ₫ã ₫ược cập nhật thành ${
-            newStatus ? "hoạt ₫ộng" : "không hoạt ₫ộng"
+          text2: `Trạng thái phòng đã được cập nhật thành ${
+            newStatus ? "hoạt động" : "không hoạt động"
           }.`,
           type: "success",
           style: { fontSize: 18 },
@@ -299,7 +299,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
 
           <View style={styles.statsRow}>
             <Text style={styles.statsLabel} allowFontScaling={false}>
-              Số ₫iện thoại:
+              Số điện thoại:
             </Text>
             <Text style={styles.statsValue} allowFontScaling={false}>
               {room.phone_number || "Chưa có"}
@@ -307,7 +307,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
           </View>
           <View style={styles.statsRow}>
             <Text style={styles.statsLabel} allowFontScaling={false}>
-              Ngày bắt ₫ầu thuê:
+              Ngày bắt đầu thuê:
             </Text>
             <Text style={styles.statsValue} allowFontScaling={false}>
               {new Date(room.rental_date).toLocaleDateString() || "Chưa có"}
@@ -359,7 +359,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
                 style={styles.createInvoiceButtonText}
                 allowFontScaling={false}
               >
-                Tạo hóa ₫ơn
+                Tạo hóa đơn
               </Text>
             </TouchableOpacity>
           </View>
@@ -408,7 +408,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
           onPress={() => navigation.navigate('Chart', { id_home: effectiveHome.id_home })}
         >
           <FontAwesome name="line-chart" size={30} color="#FFD700" />
-          <Text style={styles.infoText} allowFontScaling={false}>Biểu ₫ồ</Text>
+          <Text style={styles.infoText} allowFontScaling={false}>Biểu đồ</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.infoItem}
@@ -422,7 +422,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
           <AntDesign name="filetext1" size={30} color="#32CD32" />
           {/* <FontAwesome name="money" size={30} color="#32CD32" /> */}
           <Text style={styles.infoText} allowFontScaling={false}>
-            Hóa ₫ơn
+            Hóa đơn
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -433,7 +433,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
         >
           <FontAwesome name="cog" size={30} color="#1E90FF" />
           <Text style={styles.infoText} allowFontScaling={false}>
-            Cài ₫ặt
+            Cài đặt
           </Text>
         </TouchableOpacity>
       </View>
@@ -441,7 +441,7 @@ const DetailHomeScreen = ({ route, navigation }) => {
       {isLoading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#006D5B" />
-          <Text>₫ang tải dữ liệu...</Text>
+          <Text>Đang tải dữ liệu...</Text>
         </View>
       ) : (
         <ScrollView

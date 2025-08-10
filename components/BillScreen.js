@@ -30,7 +30,12 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
         service_id: JSON.parse(invoice.service_id || "[]"), // Chuyển ₫ổi chuỗi thành mảng
       }));
 
-      setInvoiceData(formattedData); // Lưu dữ liệu vào state
+      // Sắp xếp theo created_at giảm dần (mới nhất lên đầu)
+      const sortedData = formattedData.sort((a, b) => 
+        new Date(b.created_at) - new Date(a.created_at)
+      );
+
+      setInvoiceData(sortedData); // Lưu dữ liệu đã sắp xếp vào state
     } catch (error) {
       console.error("Error fetching invoices:", error.message);
     } finally {
@@ -91,7 +96,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
 
       // Cập nhật lại danh sách hóa ₫ơn sau khi xóa
       fetchInvoices();
-      setNotification("Xóa hóa ₫ơn thành công!"); // Cập nhật thông báo
+      setNotification("Xóa hóa đơn thành công!"); // Cập nhật thông báo
       setTimeout(() => setNotification(""), 3000); // Xóa thông báo sau 3 giây
     } catch (error) {
       console.error("Error deleting invoice:", error.message);
@@ -114,7 +119,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
         >
           <AntDesign name="arrowleft" size={24} color="#2C3E50" />
           <Text style={styles.headerText} allowFontScaling={false}>
-            Danh sách hóa ₫ơn
+            Danh sách hóa đơn
           </Text>
         </TouchableOpacity>
       </View>
@@ -190,8 +195,11 @@ const styles = StyleSheet.create({
     color: "white",
   },
   headerContainer: {
-    zIndex: 1,
-    position: "sticky",
+    zIndex: 999,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
     paddingTop: 40,
     paddingHorizontal: 20,
     backgroundColor: "#FFD2CC",
@@ -215,8 +223,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white",
     overflow: "hidden",
-    marginTop: 20,
-    maxHeight: "100%",
+    marginTop: 100, // Tăng marginTop để tránh bị che bởi header
+    maxHeight: "85%",
   },
   tableHeader: {
     flexDirection: "row",

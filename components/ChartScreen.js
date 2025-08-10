@@ -106,7 +106,7 @@ const ChartScreen = ({ route, navigation }) => {
           onPress={() => navigation.goBack()}
         >
           <AntDesign name="arrowleft" size={26} color="#2C3E50" />
-          <Text style={styles.headerTitle} allowFontScaling={false}>Biểu ₫ồ Doanh Thu</Text>
+          <Text style={styles.headerTitle} allowFontScaling={false}>Biểu đồ Doanh Thu</Text>
         </TouchableOpacity>
       </View>
 
@@ -121,7 +121,7 @@ const ChartScreen = ({ route, navigation }) => {
       </View>
 
       <View style={styles.chartContainer}>
-        <Text style={styles.chartTitle} allowFontScaling={false}>Doanh Thu Theo Tháng (VN₫)</Text>
+        <Text style={styles.chartTitle} allowFontScaling={false}>Doanh Thu Theo Tháng (VNĐ)</Text>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <LineChart
             data={revenueData}

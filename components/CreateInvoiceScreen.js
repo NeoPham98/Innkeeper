@@ -171,6 +171,7 @@ const CreateInvoiceScreen = ({
       number_electric: totalElectricityQuantity,
       number_price: totalElectricityAmount,
       isShared: isChecked,
+      divideByPeople: isChecked ? parseFloat(newInputValue) : null, // Lưu số người để chia
     };
 
     try {
@@ -188,7 +189,7 @@ const CreateInvoiceScreen = ({
       if (error) throw error;
 
       setIsLoading(false);
-      setNotification("₫ã tạo hóa ₫ơn thành công!");
+      setNotification("Đã tạo hóa đơn thành công!");
 
       // Chuyển hướng ₫ến màn hình thông tin hóa ₫ơn
       navigation.navigate("InvoiceDetail", {
@@ -200,7 +201,7 @@ const CreateInvoiceScreen = ({
     } catch (error) {
       setIsLoading(false);
       console.error("Error creating invoice:", error.message);
-      setNotification("Tạo hóa ₫ơn thất bại!");
+      setNotification("Tạo hóa đơn thất bại!");
       setTimeout(() => setNotification(""), 3000); // Tự ₫ộng xóa thông báo sau 3 giây
     }
   };
@@ -269,19 +270,71 @@ const CreateInvoiceScreen = ({
         .select("*")
         .eq("id_room", effectiveRoomId)
         .order("created_at", { ascending: false }) // Sắp xếp theo ngày tạo giảm dần
-        .limit(1); // Lấy hóa ₫ơn gần nhất
+        .limit(1); // Lấy hóa đơn gần nhất
 
       if (error) {
         console.error("Error fetching latest invoice:", error.message);
         return;
       }
 
-      // Cập nhật state với dữ liệu từ hóa ₫ơn gần nhất
+      // Cập nhật state với dữ liệu từ hóa đơn gần nhất
       if (data[0]) {
         const latestInvoice = data[0];
+        
         setOldElectricity(latestInvoice.new_electric_number);
         setOldWaterHeater(latestInvoice.new_bnl);
-        setNewWater(quantity.toString()); // Chuyển quantity thành chuỗi và ₫iền vào ô số nước mới
+        setNewWater(quantity.toString()); // Chuyển quantity thành chuỗi và điền vào ô số nước mới
+        
+        // Tự động tích vào những dịch vụ đã sử dụng trong hóa đơn trước
+        if (latestInvoice.service_id) {
+          let serviceIds = latestInvoice.service_id;
+          
+          // Đảm bảo service_id là array
+          if (!Array.isArray(serviceIds)) {
+            // Nếu là string, thử parse JSON
+            if (typeof serviceIds === 'string') {
+              try {
+                serviceIds = JSON.parse(serviceIds);
+              } catch (e) {
+                serviceIds = [];
+              }
+            } else {
+              // Nếu là số đơn lẻ, chuyển thành array
+              serviceIds = [serviceIds];
+            }
+          }
+            
+          if (serviceIds.length > 0) {
+            const previousServices = {};
+            const previousServicePrices = {};
+            
+            serviceIds.forEach(serviceId => {
+              // Chuyển serviceId thành số nếu cần
+              const numericServiceId = typeof serviceId === 'string' ? parseInt(serviceId) : serviceId;
+              previousServices[numericServiceId] = true;
+              
+              // Tìm thông tin dịch vụ để lấy giá
+              const service = services.find(s => s.service_id === numericServiceId);
+              if (service) {
+                previousServicePrices[numericServiceId] = service.service_price;
+              }
+            });
+            
+            setSelectedServices(previousServices);
+            setServicePrices(previousServicePrices);
+            
+            // Tính lại tổng giá dịch vụ
+            const newTotalServicePrice = Object.keys(previousServices).reduce((total, serviceId) => {
+              const service = services.find(s => s.service_id === parseInt(serviceId));
+              if (service) {
+                return total + parseFloat(service.service_price);
+              }
+              return total;
+            }, 0);
+            
+            setTotalServicePrice(newTotalServicePrice);
+          }
+        }
       }
     } catch (error) {
       console.error("Error fetching latest invoice:", error.message);
@@ -289,10 +342,20 @@ const CreateInvoiceScreen = ({
   };
 
   useEffect(() => {
-    fetchServices();
-    fetchSettings();
-    fetchLatestInvoice(); // Gọi hàm ₫ể lấy hóa ₫ơn gần nhất
+    const initializeData = async () => {
+      await fetchServices();
+      await fetchSettings();
+    };
+    
+    initializeData();
   }, [effectiveIdHome]);
+
+  // Gọi fetchLatestInvoice sau khi services đã được load
+  useEffect(() => {
+    if (services.length > 0 && effectiveRoomId) {
+      fetchLatestInvoice();
+    }
+  }, [services, effectiveRoomId]);
 
   const handleCheckboxToggle = (serviceId) => {
     setSelectedServices((prev) => {
@@ -336,6 +399,7 @@ const CreateInvoiceScreen = ({
     setIsRefreshing(true);
     await fetchServices();
     await fetchSettings();
+    await fetchLatestInvoice(); // Gọi lại để lấy hóa đơn gần nhất
 
     setInvoiceNumber("");
     setCustomerName("");
@@ -350,6 +414,9 @@ const CreateInvoiceScreen = ({
     setNewInputValue("");
     setTenantName(effectiveRoomer);
     setPhoneNumber(effectivePhoneNumber);
+    setSelectedServices({}); // Reset selected services
+    setServicePrices({}); // Reset service prices
+    setTotalServicePrice(0); // Reset total service price
 
     setIsRefreshing(false);
   };
@@ -381,7 +448,7 @@ const CreateInvoiceScreen = ({
             >
               <AntDesign name="arrowleft" size={24} color="black" />
               <Text style={styles.headerText} allowFontScaling={false}>
-                Tạo hóa ₫ơn
+                Tạo hóa đơn
               </Text>
             </TouchableOpacity>
           </View>
@@ -448,7 +515,7 @@ const CreateInvoiceScreen = ({
                     size={16}
                     color="#FFC107"
                   />{" "}
-                  Số ₫iện thoại
+                  Số điện thoại
                 </Text>
                 <TextInput
                   allowFontScaling={false}
@@ -463,7 +530,7 @@ const CreateInvoiceScreen = ({
 
             <View style={styles.separatorContainer}>
               <Text style={styles.separatorText} allowFontScaling={false}>
-                1. Thông số ₫ầu kỳ
+                1. Thông số đầu kỳ
               </Text>
               <View style={styles.separator} />
             </View>
@@ -476,7 +543,7 @@ const CreateInvoiceScreen = ({
                     size={16}
                     color="#E67E22"
                   />{" "}
-                  Số ₫iện cũ
+                  Số điện cũ
                 </Text>
                 <TextInput
                   allowFontScaling={false}
@@ -533,7 +600,7 @@ const CreateInvoiceScreen = ({
                     size={16}
                     color="#E67E22"
                   />{" "}
-                  Số ₫iện mới
+                  Số điện mới
                 </Text>
                 <TextInput
                   allowFontScaling={false}
@@ -591,7 +658,7 @@ const CreateInvoiceScreen = ({
                   containerStyle={{ margin: 0, padding: 0 }}
                   checkedIcon="check-square"
                   uncheckedIcon="square-o"
-                  title="Chia ₫ầu người"
+                  title="Chia đầu người"
                   textStyle={{ marginLeft: 10, fontSize: 14 }}
                 />
               </View>
@@ -631,41 +698,43 @@ const CreateInvoiceScreen = ({
             </View>
 
             {isLoadingServices ? (
-              <Text>₫ang tải dịch vụ...</Text>
+              <Text>Đang tải dịch vụ...</Text>
             ) : (
-              services.map((service) => (
-                <View key={service.service_id} style={styles.serviceContainer}>
-                  <CheckBox
-                    checked={!!selectedServices[service.service_id]}
-                    onPress={() => handleCheckboxToggle(service.service_id)}
-                    containerStyle={{ margin: 0, padding: 0 }}
-                  />
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.serviceName}>
-                      {service.service_name}
-                    </Text>
-                    <TextInput
-                      allowFontScaling={false}
-                      style={[styles.rowInput, { width: "80%" }]}
-                      placeholder="Nhập giá dịch vụ"
-                      value={
-                        formatNumber(
-                          servicePrices[service.service_id] ||
-                            service.service_price.toString()
-                        ) + " ₫"
-                      }
-                      onChangeText={(value) =>
-                        handleServicePriceChange(
-                          service.service_id,
-                          value.replace(/,/g, "")
-                        )
-                      }
-                      keyboardType="numeric"
-                      editable={false}
+              <>
+                {services.map((service) => (
+                  <View key={service.service_id} style={styles.serviceContainer}>
+                    <CheckBox
+                      checked={!!selectedServices[service.service_id]}
+                      onPress={() => handleCheckboxToggle(service.service_id)}
+                      containerStyle={{ margin: 0, padding: 0 }}
                     />
+                    <View style={{ flex: 1 }}>
+                      <Text style={styles.serviceName}>
+                        {service.service_name}
+                      </Text>
+                      <TextInput
+                        allowFontScaling={false}
+                        style={[styles.rowInput, { width: "80%" }]}
+                        placeholder="Nhập giá dịch vụ"
+                        value={
+                          formatNumber(
+                            servicePrices[service.service_id] ||
+                              service.service_price.toString()
+                          ) + " ₫"
+                        }
+                        onChangeText={(value) =>
+                          handleServicePriceChange(
+                            service.service_id,
+                            value.replace(/,/g, "")
+                          )
+                        }
+                        keyboardType="numeric"
+                        editable={false}
+                      />
+                    </View>
                   </View>
-                </View>
-              ))
+                ))}
+              </>
             )}
 
             <Text style={styles.label} allowFontScaling={false}>
@@ -692,12 +761,12 @@ const CreateInvoiceScreen = ({
               <View style={styles.tableHeader}>
                 <Text style={styles.tableHeaderText} allowFontScaling={false}></Text>
                 <Text style={styles.tableHeaderText} allowFontScaling={false}>Số lượng</Text>
-                <Text style={styles.tableHeaderText} allowFontScaling={false}>₫ơn giá</Text>
+                <Text style={styles.tableHeaderText} allowFontScaling={false}>Đơn giá</Text>
                 <Text style={styles.tableHeaderText} allowFontScaling={false}>Thành tiền</Text>
               </View>
               <View style={styles.tableRow}>
                 <Text style={[styles.tableCell, { textAlign: "left" }]} allowFontScaling={false}>
-                  Tiền ₫iện
+                  Tiền điện
                 </Text>
                 <Text style={styles.tableCell} allowFontScaling={false}>{calculateElectricity()}</Text>
                 <Text style={styles.tableCell} allowFontScaling={false}>
@@ -711,7 +780,12 @@ const CreateInvoiceScreen = ({
                 <Text style={[styles.tableCell, { textAlign: "left" }]} allowFontScaling={false}>
                   Tiền BNL
                 </Text>
-                <Text style={styles.tableCell} allowFontScaling={false}>{calculateWaterHeater()}</Text>
+                <Text style={styles.tableCell} allowFontScaling={false}>
+                  {isChecked && newInputValue ? 
+                    `${(calculateWaterHeater() / parseFloat(newInputValue) * quantity)}` : 
+                    calculateWaterHeater()
+                  }
+                </Text>
                 <Text style={styles.tableCell} allowFontScaling={false}>
                   {formatNumber(electricPrice) + " ₫"}
                 </Text>
@@ -781,7 +855,7 @@ const CreateInvoiceScreen = ({
               disabled={isLoading}
             >
               <Text style={styles.saveText} allowFontScaling={false}>
-                {isLoading ? "₫ang lưu..." : "Tạo hóa ₫ơn"}
+                {isLoading ? "Đang lưu..." : "Tạo hóa đơn"}
               </Text>
             </TouchableOpacity>
           </View>
@@ -801,7 +875,7 @@ const CreateInvoiceScreen = ({
                     style={styles.closeButton}
                     onPress={() => setNotificationVisible(false)}
                   >
-                    <Text style={styles.closeButtonText}>₫óng</Text>
+                    <Text style={styles.closeButtonText}>Đóng</Text>
                   </TouchableOpacity>
                 </View>
               </View>

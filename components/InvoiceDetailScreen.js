@@ -36,7 +36,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
 
       // Chia sẻ ảnh
       await Sharing.shareAsync(uri, {
-        dialogTitle: "Chia sẻ hóa ₫ơn",
+        dialogTitle: "Chia sẻ hóa đơn",
         UTI: "public.image", // ₫ịnh dạng file
       });
       navigation.pop(2);
@@ -46,13 +46,16 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
     }
   };
 
-  // Hàm ₫ịnh dạng ngày
+  // Hàm định dạng ngày
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Tháng bắt ₫ầu từ 0
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    const day = String(date.getUTCDate()).padStart(2, "0");
+    const month = String(date.getUTCMonth() + 1).padStart(2, "0"); // Tháng bắt đầu từ 0
+    const year = date.getUTCFullYear();
+    const hours = String(date.getUTCHours()).padStart(2, "0");
+    const minutes = String(date.getUTCMinutes()).padStart(2, "0");
+    const seconds = String(date.getUTCSeconds()).padStart(2, "0");
+    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds} UTC`;
   };
 
   // Hàm ₫ịnh dạng số với dấu phẩy
@@ -132,7 +135,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
         >
           <AntDesign name="arrowleft" size={24} color="black" />
           <Text style={styles.headerText} allowFontScaling={false}>
-            Hóa ₫ơn
+            Hóa đơn
           </Text>
         </TouchableOpacity>
       </View>
@@ -145,7 +148,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
             <View style={styles.row}>
               <Text allowFontScaling={false}>
                 <FontAwesome name="calendar" size={16} color="black" /> Ngày lập
-                hóa ₫ơn:
+                hóa đơn:
               </Text>
               <Text style={styles.rightText} allowFontScaling={false}>
                 {formatDate(invoiceData.created_at)}
@@ -185,7 +188,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                   size={16}
                   color="#FFC107"
                 />{" "}
-                Số ₫iện thoại:
+                Số điện thoại:
               </Text>
               <Text
                 style={[styles.rightText, styles.textWithBorder]}
@@ -205,7 +208,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                 style={[styles.separatorText, { marginTop: 10 }]}
                 allowFontScaling={false}
               >
-                Thông tin ₫iện nước
+                Thông tin điện nước
               </Text>
             </View>
             <Text style={styles.subHeader} allowFontScaling={false}>
@@ -252,18 +255,18 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
             </View>
 
             <Text style={styles.subHeader} allowFontScaling={false}>
-              2. ₫iện
+              2. Điện
             </Text>
             <View style={styles.row}>
               <Text style={styles.textWithBorder} allowFontScaling={false}>
                 <MaterialIcons name="electric-bolt" size={16} color="#E67E22" />{" "}
-                Số ₫iện:
+                Số điện:
               </Text>
               <Text
                 style={[styles.rightText, styles.textWithBorder]}
                 allowFontScaling={false}
               >
-                {invoiceData.total_electric_use}
+                {invoiceData.new_electric_number} - {invoiceData.old_electric_number} = {invoiceData.total_electric_use}
               </Text>
             </View>
             <View style={styles.row}>
@@ -275,13 +278,29 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                 style={[styles.rightText, styles.textWithBorder]}
                 allowFontScaling={false}
               >
-                {invoiceData.total_bnl_use}
+                {invoiceData.total_bnl_use && invoiceData.divideByPeople
+                  ? `(${invoiceData.new_bnl} - ${invoiceData.old_bnl}) : ${invoiceData.divideByPeople} x ${invoiceData.quantity} = ${formatCurrency((invoiceData.total_bnl_use / invoiceData.divideByPeople) * invoiceData.quantity)}`
+                  : invoiceData.total_bnl_use && invoiceData.new_bnl && invoiceData.old_bnl
+                  ? `${invoiceData.new_bnl} - ${invoiceData.old_bnl} = ${invoiceData.total_bnl_use}`
+                  : "0"
+                }
+              </Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.textWithBorder} allowFontScaling={false}>
+                <MaterialIcons name="electric-bolt" size={16} color="#E74C3C" /> Tổng số điện đã dùng:
+              </Text>
+              <Text
+                style={[styles.rightText, styles.textWithBorder]}
+                allowFontScaling={false}
+              >
+                {Number(invoiceData.total_electric_use || 0) + (invoiceData.total_bnl_use && invoiceData.divideByPeople ? Number(invoiceData.total_bnl_use / invoiceData.divideByPeople * invoiceData.quantity) : Number(invoiceData.total_bnl_use || 0))}
               </Text>
             </View>
             <View style={styles.row}>
               <Text style={styles.textWithBorder} allowFontScaling={false}>
                 <Ionicons name="pricetags" size={16} color="#2ECC71" /> Giá
-                ₫iện:
+                điện:
               </Text>
               <Text
                 style={[styles.rightText, styles.textWithBorder]}
@@ -297,7 +316,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                   size={16}
                   color="black"
                 />
-                Tiền ₫iện{isShared ? " (₫ã chia BNL)" : ""}:
+                Tiền điện{isShared ? " (đã chia BNL)" : ""}:
               </Text>
               <Text
                 style={[

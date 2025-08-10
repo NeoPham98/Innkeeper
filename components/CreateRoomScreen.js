@@ -67,7 +67,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
       !roomPrice ||
       !startDate
     ) {
-      setNotificationMessage("Vui lòng nhập ₫ầy ₫ủ thông tin");
+      setNotificationMessage("Vui lòng nhập đầy đủ thông tin");
       setNotificationVisible(true);
       return;
     }
@@ -106,7 +106,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
       if (error) throw error;
 
       setIsLoading(false);
-      setNotificationMessage("₫ã tạo phòng thành công!");
+      setNotificationMessage("Đã tạo phòng thành công!");
       setNotificationVisible(true);
       setTimeout(() => navigation.navigate("DetailHome", { home }), 2000);
     } catch (error) {
@@ -247,7 +247,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
               onChangeText={setRoomer}
             />
             <Text style={styles.label} allowFontScaling={false}>
-              <Entypo name="old-phone" size={16} color="#F5A623" /> Số ₫iện
+              <Entypo name="old-phone" size={16} color="#F5A623" /> Số điện
               thoại
             </Text>
             <TextInput
@@ -260,7 +260,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
             />
             <Text style={styles.label} allowFontScaling={false}>
               <Entypo name="location" size={16} color="#9013FE" /> Quê quán /
-              ₫ịa chỉ
+              địa chỉ
             </Text>
             <TextInput
               allowFontScaling={false}
@@ -367,7 +367,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
               <View style={styles.imageColumn}>
                 <View style={styles.labelContainer}>
                   <Text style={styles.label} allowFontScaling={false}>
-                    Ảnh hợp ₫ồng
+                    Ảnh hợp đồng
                   </Text>
                   {contractImage.every((image) => image === null) ? null : (
                     <TouchableOpacity
@@ -435,7 +435,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
             />
 
             <Text style={styles.label} allowFontScaling={false}>
-              <Fontisto name="date" size={16} color="#9B59B6" /> Ngày bắt ₫ầu
+              <Fontisto name="date" size={16} color="#9B59B6" /> Ngày bắt đầu
               thuê
             </Text>
             <TouchableOpacity
@@ -445,7 +445,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
               <TextInput
                 allowFontScaling={false}
                 style={styles.input}
-                placeholder="Chọn ngày bắt ₫ầu"
+                placeholder="Chọn ngày bắt đầu"
                 value={startDate.toLocaleDateString()}
                 editable={false}
               />
@@ -491,7 +491,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
               disabled={isLoading}
             >
               <Text style={styles.saveText} allowFontScaling={false}>
-                {isLoading ? "₫ang lưu..." : "Lưu lại"}
+                {isLoading ? "Đang lưu..." : "Lưu lại"}
               </Text>
             </TouchableOpacity>
           </View>
@@ -511,7 +511,7 @@ const CreateRoomScreen = ({ route, navigation }) => {
                     style={styles.closeButton}
                     onPress={() => setNotificationVisible(false)}
                   >
-                    <Text style={styles.closeButtonText} allowFontScaling={false}>₫óng</Text>
+                    <Text style={styles.closeButtonText} allowFontScaling={false}>Đóng</Text>
                   </TouchableOpacity>
                 </View>
               </View>

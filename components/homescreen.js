@@ -323,7 +323,7 @@ const HomeScreen = ({ navigation, route }) => {
         </View>
         <View style={styles.statsRow}>
           <Text allowFontScaling={false} style={styles.statsLabel}>
-            Số người ₫ang trọ:
+            Số người đang trọ:
           </Text>
           <Text allowFontScaling={false} style={styles.statsValue}>
             {home.room_total_lacks_money || 0}
@@ -331,7 +331,7 @@ const HomeScreen = ({ navigation, route }) => {
         </View>
         <View style={styles.statsRow}>
           <Text allowFontScaling={false} style={styles.statsLabel}>
-            Số hóa ₫ơn ₫ã tạo:
+            Số hóa đơn đã tạo:
           </Text>
           <Text allowFontScaling={false} style={styles.statsValue}>
             {home.monthly_revenue || 0}
@@ -411,7 +411,7 @@ const HomeScreen = ({ navigation, route }) => {
                 <AntDesign name="pluscircleo" size={50} color="#006D5B" />
               </TouchableOpacity>
               <Text style={styles.infoText} allowFontScaling={false}>
-                Bấm dấu "+" ₫ể tạo nhà trọ mới
+                Bấm dấu "+" để tạo nhà trọ mới
               </Text>
             </View>
 
@@ -452,7 +452,7 @@ const HomeScreen = ({ navigation, route }) => {
                 <AntDesign name="close" size={20} color="white" />
               </TouchableOpacity>
               <Text allowFontScaling={false} style={styles.modalTitle}>
-                Chọn hành ₫ộng
+                Chọn hành động
               </Text>
               <Text allowFontScaling={false} style={styles.modalMessage}>
                 Bạn muốn làm gì với nhà này?

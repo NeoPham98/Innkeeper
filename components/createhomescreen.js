@@ -32,7 +32,7 @@ const CreateHomeScreen = ({ navigation, route }) => {
 
   const handleSave = async () => {
     if (!houseName || !address) {
-      setNotification("Vui lòng nhập ₫ầy ₫ủ thông tin");
+      setNotification("Vui lòng nhập đầy đủ thông tin");
       setTimeout(() => setNotification(""), 3000);
       return;
     }
@@ -58,7 +58,7 @@ const CreateHomeScreen = ({ navigation, route }) => {
 
       navigation.navigate("Home", {
         id_account,
-        notification: "₫ã tạo nhà trọ thành công!",
+        notification: "Đã tạo nhà trọ thành công!",
       });
     } catch (error) {
       setIsLoading(false);
@@ -121,7 +121,7 @@ const CreateHomeScreen = ({ navigation, route }) => {
                 textAlignVertical="top"
               />
               <Text style={styles.label} allowFontScaling={false}>
-                ₫ịa chỉ
+                địa chỉ
               </Text>
               <TextInput
               
@@ -138,7 +138,7 @@ const CreateHomeScreen = ({ navigation, route }) => {
                 disabled={isLoading}
               >
                 <Text style={styles.saveText} allowFontScaling={false}>
-                  {isLoading ? "₫ang lưu..." : "Lưu lại"}
+                  {isLoading ? "Đang lưu..." : "Lưu lại"}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -166,7 +166,7 @@ const CreateHomeScreen = ({ navigation, route }) => {
                         style={styles.closeButtonText}
                         allowFontScaling={false}
                       >
-                        ₫óng
+                        Đóng
                       </Text>
                     </TouchableOpacity>
                   </View>

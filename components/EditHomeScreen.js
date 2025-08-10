@@ -74,7 +74,7 @@ const EditHomeScreen = ({ route, navigation }) => {
           onChangeText={setHomeName}
         />
         <Text style={styles.label} allowFontScaling={false}>
-          ₫ịa chỉ
+          địa chỉ
         </Text>
         <TextInput
           allowFontScaling={false}
@@ -89,7 +89,7 @@ const EditHomeScreen = ({ route, navigation }) => {
           disabled={isLoading}
         >
           <Text style={styles.saveText} allowFontScaling={false}>
-            {isLoading ? "₫ang lưu..." : "Lưu lại"}
+            {isLoading ? "Đang lưu..." : "Lưu lại"}
           </Text>
         </TouchableOpacity>
       </View>

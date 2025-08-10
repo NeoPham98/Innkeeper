@@ -106,7 +106,7 @@ const SettingsScreen = ({ route }) => {
 
   const updateSettings = async () => {
     if (!electricPrice || !waterPrice) {
-      setNotificationMessage("Giá ₫iện và giá nước không ₫ược ₫ể trống.");
+      setNotificationMessage("Giá điện và giá nước không được để trống.");
       setNotificationVisible(true);
       setTimeout(() => {
         setNotificationVisible(false);
@@ -191,7 +191,7 @@ const SettingsScreen = ({ route }) => {
 
   const handleAddService = async () => {
     if (!serviceName || !servicePrice) {
-      setNotificationMessage("Tên dịch vụ và số tiền không ₫ược ₫ể trống.");
+      setNotificationMessage("Tên dịch vụ và số tiền không được để trống.");
       setNotificationVisible(true);
       setTimeout(() => {
         setNotificationVisible(false);
@@ -233,7 +233,7 @@ const SettingsScreen = ({ route }) => {
 
   const handleEditService = async () => {
     if (!editServiceName || !editServicePrice) {
-      setNotificationMessage("Tên dịch vụ và số tiền không ₫ược ₫ể trống.");
+      setNotificationMessage("Tên dịch vụ và số tiền không được để trống.");
       setNotificationVisible(true);
       setTimeout(() => {
         setNotificationVisible(false);
@@ -296,7 +296,7 @@ const SettingsScreen = ({ route }) => {
             >
               <AntDesign name="close" size={20} color="white" />
             </TouchableOpacity>
-            <Text style={styles.modalTitle} allowFontScaling={false}>Chọn hành ₫ộng</Text>
+            <Text style={styles.modalTitle} allowFontScaling={false}>Chọn hành động</Text>
             <Text style={styles.modalMessage} allowFontScaling={false}>
               Bạn muốn làm gì với dịch vụ này?
             </Text>
@@ -409,17 +409,17 @@ const SettingsScreen = ({ route }) => {
         >
           <AntDesign name="arrowleft" size={26} color="#2C3E50" />
           <Text style={styles.headerText} allowFontScaling={false}>
-            Cài ₫ặt nhà trọ
+            Cài đặt nhà trọ
           </Text>
         </TouchableOpacity>
 
         <View style={styles.cardsContainer}>
           <View style={styles.defaultValueContainer}>
             <Text style={styles.subHeader} allowFontScaling={false}>
-              Giá trị mặc ₫ịnh cho các phòng
+              Giá trị mặc định cho các phòng
             </Text>
             <Text style={styles.label} allowFontScaling={false}>
-              Giá ₫iện (₫/kWh)
+              Giá điện (₫/kWh)
             </Text>
             <TextInput
             allowFontScaling={false}
@@ -454,7 +454,7 @@ const SettingsScreen = ({ route }) => {
           </View>
 
           <View style={styles.serviceWrapper}>
-            <Text style={styles.subHeader} allowFontScaling={false}>Thêm dịch vụ trên hóa ₫ơn</Text>
+            <Text style={styles.subHeader} allowFontScaling={false}>Thêm dịch vụ trên hóa đơn</Text>
             {services.map((service) => (
               <View key={service.service_id} style={styles.serviceContainer}>
                 <Text style={styles.serviceName} allowFontScaling={false}>
