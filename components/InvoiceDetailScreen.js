@@ -279,9 +279,9 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                 allowFontScaling={false}
               >
                 {invoiceData.total_bnl_use && invoiceData.divideByPeople
-                  ? `(${invoiceData.new_bnl} - ${invoiceData.old_bnl}) : ${invoiceData.divideByPeople} x ${invoiceData.quantity} = ${formatCurrency((invoiceData.total_bnl_use / invoiceData.divideByPeople) * invoiceData.quantity)}`
+                  ? formatCurrency((invoiceData.total_bnl_use / invoiceData.divideByPeople) * invoiceData.quantity)
                   : invoiceData.total_bnl_use && invoiceData.new_bnl && invoiceData.old_bnl
-                  ? `${invoiceData.new_bnl} - ${invoiceData.old_bnl} = ${invoiceData.total_bnl_use}`
+                  ? `${invoiceData.total_bnl_use}`
                   : "0"
                 }
               </Text>
