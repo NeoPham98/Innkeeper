@@ -1,0 +1,32 @@
+name: Keep Supabase Alive
+
+on:
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch: {}
+  push:
+    branches:
+      - develop
+    paths:
+      - ".github/workflows/keep-supabase-alive.yml"
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping PostgREST (SELECT nhẹ)
+        run: |
+          set -e
+          HTTP_CODE=$(curl -sS -o /dev/null -w "%{http_code}" \
+            "$SUPABASE_URL/rest/v1/keepalive?select=id&limit=1" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            -H "Prefer: count=exact")
+          echo "HTTP_CODE=$HTTP_CODE"
+          if [ "${HTTP_CODE:0:1}" != "2" ]; then
+            echo "Ping failed with HTTP $HTTP_CODE"
+            exit 1
+          fi
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
