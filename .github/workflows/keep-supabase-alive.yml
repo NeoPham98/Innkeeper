@@ -2,7 +2,7 @@ name: Keep Supabase Alive
 
 on:
   schedule:
-    - cron: "*/5 * * * *"  # TẠM THỜI: chạy mỗi 5 phút để test
+    # - cron: "*/5 * * * *"  # TẠM THỜI: chạy mỗi 5 phút để test
     - cron: "0 2 * * *"     # CHÍNH THỨC: 09:00 VN hằng ngày (02:00 UTC)
   workflow_dispatch: {}
   push:
