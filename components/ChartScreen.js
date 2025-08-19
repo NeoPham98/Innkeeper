@@ -100,12 +100,12 @@ const ChartScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View style={styles.headerContainer}>
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <AntDesign name="arrowleft" size={26} color="#2C3E50" />
+          <AntDesign name="arrowleft" size={24} color="#2C3E50" />
           <Text style={styles.headerTitle} allowFontScaling={false}>Biểu đồ Doanh Thu</Text>
         </TouchableOpacity>
       </View>
@@ -143,7 +143,7 @@ const ChartScreen = ({ route, navigation }) => {
                 stroke: '#818CF8',
               },
               formatYLabel: (value) => {
-                console.log("Y-Axis Value");
+                
                 const millions = value / 1000000;
                 if (millions >= 1) {
                   return millions.toFixed(1) + 'M';
@@ -220,27 +220,39 @@ const ChartScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F7FA',
-    padding: 16,
+    backgroundColor: '#F8F9FA',
+    padding: 0,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-    marginTop: 0,
-    backgroundColor: 'white',
-    padding: 15,
-    borderRadius: 12,
+  headerContainer: {
+    zIndex: 999,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "#F8F9FA",
+    paddingTop: 40,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   backButton: {
     flexDirection: "row",
     alignItems: "center",
+    alignSelf: "flex-start",
+    marginTop: -20
   },
   headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginLeft: 20,
-    color: '#2C3E50',
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#1A237E",
+    marginLeft: 15,
     marginTop: -2,
   },
   yearSelector: {
@@ -251,75 +263,78 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 15,
     borderRadius: 12,
+    marginHorizontal: 16,
+    marginTop: 100,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.1,
-    shadowRadius: 3,
+    shadowRadius: 4,
     elevation: 3,
   },
   yearText: {
-    fontSize: 22,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontWeight: '700',
     marginHorizontal: 25,
-    color: '#000000',
+    color: '#2C3E50',
     minWidth: 80,
     textAlign: 'center',
   },
   statsContainer: {
-    marginTop: 20,
+    marginTop: 10,
     padding: 20,
     backgroundColor: 'white',
-    borderRadius: 12,
+    borderRadius: 16,
+    marginHorizontal: 16,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
   },
   statItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#F0F2F5',
   },
   statLabel: {
     fontSize: 16,
     color: '#2C3E50',
-    fontWeight: '500',
+    fontWeight: '600',
   },
   statValue: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FF9999',
+    fontWeight: '700',
+    color: '#4CAF50',
   },
   chartContainer: {
     backgroundColor: 'white',
-    borderRadius: 12,
-    // padding: 5,
+    borderRadius: 16,
+    marginHorizontal: 16,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
   },
   chartTitle: {
     marginTop: 20,
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '700',
     color: '#2C3E50',
     textAlign: 'center',
-    marginBottom: 15,
+    marginBottom: 10,
   }
 });
 

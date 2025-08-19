@@ -389,7 +389,7 @@ const HomeScreen = ({ navigation, route }) => {
               style={styles.logoutButton}
               onPress={() => navigation.navigate("Login")}
             >
-              <AntDesign name="poweroff" size={24} color="#2C3E50" />
+              <AntDesign name="poweroff" size={24} color="white" />
             </TouchableOpacity>
           </View>
 
@@ -495,14 +495,14 @@ const HomeScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
-    backgroundColor: "#FFD2CC",
+    backgroundColor: "#E3F2FD",
   },
   scrollViewContent: {
     flexGrow: 1,
   },
   container: {
     flex: 1,
-    backgroundColor: "#FFD2CC",
+    backgroundColor: "#E3F2FD",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -513,7 +513,17 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   logoutButton: {
-    padding: 10,
+    backgroundColor: "#3F51B5",
+    padding: 12,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
   },
   header: {
     alignItems: "center",
@@ -534,6 +544,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 5,
     paddingHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
   },
 
   card: {
@@ -555,7 +570,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 18,
-    color: "#333",
+    color: "#2C3E50",
     textAlign: "center",
   },
   homeCard: {
@@ -582,7 +597,7 @@ const styles = StyleSheet.create({
   homeName: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#FF9999",
+    color: "#3F51B5",
   },
   locationRow: {
     flexDirection: "row",
@@ -592,7 +607,7 @@ const styles = StyleSheet.create({
   locationText: {
     fontSize: 16,
     marginLeft: 8,
-    color: "#666",
+    color: "#2C3E50",
   },
   statsContainer: {
     borderTopWidth: 1,
@@ -609,13 +624,13 @@ const styles = StyleSheet.create({
   },
   statsLabel: {
     fontSize: 16,
-    color: "#333",
+    color: "#2C3E50",
     flex: 2,
   },
   statsValue: {
     fontSize: 16,
     fontWeight: "500",
-    color: "#333",
+    color: "#2C3E50",
     flex: 1,
     textAlign: "left",
     marginRight: 0,
@@ -670,17 +685,17 @@ const styles = StyleSheet.create({
   },
   revenueLabel: {
     fontSize: 16,
-    color: "#333",
+    color: "#2C3E50",
     fontWeight: "bold",
   },
   revenueValue: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#E74C3C",
+    color: "#4CAF50",
     marginRight: 10,
   },
   detailButton: {
-    backgroundColor: "#007BFF",
+    backgroundColor: "#3F51B5",
     padding: 10,
     borderRadius: 5,
     alignItems: "center",
@@ -716,7 +731,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#E74C3C",
+    color: "#3F51B5",
     marginBottom: 15,
   },
   modalMessage: {
@@ -732,7 +747,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   modalButton: {
-    backgroundColor: "#006D5B",
+    backgroundColor: "#3F51B5",
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 10,

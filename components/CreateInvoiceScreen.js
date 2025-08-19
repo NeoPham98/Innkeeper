@@ -13,7 +13,6 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
-  RefreshControl,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -95,7 +94,6 @@ const CreateInvoiceScreen = ({
   const [quantity, setQuantity] = useState(route.params.quantity);
   const [isLoadingServices, setIsLoadingServices] = useState(true);
   const [totalServicePrice, setTotalServicePrice] = useState(0);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [notification, setNotification] = useState("");
 
   // Tính số ₫iện
@@ -395,32 +393,6 @@ const CreateInvoiceScreen = ({
       .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
-  const onRefresh = async () => {
-    setIsRefreshing(true);
-    await fetchServices();
-    await fetchSettings();
-    await fetchLatestInvoice(); // Gọi lại để lấy hóa đơn gần nhất
-
-    setInvoiceNumber("");
-    setCustomerName("");
-    setAmount("");
-    setNote("");
-    setOldElectricity("");
-    setOldWater("");
-    setOldWaterHeater("");
-    setNewElectricity("");
-    setNewWater("");
-    setNewWaterHeater("");
-    setNewInputValue("");
-    setTenantName(effectiveRoomer);
-    setPhoneNumber(effectivePhoneNumber);
-    setSelectedServices({}); // Reset selected services
-    setServicePrices({}); // Reset service prices
-    setTotalServicePrice(0); // Reset total service price
-
-    setIsRefreshing(false);
-  };
-
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -436,9 +408,6 @@ const CreateInvoiceScreen = ({
           contentContainerStyle={{ flexGrow: 1 }}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
-          refreshControl={
-            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
-          }
           stickyHeaderIndices={[0]}
         >
           <View style={styles.headerContainer}>
@@ -890,53 +859,61 @@ const CreateInvoiceScreen = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFD2CC",
+    backgroundColor: "#F8F9FA",
+    padding: 0,
   },
   headerContainer: {
-    position: "sticky",
-    // paddingTop: 40,
+    backgroundColor: "#F8F9FA",
+    paddingTop: 40,
+    paddingBottom: 20,
     paddingHorizontal: 20,
-    backgroundColor: "#FFD2CC",
-    height: 80,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   backButton: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 10,
+    alignSelf: "flex-start",
+    marginTop: -20
   },
   headerText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#2C3E50",
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#1A237E",
     marginLeft: 15,
-    marginTop: -5,
+    marginTop: -2,
   },
   content: {
-    // marginTop: 20,
-    paddingTop: 10,
+    paddingTop: 20,
     paddingBottom: 30,
     height: "auto",
-    width: "100%", // IOS
+    width: "95%",
     backgroundColor: "white",
-    borderRadius: 20,
+    borderRadius: 16,
     alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 20,
-    borderWidth: 1,
-    borderColor: "#E0E0E0",
+    paddingHorizontal: 25,
+    marginBottom: 20,
+    marginTop: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 4,
     },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 6,
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
   },
   label: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "600",
     color: "#2C3E50",
     alignSelf: "flex-start",
     marginLeft: 5,
@@ -953,14 +930,30 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontSize: 16,
     backgroundColor: "#F8F9FA",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
   },
   saveButton: {
-    backgroundColor: "#006D5B",
+    backgroundColor: "#3F51B5",
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 12,
     alignItems: "center",
     width: "90%",
     marginTop: 30,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 6,
   },
   saveText: {
     color: "white",
@@ -975,40 +968,58 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: "white",
-    borderRadius: 15,
-    width: "90%",
+    borderRadius: 16,
+    padding: 30,
+    width: "85%",
     height: "auto",
     maxHeight: "67%",
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
   },
   modalTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#E74C3C",
-    marginBottom: 15,
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#3F51B5",
+    marginBottom: 20,
   },
   modalMessage: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#2C3E50",
     textAlign: "center",
     marginBottom: 25,
+    lineHeight: 22,
   },
   closeButton: {
-    backgroundColor: "#006D5B",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
+    backgroundColor: "#4CAF50",
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
   },
   closeButtonText: {
     color: "white",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "600",
   },
   title: {
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "#E74C3C",
-    marginBottom: 5,
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#3F51B5",
+    marginBottom: 15,
     marginTop: 10,
   },
   required: {
@@ -1018,10 +1029,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 15,
+    width: "100%",
   },
   inputContainer: {
     flex: 1,
-    marginHorizontal: 5,
+    marginHorizontal: 3,
   },
   rowInputBNL: {
     width: "50%",
@@ -1034,11 +1046,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: "#F8F9FA",
     alignItems: "flex-start",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
   },
-
   rowInput: {
     width: "100%",
-    height: "auto",
+    height: 45,
     borderWidth: 1,
     borderColor: "#E0E0E0",
     borderRadius: 10,
@@ -1046,6 +1065,14 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontSize: 16,
     backgroundColor: "#F8F9FA",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
   },
   separatorContainer: {
     flexDirection: "row",
@@ -1054,9 +1081,9 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   separatorText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#3498DB",
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#3F51B5",
     marginRight: 10,
   },
   separator: {
@@ -1070,8 +1097,8 @@ const styles = StyleSheet.create({
     top: 10,
   },
   subHeader: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 18,
+    fontWeight: "700",
     color: "#2C3E50",
     marginBottom: 10,
     marginTop: 20,
@@ -1081,13 +1108,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: 10,
-    // borderBottomWidth: 1,
     borderBottomColor: "#E0E0E0",
     marginLeft: 40,
   },
   serviceName: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "600",
     color: "#2C3E50",
     marginBottom: 5,
     marginLeft: 10,
@@ -1097,50 +1123,70 @@ const styles = StyleSheet.create({
     color: "#2C3E50",
   },
   tableContainer: {
-    width: "100%",
+    width: "105%",
     borderWidth: 1,
     borderColor: "#E0E0E0",
     borderRadius: 10,
     marginTop: 10,
     overflow: "hidden",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   tableHeader: {
     flexDirection: "row",
-    backgroundColor: "#F8F9FA",
+    backgroundColor: "#3F51B5",
     padding: 10,
   },
   tableHeaderText: {
     flex: 1,
-    fontWeight: "bold",
+    fontWeight: "600",
     textAlign: "center",
+    color: "white",
+    fontSize: 14,
   },
   tableRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#E0E0E0",
+    borderBottomColor: "#F0F0F0",
+    backgroundColor: "white",
   },
   tableCell: {
     flex: 1,
     textAlign: "center",
     fontSize: 14,
+    color: "#2C3E50",
   },
   notification: {
-    backgroundColor: "#FFD700",
-    padding: 10,
-    borderRadius: 5,
+    backgroundColor: "#4CAF50",
+    padding: 16,
+    borderRadius: 12,
     position: "absolute",
-    top: 40,
-    left: 10,
-    right: 10,
+    top: 70,
+    left: 20,
+    right: 20,
     alignItems: "center",
-    zIndex: 1,
+    zIndex: 999,
+    elevation: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
   },
   notificationText: {
-    color: "#2C3E50",
+    color: "white",
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "600",
   },
 });
 

@@ -575,58 +575,65 @@ const EditRoomScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFD2CC",
+    backgroundColor: "#F8F9FA",
+    padding: 0,
   },
   headerContainer: {
-    position: "sticky",
-    // paddingTop: 40,
+    backgroundColor: "#F8F9FA",
+    paddingTop: 40,
+    paddingBottom: 20,
     paddingHorizontal: 20,
-    backgroundColor: "#FFD2CC",
-    height: 80,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   backButton: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 10,
+    alignSelf: "flex-start",
+    marginTop: -20
   },
   headerText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#2C3E50",
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#1A237E",
     marginLeft: 15,
-    marginTop: -5,
+    marginTop: -2,
   },
   content: {
-    // marginTop: 20,
-    paddingTop: 10,
+    paddingTop: 20,
     paddingBottom: 30,
-    height: "auto", // Giảm chiều dài khối
+    height: "auto",
     width: "90%",
     backgroundColor: "white",
-    borderRadius: 20,
-    alignSelf: "center", // Canh giữa theo chiều ngang
-    justifyContent: "center", // Canh giữa theo chiều dọc
+    borderRadius: 16,
+    alignSelf: "center",
+    justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 20,
-    borderWidth: 1,
-    borderColor: "#E0E0E0",
+    paddingHorizontal: 25,
+    marginBottom: 20,
+    marginTop: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 4,
     },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 6,
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
   },
-
   label: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "600",
     color: "#2C3E50",
     alignSelf: "flex-start",
     marginLeft: 5,
-    marginTop: 15,
+    marginTop: 5,
     marginBottom: 5,
   },
   input: {
@@ -635,22 +642,38 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E0E0E0",
     borderRadius: 10,
-    padding: 10,
-    marginBottom: 5,
+    padding: 15,
+    marginBottom: 10,
     fontSize: 16,
     backgroundColor: "#F8F9FA",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
   },
   saveButton: {
-    backgroundColor: "#006D5B",
+    backgroundColor: "#3F51B5",
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 12,
     alignItems: "center",
     width: "90%",
-    marginTop: 15,
+    marginTop: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 6,
   },
   saveText: {
     color: "white",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "700",
   },
   modalOverlay: {
@@ -661,49 +684,58 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: "white",
-    borderRadius: 15,
+    borderRadius: 16,
     padding: 30,
     width: "85%",
+    height: "auto",
+    maxHeight: "67%",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 6,
     },
     shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 6,
+    shadowRadius: 8,
+    elevation: 8,
   },
   modalTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#E74C3C",
-    marginBottom: 15,
-    textAlign: "center",
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#3F51B5",
+    marginBottom: 20,
   },
   modalMessage: {
-    fontSize: 18,
-    color: "#333",
+    fontSize: 16,
+    color: "#2C3E50",
     textAlign: "center",
     marginBottom: 25,
+    lineHeight: 22,
   },
   closeButton: {
-    backgroundColor: "#006D5B",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    marginTop: 10,
+    backgroundColor: "#4CAF50",
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
   },
   closeButtonText: {
     color: "white",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "600",
   },
   title: {
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "#E74C3C",
-    marginBottom: 5,
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#3F51B5",
+    marginBottom: 25,
     marginTop: 10,
   },
   imageUploadContainer: {
@@ -715,7 +747,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   imageColumn: {
-    width: "100%", // ₫ể hai cột có chiều rộng gần bằng nhau
+    width: "100%",
     flex: 1,
     alignItems: "center",
     justifyContent: "space-between",
@@ -728,13 +760,21 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#ECECEC",
+    backgroundColor: "#F8F9FA",
     marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
   },
   imagePreview: {
     width: "100%",
     height: "100%",
-    // borderRadius: 15,
+    borderRadius: 10,
   },
   thumbnail: {
     width: 100,
@@ -745,9 +785,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   fullImage: {
-    borderRadius: 15,
-    width: "100%", // Keep full width
-    height: "100%", // Maintain aspect ratio
+    borderRadius: 16,
+    width: "100%",
+    height: "100%",
   },
   labelContainer: {
     flexDirection: "row",
@@ -759,31 +799,30 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   rowContainer: {
-    flexDirection: "row", // Căn chỉnh theo hàng
-    justifyContent: "space-between", // Căn giữa các ô
-    width: "100%", // ₫ảm bảo chiều rộng ₫ầy ₫ủ
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
   },
   inputContainer: {
-    width: "48%", // ₫ặt chiều rộng cho mỗi ô input
+    width: "48%",
   },
   dateIcon: {
     position: "absolute",
     right: 10,
-    top: 10, // ₫iều chỉnh vị trí icon cho phù hợp
+    top: 10,
   },
   required: {
     color: "red",
   },
   newModalContent: {
-    // backgroundColor: "white", // Nền trắng
-    borderRadius: 20, // ₫ộ bo góc lớn hơn
-    width: "95%", // ₫ặt chiều rộng modal là 95% của màn hình
-    height: "auto", // Chiều cao tự ₫ộng
-    maxHeight: "80%", // Giới hạn chiều cao tối ₫a của modal
+    borderRadius: 16,
+    width: "95%",
+    height: "auto",
+    maxHeight: "80%",
     alignItems: "center",
-    justifyContent: "center", // Căn giữa nội dung
-    padding: 15, // Thêm khoảng cách bên trong
-    shadowColor: "#000", // Thêm bóng cho modal
+    justifyContent: "center",
+    padding: 15,
+    shadowColor: "#000",
   },
 });
 

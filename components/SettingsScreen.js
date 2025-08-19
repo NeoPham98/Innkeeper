@@ -393,6 +393,19 @@ const SettingsScreen = ({ route }) => {
           <Text style={styles.notificationText} allowFontScaling={false}>{notification}</Text>
         </View>
       ) : null}
+      
+      <View style={styles.headerContainer}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <AntDesign name="arrowleft" size={24} color="#2C3E50" />
+          <Text style={styles.headerText} allowFontScaling={false}>
+            Cài đặt nhà trọ
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       <ScrollView
         refreshControl={
           <RefreshControl
@@ -403,16 +416,6 @@ const SettingsScreen = ({ route }) => {
           />
         }
       >
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <AntDesign name="arrowleft" size={26} color="#2C3E50" />
-          <Text style={styles.headerText} allowFontScaling={false}>
-            Cài đặt nhà trọ
-          </Text>
-        </TouchableOpacity>
-
         <View style={styles.cardsContainer}>
           <View style={styles.defaultValueContainer}>
             <Text style={styles.subHeader} allowFontScaling={false}>
@@ -482,7 +485,7 @@ const SettingsScreen = ({ route }) => {
               style={styles.addButton}
               onPress={() => setModalVisible(true)}
             >
-              <AntDesign name="pluscircleo" size={35} color="#006D5B" />
+              <AntDesign name="plus" size={30} color="white" />
             </TouchableOpacity>
           </View>
         </View>
@@ -577,79 +580,132 @@ const SettingsScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: "white",
+    backgroundColor: "#F8F9FA",
+    padding: 0,
   },
   cardsContainer: {
     alignItems: "center",
-    marginTop: 30,
+    marginTop: 100,
   },
   subHeader: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "black",
-    marginVertical: 10,
-    backgroundColor: "#FFD2CC",
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 10,
+    fontWeight: "700",
+    color: "white",
+    marginVertical: 15,
+    backgroundColor: "#3F51B5",
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 15,
+    width: "100%",
+    textAlign: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   label: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "600",
     color: "#2C3E50",
     alignSelf: "flex-start",
     marginLeft: 5,
-    marginTop: 15,
-    marginBottom: 5,
+    marginTop: 20,
+    marginBottom: 8,
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 15,
+    borderColor: "#E0E0E0",
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 20,
+    fontSize: 16,
+    backgroundColor: "white",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
   },
   button: {
-    backgroundColor: "#007BFF",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
+    backgroundColor: "#3F51B5",
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 12,
     alignItems: "center",
-    marginVertical: 20,
-    width: "40%",
+    marginVertical: 25,
+    width: "50%",
     alignSelf: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 6,
   },
   buttonText: {
     color: "white",
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "700",
   },
   serviceContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 10,
-    marginBottom: 10,
+    padding: 15,
+    marginBottom: 12,
+    backgroundColor: "#F8F9FA",
+    borderRadius: 10,
+    borderLeftWidth: 4,
+    borderLeftColor: "#4CAF50",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   serviceName: {
     flex: 1,
-    fontSize: 17,
-    fontWeight: "bold",
+    fontSize: 16,
+    fontWeight: "600",
     color: "#2C3E50",
   },
   servicePrice: {
     flex: 1,
-    fontSize: 17,
-    fontWeight: "bold",
-    color: "#2C3E50",
-    // textAlign: "center",
-    marginRight: 30,
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#2E7D32",
+    textAlign: "right",
+    marginRight: 20,
   },
   addButton: {
-    marginTop: 13,
+    marginTop: 20,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#4CAF50",
+    borderRadius: 50,
+    width: 60,
+    height: 60,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 6,
+    alignSelf: "center",
   },
   addButtonText: {
     color: "white",
@@ -658,45 +714,46 @@ const styles = StyleSheet.create({
   backButton: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 30,
+    alignSelf: "flex-start",
+    marginTop: -20
   },
   headerText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#2C3E50",
-    marginLeft: 20,
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#1A237E",
+    marginLeft: 15,
     marginTop: -2,
   },
   defaultValueContainer: {
     backgroundColor: "white",
-    borderRadius: 15,
-    padding: 20,
+    borderRadius: 16,
+    padding: 25,
     marginVertical: 10,
     shadowColor: "#000",
-    width: "95%",
+    width: "90%",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
   },
   serviceWrapper: {
     backgroundColor: "white",
-    borderRadius: 15,
-    width: "95%",
-    padding: 20,
+    borderRadius: 16,
+    width: "90%",
+    padding: 25,
     marginVertical: 10,
     shadowColor: "#000",
-
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
+    alignItems: "center",
   },
   modalOverlay: {
     flex: 1,
@@ -706,10 +763,48 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: "white",
-    borderRadius: 15,
+    borderRadius: 16,
     padding: 30,
     width: "85%",
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#3F51B5",
+    marginBottom: 20,
+  },
+  modalButton: {
+    backgroundColor: "#3F51B5",
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    marginHorizontal: 8,
+    flex: 1,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  modalButtonAdd: {
+    backgroundColor: "#4CAF50",
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    borderRadius: 12,
+    marginTop: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -719,31 +814,9 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 6,
   },
-  modalTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#E74C3C",
-    marginBottom: 15,
-  },
-  modalButton: {
-    backgroundColor: "#006D5B",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    marginHorizontal: 5,
-    flex: 1,
-    alignItems: "center",
-  },
-  modalButtonAdd: {
-    backgroundColor: "#007BFF",
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 10,
-    marginTop: 10,
-  },
   modalButtonText: {
     color: "white",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "600",
     textAlign: "center",
   },
@@ -751,33 +824,34 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
-    marginTop: 15,
+    marginTop: 20,
   },
   closeButton: {
     position: "absolute",
-    top: 10,
-    right: 10,
-    backgroundColor: "#E74C3C",
+    top: 15,
+    right: 15,
+    backgroundColor: "#F44336",
     borderRadius: 50,
     padding: 10,
-    elevation: 5,
+    elevation: 6,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 3,
     },
     shadowOpacity: 0.3,
-    shadowRadius: 4,
+    shadowRadius: 5,
     width: 40,
     height: 40,
     justifyContent: "center",
     alignItems: "center",
   },
   modalMessage: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#2C3E50",
     textAlign: "center",
     marginBottom: 25,
+    lineHeight: 22,
   },
   actionModalOverlay: {
     flex: 1,
@@ -787,18 +861,18 @@ const styles = StyleSheet.create({
   },
   actionModalContent: {
     backgroundColor: "white",
-    borderRadius: 15,
+    borderRadius: 16,
     padding: 30,
     width: "85%",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 6,
     },
     shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 6,
+    shadowRadius: 8,
+    elevation: 8,
   },
   notificationModalOverlay: {
     flex: 1,
@@ -808,30 +882,31 @@ const styles = StyleSheet.create({
   },
   notificationModalContent: {
     backgroundColor: "white",
-    borderRadius: 15,
+    borderRadius: 16,
     padding: 30,
     width: "85%",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 6,
     },
     shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 6,
+    shadowRadius: 8,
+    elevation: 8,
   },
   closeButtonText: {
-    color: "#E74C3C",
+    color: "#F44336",
     fontSize: 18,
     fontWeight: "bold",
   },
   modalLabel: {
     fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
+    fontWeight: "600",
+    marginBottom: 8,
     marginTop: 20,
     textAlign: "left",
+    color: "#2C3E50",
   },
   modalInput: {
     width: "100%",
@@ -839,31 +914,67 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E0E0E0",
     borderRadius: 10,
-    padding: 10,
-    marginBottom: 5,
+    padding: 15,
+    marginBottom: 10,
     fontSize: 16,
     backgroundColor: "#F8F9FA",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
   },
   notification: {
-    backgroundColor: "#FFD700",
-    padding: 10,
-    borderRadius: 5,
+    backgroundColor: "#4CAF50",
+    padding: 16,
+    borderRadius: 12,
     position: "absolute",
-    top: 40,
-    left: 10,
-    right: 10,
+    top: 60,
+    left: 20,
+    right: 20,
     alignItems: "center",
-    zIndex: 1,
+    zIndex: 999,
+    elevation: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
   },
   notificationText: {
-    color: "#2C3E50",
+    color: "white",
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "600",
   },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+  },
+  headerContainer: {
+    zIndex: 999,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "#F8F9FA",
+    paddingTop: 40,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
 });
 

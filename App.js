@@ -1,6 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { StatusBar } from "react-native";
 import LoginScreen from "./components/loginscreen";
 import HomeScreen from "./components/homescreen";
 import CreateHomeScreen from "./components/createhomescreen";
@@ -13,15 +14,18 @@ import CreateInvoiceScreen from "./components/CreateInvoiceScreen";
 import InvoiceDetailScreen from "./components/InvoiceDetailScreen";
 import BillScreen from "./components/BillScreen";
 import ChartScreen from "./components/ChartScreen";
+import SplashScreen from "./components/SplashScreen";
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
+      <StatusBar barStyle="dark-content" backgroundColor="#343A40" animated={true} />
       <Stack.Navigator
-        initialRouteName="Login"
+        initialRouteName="Splash"
         screenOptions={{ headerShown: false }}
       >
+        <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="CreateHome" component={CreateHomeScreen} />

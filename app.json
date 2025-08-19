@@ -2,14 +2,15 @@
   "expo": {
     "name": "Nhà trọ",
     "slug": "Inkeeper",
-    "version": "1.0.3",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/logoApp.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#E3F2FD",
+      "image": "./assets/logoApp.png"
     },
     "ios": {
       "supportsTablet": true,
@@ -24,6 +25,11 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.datpq.Inkeeper"
+    },
+    "androidStatusBar": {
+      "backgroundColor": "#E3F2FD",
+      "barStyle": "dark-content",
+      "translucent": false
     },
     "web": {
       "favicon": "./assets/favicon.png"

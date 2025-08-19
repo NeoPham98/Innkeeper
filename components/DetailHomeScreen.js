@@ -66,12 +66,6 @@ const DetailHomeScreen = ({ route, navigation }) => {
           "Error updating room_total and room_total_empty:",
           updateError.message
         );
-      } else {
-        console.log(
-          "Cập nhật room_total và room_total_empty thành công:",
-          roomCount,
-          inActiveRoomCount
-        );
       }
 
       setRooms(data || []);
@@ -144,12 +138,6 @@ const DetailHomeScreen = ({ route, navigation }) => {
           console.error(
             "Error updating room_total and room_total_empty:",
             updateError.message
-          );
-        } else {
-          console.log(
-            "Cập nhật room_total và room_total_empty thành công:",
-            roomCount,
-            inActiveRoomCount
           );
         }
       }
@@ -391,53 +379,6 @@ const DetailHomeScreen = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.infoContainer}>
-        <TouchableOpacity
-          style={styles.infoItem}
-          onPress={() =>
-            navigation.navigate("CreateRoom", { home: effectiveHome })
-          }
-        >
-          <FontAwesome name="plus-circle" size={30} color="#FF6347" />
-          <Text style={styles.infoText} allowFontScaling={false}>
-            Thêm phòng
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.infoItem}
-          onPress={() => navigation.navigate('Chart', { id_home: effectiveHome.id_home })}
-        >
-          <FontAwesome name="line-chart" size={30} color="#FFD700" />
-          <Text style={styles.infoText} allowFontScaling={false}>Biểu đồ</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.infoItem}
-          onPress={() =>
-            navigation.navigate("Bill", {
-              id_home: effectiveHome.id_home,
-              id_room: effectiveHome.id_room,
-            })
-          }
-        >
-          <AntDesign name="filetext1" size={30} color="#32CD32" />
-          {/* <FontAwesome name="money" size={30} color="#32CD32" /> */}
-          <Text style={styles.infoText} allowFontScaling={false}>
-            Hóa đơn
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.infoItem}
-          onPress={() =>
-            navigation.navigate("Settings", { id_home: effectiveHome.id_home })
-          }
-        >
-          <FontAwesome name="cog" size={30} color="#1E90FF" />
-          <Text style={styles.infoText} allowFontScaling={false}>
-            Cài đặt
-          </Text>
-        </TouchableOpacity>
-      </View>
-
       {isLoading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#006D5B" />
@@ -449,6 +390,53 @@ const DetailHomeScreen = ({ route, navigation }) => {
           contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="handled"
         >
+          <View style={styles.infoContainer}>
+            <TouchableOpacity
+              style={styles.infoItem}
+              onPress={() =>
+                navigation.navigate("CreateRoom", { home: effectiveHome })
+              }
+            >
+              <FontAwesome name="plus-circle" size={30} color="#FF6347" />
+              <Text style={styles.infoText} allowFontScaling={false}>
+                Thêm phòng
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.infoItem}
+              onPress={() => navigation.navigate('Chart', { id_home: effectiveHome.id_home })}
+            >
+              <FontAwesome name="line-chart" size={30} color="#FFD700" />
+              <Text style={styles.infoText} allowFontScaling={false}>Biểu đồ</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.infoItem}
+              onPress={() =>
+                navigation.navigate("Bill", {
+                  id_home: effectiveHome.id_home,
+                  id_room: effectiveHome.id_room,
+                })
+              }
+            >
+              <AntDesign name="filetext1" size={30} color="#32CD32" />
+              {/* <FontAwesome name="money" size={30} color="#32CD32" /> */}
+              <Text style={styles.infoText} allowFontScaling={false}>
+                Hóa đơn
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.infoItem}
+              onPress={() =>
+                navigation.navigate("Settings", { id_home: effectiveHome.id_home })
+              }
+            >
+              <FontAwesome name="cog" size={30} color="#1E90FF" />
+              <Text style={styles.infoText} allowFontScaling={false}>
+                Cài đặt
+              </Text>
+            </TouchableOpacity>
+          </View>
+
           {rooms.map((room) => (
             <View
               key={room.id_room}
@@ -468,123 +456,168 @@ const DetailHomeScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: "white",
+    backgroundColor: "#F8F9FA",
+    padding: 0,
   },
   headerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 20,
-    marginTop: 0,
-  },
-  backButton: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  headerText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#2C3E50",
-    marginLeft: 20,
-    marginTop: -2,
-  },
-  infoContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
-  infoItem: {
-    alignItems: "center",
-    marginHorizontal: 15,
-    marginTop: 10,
-  },
-  infoText: {
-    fontSize: 16,
-    marginVertical: 5,
-    color: "#000",
-    fontWeight: "bold",
-  },
-  roomsContainer: {
-    marginTop: 10,
+    zIndex: 999,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "#F8F9FA",
+    paddingTop: 40,
     paddingBottom: 20,
-  },
-  roomDetailCard: {
-    backgroundColor: "white",
-    borderRadius: 15,
-    padding: 20,
-    marginVertical: 10,
-    width: "95%",
+    paddingHorizontal: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  backButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-start",
+    marginTop: -20
+  },
+  headerText: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#1A237E",
+    marginLeft: 15,
+    marginTop: -2,
+  },
+  infoContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 20,
+    marginHorizontal: -10,
+    marginTop: 100,
+    paddingHorizontal: 0,
+  },
+  infoItem: {
+    alignItems: "center",
+    flex: 1,
+    marginHorizontal: 5,
+    marginTop: 10,
+    backgroundColor: "white",
+    padding: 0,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    minHeight: 90,
+    justifyContent: "center",
+  },
+  infoText: {
+    fontSize: 13,
+    marginVertical: 8,
+    color: "#2C3E50",
+    fontWeight: "600",
+    textAlign: "center",
+    marginTop: 5,
+  },
+  roomsContainer: {
+    marginTop: 10,
+    paddingBottom: 20,
+    paddingHorizontal: 16,
+  },
+  roomDetailCard: {
+    backgroundColor: "white",
+    borderRadius: 16,
+    padding: 25,
+    marginVertical: 12,
+    width: "100%",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
   },
   roomHeader: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 15,
   },
   roomName: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#FF9999",
-    marginLeft: 10,
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#3F51B5",
+    marginLeft: 15,
   },
   menuButton: {
     marginLeft: "auto",
+    padding: 5,
   },
   statsContainer: {
     borderTopWidth: 1,
-    borderTopColor: "#eee",
-    paddingTop: 15,
+    borderTopColor: "#F0F0F0",
+    paddingTop: 20,
   },
   statsRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 15,
   },
   statsLabel: {
     fontSize: 16,
-    color: "#333",
+    color: "#2C3E50",
     flex: 1,
+    fontWeight: "500",
   },
   statsValue: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#333",
+    fontWeight: "600",
+    color: "#2C3E50",
     flex: 1,
     textAlign: "right",
   },
   separator: {
     height: 1,
-    backgroundColor: "#E0E0E0",
-    marginVertical: 10,
+    backgroundColor: "#F0F0F0",
+    marginVertical: 15,
   },
   revenueContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 15,
   },
   createInvoiceContainer: {
     flex: 1,
   },
   createInvoiceButton: {
-    backgroundColor: "#007BFF",
-    padding: 10,
-    borderRadius: 5,
+    backgroundColor: "#4CAF50",
+    padding: 12,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
     marginLeft: "auto",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
   },
   createInvoiceButtonText: {
     color: "white",
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "600",
   },
   switchContainer: {
     flexDirection: "row",
@@ -597,6 +630,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
   },
   modalOverlay: {
     flex: 1,
@@ -606,37 +640,45 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: "white",
-    borderRadius: 15,
+    borderRadius: 16,
     padding: 30,
     width: "85%",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 6,
     },
     shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 6,
+    shadowRadius: 8,
+    elevation: 8,
   },
   modalTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#E74C3C",
-    marginBottom: 15,
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#3F51B5",
+    marginBottom: 20,
   },
   modalButton: {
-    backgroundColor: "#006D5B",
+    backgroundColor: "#3F51B5",
     paddingVertical: 15,
     paddingHorizontal: 20,
-    borderRadius: 10,
-    marginHorizontal: 5,
+    borderRadius: 12,
+    marginHorizontal: 8,
     flex: 1,
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
   },
   modalButtonText: {
     color: "white",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "600",
     textAlign: "center",
   },
@@ -644,49 +686,58 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
-    marginTop: 15,
+    marginTop: 20,
   },
   closeButton: {
     position: "absolute",
-    top: 10,
-    right: 10,
-    backgroundColor: "#E74C3C",
+    top: 15,
+    right: 15,
+    backgroundColor: "#F44336",
     borderRadius: 50,
     padding: 10,
-    elevation: 5,
+    elevation: 6,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 3,
     },
     shadowOpacity: 0.3,
-    shadowRadius: 4,
+    shadowRadius: 5,
     width: 40,
     height: 40,
     justifyContent: "center",
     alignItems: "center",
   },
   modalMessage: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#2C3E50",
     textAlign: "center",
     marginBottom: 25,
+    lineHeight: 22,
   },
   notification: {
-    backgroundColor: "#FFD700",
-    padding: 10,
-    borderRadius: 5,
+    backgroundColor: "#4CAF50",
+    padding: 16,
+    borderRadius: 12,
     position: "absolute",
-    top: 40,
-    left: 10,
-    right: 10,
+    top: 70,
+    left: 20,
+    right: 20,
     alignItems: "center",
-    zIndex: 1,
+    zIndex: 999,
+    elevation: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
   },
   notificationText: {
-    color: "#2C3E50",
+    color: "white",
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "600",
   },
 });
 

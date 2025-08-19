@@ -132,7 +132,7 @@ const LoginScreen = ({ navigation }) => {
                 <Ionicons
                   name={showPassword ? "eye-outline" : "eye-off-outline"}
                   size={24}
-                  color="#006D5B"
+                  color="#3F51B5"
                 />
               </TouchableOpacity>
             </View>
@@ -192,7 +192,7 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFD2CC",
+    backgroundColor: "#E3F2FD",
   },
   header: {
     alignItems: "center",
@@ -213,6 +213,11 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingHorizontal: 20,
     paddingBottom: 40,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
   },
   title: {
     fontSize: 30,
@@ -221,7 +226,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 20,
-    color: "#7F8C8D",
+    color: "#2C3E50",
     marginBottom: 20,
   },
   label: {
@@ -260,7 +265,7 @@ const styles = StyleSheet.create({
   },
 
   loginButton: {
-    backgroundColor: "#006D5B",
+    backgroundColor: "#3F51B5",
     padding: 15,
     borderRadius: 10,
     alignItems: "center",

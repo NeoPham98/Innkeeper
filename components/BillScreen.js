@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
   RefreshControl,
+  Modal,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { supabaseDB } from "../DBconfig"; // Thêm import supabaseDB
@@ -16,6 +17,8 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
   const [invoiceData, setInvoiceData] = useState([]); // Thêm state ₫ể lưu dữ liệu hóa ₫ơn
   const [notification, setNotification] = useState(""); // Thêm state cho thông báo
   const [loading, setLoading] = useState(false); // Thêm state ₫ể quản lý trạng thái loading
+  const [isConfirmVisible, setConfirmVisible] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
 
   // Hàm ₫ể lấy dữ liệu từ bảng Invoiceto
   const fetchInvoices = async () => {
@@ -49,27 +52,35 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
 
   const renderInvoiceItem = ({ item }) => (
     <View style={styles.tableRow}>
-      <Text style={styles.dateText} allowFontScaling={false}>
-        {new Date(item.created_at).toLocaleDateString("vi-VN")}
-      </Text>
-      <Text style={styles.roomNameText} allowFontScaling={false}>
-        {item.room_name}
-      </Text>
-      <Text style={styles.totalText} allowFontScaling={false}>
-        {Number(item.total_amount).toLocaleString("en-US")} ₫
-      </Text>
-      <TouchableOpacity
-        style={styles.actionButton}
-        onPress={() => handleView(item)}
-      >
-        <Text style={styles.actionText} allowFontScaling={false}>Xem</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.actionButton}
-        onPress={() => handleDelete(item)}
-      >
-        <Text style={styles.actionText} allowFontScaling={false}>Xóa</Text>
-      </TouchableOpacity>
+      <View style={styles.dateColumn}>
+        <Text style={styles.dateText} allowFontScaling={false} numberOfLines={1} ellipsizeMode="tail">
+          {new Date(item.created_at).toLocaleDateString("vi-VN")}
+        </Text>
+      </View>
+      <View style={styles.roomColumn}>
+        <Text style={styles.roomNameText} allowFontScaling={false} numberOfLines={1} ellipsizeMode="tail">
+          {item.room_name}
+        </Text>
+      </View>
+      <View style={styles.totalColumn}>
+        <Text style={styles.totalText} allowFontScaling={false} numberOfLines={1} ellipsizeMode="tail">
+          {Number(item.total_amount).toLocaleString("en-US")} ₫
+        </Text>
+      </View>
+      <View style={styles.actionColumn}>
+        <TouchableOpacity
+          style={[styles.actionButton, { marginLeft: 0 }]}
+          onPress={() => handleView(item)}
+        >
+          <AntDesign name="eye" size={14} color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.actionButton, { backgroundColor: "#F44336" }]}
+          onPress={() => handleDelete(item)}
+        >
+          <AntDesign name="delete" size={14} color="white" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
@@ -84,10 +95,17 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
     navigation.navigate("InvoiceDetail", { invoiceData: item });
   };
 
-  // Hàm xử lý xóa hóa ₫ơn
-  const handleDelete = async (item) => {
+  // Mở modal xác nhận xóa hóa đơn
+  const handleDelete = (item) => {
+    setSelectedInvoice(item);
+    setConfirmVisible(true);
+  };
+
+  // Thực hiện xóa hóa đơn
+  const confirmDelete = async () => {
     try {
-      const numericId = Number(item.id_invoice);
+      if (!selectedInvoice) return;
+      const numericId = Number(selectedInvoice.id_invoice);
       const { error } = await supabaseDB
         .from("Invoice")
         .delete()
@@ -100,6 +118,9 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
       setTimeout(() => setNotification(""), 3000); // Xóa thông báo sau 3 giây
     } catch (error) {
       console.error("Error deleting invoice:", error.message);
+    } finally {
+      setConfirmVisible(false);
+      setSelectedInvoice(null);
     }
   };
 
@@ -125,16 +146,18 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
       </View>
       <View style={styles.tableContainer}>
         <View style={styles.tableHeader}>
-          <Text style={styles.tableHeaderText} allowFontScaling={false}>
+          <Text style={[styles.tableHeaderText, { flex: 1, paddingLeft: 15 }]} allowFontScaling={false}>
             Ngày tạo
           </Text>
-          <Text style={styles.tableHeaderText} allowFontScaling={false}>
+          <Text style={[styles.tableHeaderText, { flex: 1.25, paddingLeft: 8 }]} allowFontScaling={false}>
             Tên Phòng
           </Text>
-          <Text style={styles.tableHeaderText} allowFontScaling={false}>
+          <Text style={[styles.tableHeaderText, { flex: 1.2, paddingLeft: 8 }]} allowFontScaling={false}>
             Tổng tiền
           </Text>
-          <Text style={styles.tableHeaderText} allowFontScaling={false}></Text>
+          <Text style={[styles.tableHeaderText, { flex: 1.5, paddingLeft: 8 }]} allowFontScaling={false}>
+            Thao tác
+          </Text>
         </View>
         <FlatList
           data={invoiceData}
@@ -150,6 +173,37 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
           }
         />
       </View>
+
+      {/* Modal xác nhận xóa */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={isConfirmVisible}
+        onRequestClose={() => setConfirmVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle} allowFontScaling={false}>Xác nhận xóa</Text>
+            <Text style={styles.modalMessage} allowFontScaling={false}>
+              Bạn có chắc muốn xóa hóa đơn này không?
+            </Text>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => setConfirmVisible(false)}
+              >
+                <Text style={styles.modalButtonText} allowFontScaling={false}>Hủy</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, { backgroundColor: "#F44336" }]}
+                onPress={confirmDelete}
+              >
+                <Text style={styles.modalButtonText} allowFontScaling={false}>Xóa</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -157,11 +211,13 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFD2CC",
-    padding: 20,
+    backgroundColor: "#F8F9FA",
+    padding: 0,
   },
   backButton: {
-    marginBottom: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-start",
   },
   title: {
     fontSize: 24,
@@ -176,12 +232,16 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ccc",
   },
   dateText: {
-    flex: 1,
-    textAlign: "center",
+    textAlign: "left",
+    fontSize: 12,
+    color: "#555",
+    fontWeight: "500",
   },
   totalText: {
-    flex: 1,
-    textAlign: "center",
+    textAlign: "left",
+    fontSize: 12,
+    color: "#2E7D32",
+    fontWeight: "600",
   },
   currencyText: {
     fontSize: 16,
@@ -195,59 +255,72 @@ const styles = StyleSheet.create({
     color: "white",
   },
   headerContainer: {
-    zIndex: 999,
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
+    backgroundColor: "#F8F9FA",
     paddingTop: 40,
+    paddingBottom: 20,
     paddingHorizontal: 20,
-    backgroundColor: "#FFD2CC",
-    height: 80,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   backButton: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 10,
+    alignSelf: "flex-start",
+    marginTop: -20
   },
   headerText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#2C3E50",
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#1A237E",
     marginLeft: 15,
-    marginTop: -5,
+    marginTop: -2,
   },
   tableContainer: {
-    borderWidth: 1,
-    borderColor: "#E0E0E0",
-    borderRadius: 10,
     backgroundColor: "white",
+    marginTop: 20,
+    marginHorizontal: 16,
+    borderRadius: 16,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
     overflow: "hidden",
-    marginTop: 100, // Tăng marginTop để tránh bị che bởi header
     maxHeight: "85%",
   },
   tableHeader: {
     flexDirection: "row",
-    backgroundColor: "#F8F9FA",
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#E0E0E0",
-    marginLeft: -5,
-    justifyContent: "space-between",
+    backgroundColor: "#3F51B5",
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    alignItems: "center",
   },
   tableHeaderText: {
     flex: 1,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: "600",
+    textAlign: "left",
+    color: "white",
+    fontSize: 14,
+    paddingHorizontal: 8,
   },
   tableRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 10,
+    paddingVertical: 16,
+    paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#E0E0E0",
+    borderBottomColor: "#F0F0F0",
     alignItems: "center",
-    width: "100%",
+    backgroundColor: "white",
   },
   tableCell: {
     flex: 1,
@@ -271,44 +344,143 @@ const styles = StyleSheet.create({
   },
   viewText: { color: "#008080" },
   roomNameText: {
-    flex: 1,
-    textAlign: "center",
-    fontWeight: "bold",
+    textAlign: "left",
+    fontWeight: "600",
+    fontSize: 12,
+    color: "#333",
   },
   actionButton: {
-    padding: 10,
-    backgroundColor: "#3498DB",
-    borderRadius: 5,
-    marginLeft: 5,
-  },
-  actionText: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  notification: {
-    backgroundColor: "#FFD700",
-    padding: 10,
-    borderRadius: 5,
-    position: "absolute",
-    top: 100,
-    left: 20,
-    right: 20,
+    padding: 8,
+    backgroundColor: "#4CAF50",
+    borderRadius: 6,
+    marginLeft: 10,
+    width: 32,
+    height: 32,
     alignItems: "center",
-    zIndex: 999,
-    elevation: 5,
+    justifyContent: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  actionText: {
+    color: "white",
+    fontWeight: "600",
+    textAlign: "center",
+    fontSize: 13,
+  },
+  notification: {
+    backgroundColor: "#4CAF50",
+    padding: 16,
+    borderRadius: 12,
+    position: "absolute",
+    top: 120,
+    left: 20,
+    right: 20,
+    alignItems: "center",
+    zIndex: 999,
+    elevation: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
   },
   notificationText: {
-    color: "#2C3E50",
+    color: "white",
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "600",
+  },
+  dateColumn: {
+    flex: 1,
+    justifyContent: "center",
+    paddingLeft: 8,
+  },
+  roomColumn: {
+    flex: 1.5,
+    justifyContent: "center",
+    paddingLeft: 8,
+  },
+  totalColumn: {
+    flex: 1.2,
+    justifyContent: "center",
+    paddingLeft: 8,
+  },
+  actionColumn: {
+    paddingLeft: 8,
+    flex: 1.5,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    borderRadius: 16,
+    padding: 30,
+    width: "85%",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#3F51B5",
+    marginBottom: 12,
+  },
+  modalMessage: {
+    fontSize: 16,
+    color: "#2C3E50",
+    textAlign: "center",
+    marginBottom: 20,
+    lineHeight: 22,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    marginTop: 10,
+  },
+  modalButton: {
+    backgroundColor: "#3F51B5",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    marginHorizontal: 8,
+    flex: 1,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  modalButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "600",
+    textAlign: "center",
   },
 });
 
