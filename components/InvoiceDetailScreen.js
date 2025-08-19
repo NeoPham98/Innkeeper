@@ -55,12 +55,12 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
     const hours = String(date.getUTCHours()).padStart(2, "0");
     const minutes = String(date.getUTCMinutes()).padStart(2, "0");
     const seconds = String(date.getUTCSeconds()).padStart(2, "0");
-    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds} UTC`;
+    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
   };
 
   // Hàm ₫ịnh dạng số với dấu phẩy
   const formatCurrency = (amount) => {
-    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
 
   // Hàm lấy dữ liệu từ bảng Setting
@@ -175,7 +175,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
               </Text>
 
               <Text
-                style={[styles.rightText, styles.textWithBorder]}
+                style={[styles.rightText, styles.textWithBorder, { fontWeight: "bold" }]}
                 allowFontScaling={false}
               >
                 {invoiceData.roomer}
@@ -272,16 +272,16 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
             <View style={styles.row}>
               <Text style={styles.textWithBorder} allowFontScaling={false}>
                 <FontAwesome5 name="hot-tub" size={16} color="#E74C3C" /> Số
-                bình nóng lạnh:
+                BNL:
               </Text>
               <Text
                 style={[styles.rightText, styles.textWithBorder]}
                 allowFontScaling={false}
               >
                 {invoiceData.total_bnl_use && invoiceData.divideByPeople
-                  ? formatCurrency((invoiceData.total_bnl_use / invoiceData.divideByPeople) * invoiceData.quantity)
+                  ? `(${invoiceData.new_bnl} - ${invoiceData.old_bnl}) : ${invoiceData.divideByPeople} x ${invoiceData.quantity} = ${formatCurrency((invoiceData.total_bnl_use / invoiceData.divideByPeople) * invoiceData.quantity)}`
                   : invoiceData.total_bnl_use && invoiceData.new_bnl && invoiceData.old_bnl
-                  ? `${invoiceData.total_bnl_use}`
+                  ? `${invoiceData.new_bnl} - ${invoiceData.old_bnl} = ${invoiceData.total_bnl_use}`
                   : "0"
                 }
               </Text>
@@ -294,8 +294,7 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                 style={[styles.rightText, styles.textWithBorder]}
                 allowFontScaling={false}
               >
-                {Number(invoiceData.total_electric_use || 0) + (invoiceData.total_bnl_use && invoiceData.divideByPeople ? Number(invoiceData.total_bnl_use / invoiceData.divideByPeople * invoiceData.quantity) : Number(invoiceData.total_bnl_use || 0))}
-              </Text>
+                {Number(invoiceData.total_electric_use || 0) + (invoiceData.total_bnl_use && invoiceData.divideByPeople ? Number(invoiceData.total_bnl_use / invoiceData.divideByPeople * invoiceData.quantity) : Number(invoiceData.total_bnl_use || 0))}</Text>
             </View>
             <View style={styles.row}>
               <Text style={styles.textWithBorder} allowFontScaling={false}>
@@ -315,8 +314,8 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                   name="electrical-services"
                   size={16}
                   color="black"
-                />
-                Tiền điện{isShared ? " (đã chia BNL)" : ""}:
+                />{" "}
+                Tiền điện:
               </Text>
               <Text
                 style={[
@@ -358,6 +357,22 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                 </Text>
               </View>
             ))}
+                        <View style={styles.row}>
+              <Text style={styles.textWithBorder} allowFontScaling={false}>
+              <Entypo name="pin" size={16} color="#FF4D4D" />{" "}
+                Tiền phòng:
+              </Text>
+              <Text
+                style={[
+                  styles.rightText,
+                  styles.textWithBorder,
+                  // styles.priceText,
+                ]}
+                allowFontScaling={false}
+              >
+                {formatCurrency(invoiceData.room_price)} ₫
+              </Text>
+            </View>
             <View style={styles.row}>
               <Text style={styles.textWithBorder} allowFontScaling={false}>
                 <FontAwesome6
@@ -365,17 +380,13 @@ const InvoiceDetailScreen = ({ navigation, route }) => {
                   size={16}
                   color="green"
                 />{" "}
-                Tiền phòng:
+                Tiền dịch vụ:
               </Text>
               <Text
-                style={[
-                  styles.rightText,
-                  styles.textWithBorder,
-                  styles.priceText,
-                ]}
+                style={[styles.rightText, styles.textWithBorder, styles.priceText]}
                 allowFontScaling={false}
               >
-                {formatCurrency(invoiceData.room_price)} ₫
+                {formatCurrency(Number(invoiceData.room_price || 0) + services.reduce((total, service) => total + Number(service.service_price || 0), 0))} ₫
               </Text>
             </View>
             <View style={styles.row}>
@@ -423,7 +434,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   content: {
-    padding: 20,
+    padding: 5,
     backgroundColor: "white",
     borderRadius: 10,
     borderWidth: 1,

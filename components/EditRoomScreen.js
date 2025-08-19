@@ -294,7 +294,7 @@ const EditRoomScreen = ({ route, navigation }) => {
             />
             <Text style={styles.label} allowFontScaling={false}>
               <Entypo name="location" size={16} color="#9013FE" /> Quê quán /
-              địa chỉ
+              Địa chỉ
             </Text>
             <TextInput
               style={[styles.input, { height: 100 }]}

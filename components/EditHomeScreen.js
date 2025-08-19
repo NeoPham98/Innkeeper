@@ -74,7 +74,7 @@ const EditHomeScreen = ({ route, navigation }) => {
           onChangeText={setHomeName}
         />
         <Text style={styles.label} allowFontScaling={false}>
-          địa chỉ
+          Địa chỉ
         </Text>
         <TextInput
           allowFontScaling={false}
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E0E0E0",
     borderRadius: 10,
-    padding: 15,
+    padding: 10,
     marginBottom: 15,
     fontSize: 18,
     backgroundColor: "#F8F9FA",
